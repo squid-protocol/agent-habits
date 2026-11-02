@@ -1,5 +1,22 @@
 # Agent habits
 
+> **Abstract.** We asked whether AI coding agents leave measurable, model-specific habits in the programs they
+> write, and whether a training-free, AST-free structural scanner can see them. Three agent/model combinations
+> (Claude Code with Sonnet 5.5 and with Haiku 5.5, two independent rounds each; Codex CLI with gpt-6-luna) each
+> built a UCI chess engine and a DPLL SAT solver in C, Java, Python, Rust and COBOL without human steering: 60
+> programs, 59 of them working. The hypotheses came from an exploratory analysis of Mathieu Acher's human-steered
+> Claude Code / Codex pairs and were pre-registered with a public timestamp before any run. The predicted
+> Claude-vs-Codex habits were **not confirmed** after correction. Codex's tendency to exit early came closest (9 of
+> 10 cells, Holm p = 0.054); its Python helper scripts disappeared; and the fan-out prediction reversed. Instead,
+> habits proved **model-specific**: Haiku comments and documents more than Sonnet in all 10 cells, and documents
+> more functions than Codex in all 10. Each model's habits replicate across independent rounds. Structure alone is
+> distinctive. With no training step, a program's nearest structural neighbour on the same task and language came
+> from the same model **83 % of the time (chance 27 %, p < 0.001)**. That result was exploratory and is
+> pre-registered for replication on fresh runs and a new task (round 3). We also found that AI-written code can
+> defeat static-analysis safeguards. Codex's ultra-dense programs (whole chess engines in 35–56 lines) were
+> skipped by the scanner's anti-minification guard. The gap was caught by a tree-sitter/ctags cross-check, handled
+> by a pre-stated rule and fixed upstream.
+
 **Do AI coding agents have habits you can measure from their code?** We gave the same two tasks (a UCI chess
 engine and a DPLL SAT solver) in the same five languages (C, Java, Python, Rust, COBOL) to three agent/model
 combinations, with no human in the loop, and measured what they wrote with
@@ -48,6 +65,26 @@ chess engines, plus four COBOL systems). The habits it suggested became the pred
 repository tests them on **fresh code** that no hypothesis had seen. His study is human-steered (one of his COBOL
 engines records "47 substantive prompts, 15.5 active hours"); ours is autonomous. That difference, and the newer
 models, are part of the result. Any error here is ours, not his.
+
+## Related work, and what this study corroborates
+
+That LLMs leave identifiable fingerprints in code is an active research topic. This study is small next to those
+benchmarks, and it is not the first to show attribution. Its contribution is the setting (whole programs from
+autonomous CLI agents, five languages including COBOL, two independent rounds per model), the method (training-free
+structural matching, no AST, no LLM, no comment text) and the pre-registration, negatives included. The summaries
+below are drawn from the papers' abstracts and published summaries.
+
+| work | what it reports | what this study corroborates, or adds |
+|---|---|---|
+| Bisztray et al., [*I Know Which LLM Wrote Your Code Last Summer*](https://arxiv.org/abs/2506.17323) (ACM AISec 2025) | A trained classifier on 32,000 compilable C programs from eight LLMs attributes code to its model (about 95 % across five models; about 97.6 % between closely related ones). Comment phrasing and style are a dominant feature. | **Corroborates** that the generating model is identifiable from its code, here **without training** and **without comment text** (83 %, chance 27 %, nearest structural neighbour). **Consistent with** comments as a strong model marker: comment amount and placement separate Haiku from Sonnet and Codex in every cell. |
+| [*The Hidden DNA of LLM-Generated JavaScript*](https://arxiv.org/pdf/2510.10493) (2025) | Structural patterns allow high-accuracy attribution of LLM-written Node.js programs, robust even to minification (about 91 %). | **Corroborates** structure, not surface text, as the carrier of a model's identity, in five other languages. **Adds the converse risk:** dense AI-written code can be *mistaken for minified code* by a scanner's own safeguards, silently dropping one author's programs. |
+| [*Code Fingerprints: Disentangled Attribution of LLM-Generated Code*](https://arxiv.org/pdf/2603.04212) (DCAN, 2026) | Separates semantic from stylistic signal; in its case study, Claude-generated code puts more weight on explicit control-flow constructs. | **Partly consistent:** Sonnet uses more `if`/`while` than Haiku in all 8 non-COBOL cells; against Codex, Sonnet's `while` lead is only directional (6 of 2, not significant), and Codex uses more early `return`. The control-flow habit looks model-specific here, not vendor-wide. |
+| [*Style, Not Self: Surface Cues Explain Zero-Shot Code Attribution by LLMs*](https://arxiv.org/html/2609.30048v1) (2026) | Argues that surface style cues explain how LLMs attribute code. | **Consistent with** our reading that a fingerprint is a stable *habit of form* (distances 0.32 within a model vs 0.62 between models, replicated across independent rounds), not a trace of what the program does: every program here solves the same task. |
+| Acher, [*agentic-cobol-study*](https://github.com/acherm/agentic-cobol-study) and *agentic-chessengine-\** | Same tasks built by Claude Code and Codex, human-steered, with code, history and session logs preserved. | The source of our exploratory hypotheses. Of its habits, **early exits held their direction** under autonomous runs and newer models. **Commenting held for Haiku but weakened for Sonnet; Python helpers vanished; fan-out reversed.** Steering and model version matter. |
+
+Practitioner comparisons of Claude Code and Codex are mostly anecdotal (blog posts and single-user tests). We found
+no controlled, same-task comparison of their code's structure before this one, though our search was not
+exhaustive.
 
 ## How it was done (and how you can check it)
 
