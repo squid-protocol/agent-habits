@@ -1,7 +1,8 @@
 """Write the README's figures (../figures/*.svg) from the article's own chart code, so both editions show the same charts.
 
-Serves this folder, opens index.html?export in headless Chrome (light theme), and saves each chart as a standalone SVG
-with its colours and fonts inlined. Run after build_data.py:  python3 -I article/export_figures.py
+Serves this folder, opens index.html?export in headless Chrome, and saves each chart as a standalone SVG with its
+colours and fonts inlined, its legend drawn in, a framed card behind it, and dark-mode colours in a
+prefers-color-scheme block (GitHub shows README images as <img>, so the file has to carry all of that itself). Run after build_data.py:  python3 -I article/export_figures.py
 """
 import html
 import json

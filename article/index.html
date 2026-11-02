@@ -864,26 +864,81 @@ function route() {
 
 
 // ---------------------------------------------------------------- figure export (for the README): ?export renders every chart in the
-// light theme and writes standalone SVGs (computed colours and fonts inlined, white ground) into <pre id="export"> as JSON.
+// light theme and writes standalone SVGs (computed colours and fonts inlined, legend drawn in, framed card, dark-mode
+// colours in a prefers-color-scheme block) into <pre id="export"> as JSON.
 const EXPORT = new URLSearchParams(location.search).has("export");
 if (EXPORT) document.documentElement.setAttribute("data-theme", "light");
+// The README shows these as <img>, so each figure carries its own key (the figure's HTML legend, drawn in above the
+// chart), its own card (padded, framed: not a white sheet on GitHub's white page), and both themes: light colours as
+// attributes, dark ones in a prefers-color-scheme style block.
+function legendInto(svg) {
+  const leg = svg.closest("figure")?.querySelector(".legend"), vb = svg.viewBox.baseVal;
+  if (!leg || !leg.children.length) return null;
+  const g = S("g", {}), rowH = 22, gap = 20, sw = 11, font = "font-family:var(--font-display);font-size:13px;fill:var(--ink-2)";
+  svg.append(g);
+  const k = Math.max(1, vb.width / 760), room = vb.width / k;  // wide charts get shrunk on the page: scale the key with them
+  let x = 0, row = 0, gid = 0;
+  for (const item of leg.children) {
+    const it = S("g", {}); g.append(it);
+    let w = 0;
+    const bg = item.style.background || "";
+    const sq = item.querySelector("i");
+    if (/gradient/.test(bg)) {
+      const id = `lg${gid++}`, stops = bg.match(/var\(--[\w-]+\)/g) || [];
+      const lg = S("linearGradient", { id }, ...stops.map((v, i) => S("stop", { offset: i / Math.max(1, stops.length - 1), style: `stop-color:${v}` })));
+      it.append(S("defs", {}, lg), S("rect", { x: 0, y: -10, width: 90, height: 10, rx: 2, fill: `url(#${id})` }));
+      w = 90;
+    } else if (sq) {
+      const fill = sq.style.background || getComputedStyle(sq).backgroundColor;
+      it.append(sq.classList.contains("sq") ? S("rect", { x: 0, y: -sw + 1, width: sw, height: sw, rx: 2, style: `fill:${fill}` })
+        : S("circle", { cx: sw / 2, cy: -sw / 2 + 1, r: sw / 2, style: `fill:${fill}` }));
+      w = sw + 6;
+    }
+    const label = item.textContent.replace(/\s+/g, " ").trim();
+    if (label) {
+      const t = S("text", { x: w, y: 0, style: font, text: label }); it.append(t);
+      w += t.getComputedTextLength() + 4;
+    }
+    if (x && x + w > room) { x = 0; row++; }
+    it.setAttribute("transform", `translate(${x},${row * rowH})`);
+    x += w + gap;
+  }
+  const h = (row + 1) * rowH * k;
+  g.setAttribute("transform", `translate(${vb.x},${vb.y - h + 11 * k}) scale(${k})`);
+  return { g, h };
+}
 function standalone(svg) {
+  const vb = svg.viewBox.baseVal, pad = 20, leg = legendInto(svg), top = leg ? leg.h + 8 : 0;
+  const box = { x: vb.x - pad, y: vb.y - top - pad, w: vb.width + 2 * pad, h: vb.height + top + 2 * pad };
+  const card = S("rect", { x: box.x + 0.5, y: box.y + 0.5, width: box.w - 1, height: box.h - 1, rx: 12, style: "fill:var(--paper);stroke:var(--rule);stroke-width:1px" });
+  svg.insertBefore(card, svg.firstChild);
   const c = svg.cloneNode(true), src = [svg, ...svg.querySelectorAll("*")], dst = [c, ...c.querySelectorAll("*")];
-  const props = ["fill", "stroke", "stroke-width", "fill-opacity", "stroke-opacity", "font-family", "font-size", "font-weight", "letter-spacing", "text-anchor", "opacity"];
+  const props = ["fill", "stroke", "stroke-width", "fill-opacity", "stroke-opacity", "stop-color", "font-family", "font-size", "font-weight", "letter-spacing", "text-anchor", "opacity"];
+  const colours = ["fill", "stroke", "stop-color"];
+  const snap = theme => { document.documentElement.setAttribute("data-theme", theme); return src.map(o => getComputedStyle(o)).map(cs => Object.fromEntries(props.map(k => [k, cs.getPropertyValue(k)]))); };
+  const dark = snap("dark"), light = snap("light"), rules = new Map();
   src.forEach((o, i) => {
-    const cs = getComputedStyle(o), d = dst[i];
-    const text = o.tagName === "text";
+    const cs = light[i], d = dst[i], text = o.tagName === "text", set = [];
     if (i) for (const k of props) {
       if (!text && /^(font|letter|text-anchor)/.test(k)) continue;
-      const v = cs.getPropertyValue(k);
-      if (v && v !== "normal" && !(/opacity/.test(k) && v === "1") && !(k === "stroke" && v === "none") && !(k === "stroke-width" && cs.getPropertyValue("stroke") === "none")) d.setAttribute(k, v);
+      if (k === "stop-color" && o.tagName !== "stop") continue;
+      const v = cs[k];
+      if (v && v !== "normal" && !(/opacity/.test(k) && v === "1") && !(k === "stroke" && v === "none") && !(k === "stroke-width" && cs.stroke === "none")) {
+        d.setAttribute(k, v);
+        if (colours.includes(k) && dark[i][k] !== v) set.push(`${k}:${dark[i][k]}`);
+      }
     }
     d.removeAttribute("class"); d.removeAttribute("style");
+    if (set.length) { const key = set.join(";"); if (!rules.has(key)) rules.set(key, `d${rules.size}`); d.setAttribute("class", rules.get(key)); }
   });
-  const vb = svg.viewBox.baseVal;
-  c.setAttribute("xmlns", "http://www.w3.org/2000/svg"); c.setAttribute("width", vb.width); c.setAttribute("height", vb.height);
-  c.insertBefore(Object.assign(document.createElementNS(SVGNS, "rect"), {}), c.firstChild);
-  const bg = c.firstChild; bg.setAttribute("x", vb.x); bg.setAttribute("y", vb.y); bg.setAttribute("width", vb.width); bg.setAttribute("height", vb.height); bg.setAttribute("fill", "#ffffff");
+  card.remove(); leg?.g.remove();
+  c.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  c.setAttribute("viewBox", `${box.x} ${box.y} ${box.w} ${box.h}`); c.setAttribute("width", box.w); c.setAttribute("height", box.h);
+  if (rules.size) {
+    const st = document.createElementNS(SVGNS, "style");
+    st.textContent = `@media (prefers-color-scheme: dark) { ${[...rules].map(([k, n]) => `.${n} { ${k} }`).join(" ")} }`;
+    c.insertBefore(st, c.firstChild);
+  }
   return c.outerHTML;
 }
 async function exportFigures() {
