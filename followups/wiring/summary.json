@@ -1,0 +1,4352 @@
+{
+ "label": "EXPLORATORY, not registered. Round-1 runs (rep 1); one program per arm per cell.",
+ "excluded_runs": {},
+ "scan_roots": {
+  "chess-c-codex-r1": "confirm-wrapped",
+  "chess-rust-codex-r1": "confirm-wrapped",
+  "chess-rust-codex-r2": "confirm-wrapped",
+  "sat-c-codex-r1": "confirm-d16"
+ },
+ "arm_medians_round1": {
+  "S": {
+   "runs": 10,
+   "functions": 22.0,
+   "edges": 33.5,
+   "fanout_mean": 1.3465,
+   "hub3_share": 0.3607,
+   "hub3_null": 0.3014,
+   "hub3_excess": 0.0348,
+   "indeg_gini": 0.3169,
+   "depth": 6.0,
+   "never_called_share": 0.0,
+   "outside_share": 0.531,
+   "strict_hub3_share": 0.3679,
+   "hub3_share_non_cobol": 0.3781
+  },
+  "S2": {
+   "runs": 10,
+   "functions": 22.0,
+   "edges": 36.5,
+   "fanout_mean": 1.613,
+   "hub3_share": 0.355,
+   "hub3_null": 0.294,
+   "hub3_excess": 0.0157,
+   "indeg_gini": 0.3186,
+   "depth": 5.5,
+   "never_called_share": 0.0,
+   "outside_share": 0.6144,
+   "strict_hub3_share": 0.3742,
+   "hub3_share_non_cobol": 0.3585
+  },
+  "K": {
+   "runs": 10,
+   "functions": 39.0,
+   "edges": 62.0,
+   "fanout_mean": 1.6025,
+   "hub3_share": 0.2158,
+   "hub3_null": 0.2035,
+   "hub3_excess": 0.0319,
+   "indeg_gini": 0.3488,
+   "depth": 7.5,
+   "never_called_share": 0.0,
+   "outside_share": 0.5093,
+   "strict_hub3_share": 0.2225,
+   "hub3_share_non_cobol": 0.223
+  },
+  "K2": {
+   "runs": 10,
+   "functions": 38.5,
+   "edges": 57.5,
+   "fanout_mean": 1.5695,
+   "hub3_share": 0.2406,
+   "hub3_null": 0.1971,
+   "hub3_excess": 0.033,
+   "indeg_gini": 0.3348,
+   "depth": 9.0,
+   "never_called_share": 0.01,
+   "outside_share": 0.3848,
+   "strict_hub3_share": 0.271,
+   "hub3_share_non_cobol": 0.2651
+  },
+  "X": {
+   "runs": 10,
+   "functions": 18.0,
+   "edges": 30.0,
+   "fanout_mean": 1.7345,
+   "hub3_share": 0.374,
+   "hub3_null": 0.3454,
+   "hub3_excess": 0.018,
+   "indeg_gini": 0.3539,
+   "depth": 6.0,
+   "never_called_share": 0.0,
+   "outside_share": 0.5564,
+   "strict_hub3_share": 0.3667,
+   "hub3_share_non_cobol": 0.374
+  }
+ },
+ "round1_pairs": {
+  "X_vs_S": {
+   "functions": {
+    "X_higher": 2,
+    "S_higher": 8,
+    "ties": 0,
+    "p_two_sided": 0.109375,
+    "non_cobol": [
+     2,
+     6
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      23,
+      26
+     ],
+     [
+      "chess-cobol",
+      26,
+      55
+     ],
+     [
+      "chess-java",
+      32,
+      20
+     ],
+     [
+      "chess-python",
+      22,
+      24
+     ],
+     [
+      "chess-rust",
+      20,
+      26
+     ],
+     [
+      "sat-c",
+      8,
+      15
+     ],
+     [
+      "sat-cobol",
+      11,
+      23
+     ],
+     [
+      "sat-java",
+      16,
+      21
+     ],
+     [
+      "sat-python",
+      12,
+      4
+     ],
+     [
+      "sat-rust",
+      11,
+      15
+     ]
+    ]
+   },
+   "edges": {
+    "X_higher": 4,
+    "S_higher": 6,
+    "ties": 0,
+    "p_two_sided": 0.75390625,
+    "non_cobol": [
+     4,
+     4
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      56,
+      47
+     ],
+     [
+      "chess-cobol",
+      58,
+      74
+     ],
+     [
+      "chess-java",
+      63,
+      36
+     ],
+     [
+      "chess-python",
+      51,
+      46
+     ],
+     [
+      "chess-rust",
+      41,
+      49
+     ],
+     [
+      "sat-c",
+      12,
+      17
+     ],
+     [
+      "sat-cobol",
+      14,
+      31
+     ],
+     [
+      "sat-java",
+      19,
+      28
+     ],
+     [
+      "sat-python",
+      12,
+      3
+     ],
+     [
+      "sat-rust",
+      14,
+      19
+     ]
+    ]
+   },
+   "fanout_mean": {
+    "X_higher": 8,
+    "S_higher": 2,
+    "ties": 0,
+    "p_two_sided": 0.109375,
+    "non_cobol": [
+     7,
+     1
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      2.435,
+      1.808
+     ],
+     [
+      "chess-cobol",
+      2.231,
+      1.345
+     ],
+     [
+      "chess-java",
+      1.969,
+      1.8
+     ],
+     [
+      "chess-python",
+      2.318,
+      1.917
+     ],
+     [
+      "chess-rust",
+      2.05,
+      1.885
+     ],
+     [
+      "sat-c",
+      1.5,
+      1.133
+     ],
+     [
+      "sat-cobol",
+      1.273,
+      1.348
+     ],
+     [
+      "sat-java",
+      1.188,
+      1.333
+     ],
+     [
+      "sat-python",
+      1.0,
+      0.75
+     ],
+     [
+      "sat-rust",
+      1.273,
+      1.267
+     ]
+    ]
+   },
+   "hub3_share": {
+    "X_higher": 7,
+    "S_higher": 3,
+    "ties": 0,
+    "p_two_sided": 0.34375,
+    "non_cobol": [
+     5,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2679,
+      0.3191
+     ],
+     [
+      "chess-cobol",
+      0.3276,
+      0.2432
+     ],
+     [
+      "chess-java",
+      0.3016,
+      0.3889
+     ],
+     [
+      "chess-python",
+      0.5294,
+      0.3913
+     ],
+     [
+      "chess-rust",
+      0.4146,
+      0.3878
+     ],
+     [
+      "sat-c",
+      0.5833,
+      0.3529
+     ],
+     [
+      "sat-cobol",
+      0.5,
+      0.2581
+     ],
+     [
+      "sat-java",
+      0.3158,
+      0.2857
+     ],
+     [
+      "sat-python",
+      0.3333,
+      1.0
+     ],
+     [
+      "sat-rust",
+      0.5,
+      0.3684
+     ]
+    ]
+   },
+   "hub3_null": {
+    "X_higher": 7,
+    "S_higher": 3,
+    "ties": 0,
+    "p_two_sided": 0.34375,
+    "non_cobol": [
+     5,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2456,
+      0.2497
+     ],
+     [
+      "chess-cobol",
+      0.2362,
+      0.1611
+     ],
+     [
+      "chess-java",
+      0.2125,
+      0.2974
+     ],
+     [
+      "chess-python",
+      0.2676,
+      0.2623
+     ],
+     [
+      "chess-rust",
+      0.2926,
+      0.2414
+     ],
+     [
+      "sat-c",
+      0.592,
+      0.4
+     ],
+     [
+      "sat-cobol",
+      0.5011,
+      0.3053
+     ],
+     [
+      "sat-java",
+      0.3981,
+      0.3262
+     ],
+     [
+      "sat-python",
+      0.5173,
+      1.0
+     ],
+     [
+      "sat-rust",
+      0.4863,
+      0.4071
+     ]
+    ]
+   },
+   "hub3_excess": {
+    "X_higher": 5,
+    "S_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0223,
+      0.0695
+     ],
+     [
+      "chess-cobol",
+      0.0914,
+      0.0822
+     ],
+     [
+      "chess-java",
+      0.089,
+      0.0914
+     ],
+     [
+      "chess-python",
+      0.2618,
+      0.129
+     ],
+     [
+      "chess-rust",
+      0.122,
+      0.1463
+     ],
+     [
+      "sat-c",
+      -0.0087,
+      -0.0471
+     ],
+     [
+      "sat-cobol",
+      -0.0011,
+      -0.0472
+     ],
+     [
+      "sat-java",
+      -0.0823,
+      -0.0405
+     ],
+     [
+      "sat-python",
+      -0.184,
+      0.0
+     ],
+     [
+      "sat-rust",
+      0.0137,
+      -0.0386
+     ]
+    ]
+   },
+   "indeg_gini": {
+    "X_higher": 6,
+    "S_higher": 4,
+    "ties": 0,
+    "p_two_sided": 0.75390625,
+    "non_cobol": [
+     5,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3991,
+      0.3592
+     ],
+     [
+      "chess-cobol",
+      0.4403,
+      0.5086
+     ],
+     [
+      "chess-java",
+      0.3953,
+      0.3778
+     ],
+     [
+      "chess-python",
+      0.5588,
+      0.4638
+     ],
+     [
+      "chess-rust",
+      0.4085,
+      0.4278
+     ],
+     [
+      "sat-c",
+      0.3125,
+      0.2745
+     ],
+     [
+      "sat-cobol",
+      0.2857,
+      0.2468
+     ],
+     [
+      "sat-java",
+      0.2072,
+      0.2517
+     ],
+     [
+      "sat-python",
+      0.1528,
+      0.25
+     ],
+     [
+      "sat-rust",
+      0.2857,
+      0.2526
+     ]
+    ]
+   },
+   "depth": {
+    "X_higher": 4,
+    "S_higher": 4,
+    "ties": 2,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     4,
+     2
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      7,
+      7
+     ],
+     [
+      "chess-cobol",
+      8,
+      9
+     ],
+     [
+      "chess-java",
+      11,
+      6
+     ],
+     [
+      "chess-python",
+      8,
+      5
+     ],
+     [
+      "chess-rust",
+      8,
+      6
+     ],
+     [
+      "sat-c",
+      4,
+      4
+     ],
+     [
+      "sat-cobol",
+      4,
+      6
+     ],
+     [
+      "sat-java",
+      5,
+      6
+     ],
+     [
+      "sat-python",
+      4,
+      3
+     ],
+     [
+      "sat-rust",
+      4,
+      5
+     ]
+    ]
+   },
+   "never_called_share": {
+    "X_higher": 2,
+    "S_higher": 3,
+    "ties": 5,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     2,
+     2
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0455,
+      0.0
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.2264
+     ],
+     [
+      "chess-java",
+      0.0,
+      0.0
+     ],
+     [
+      "chess-python",
+      0.1,
+      0.0952
+     ],
+     [
+      "chess-rust",
+      0.0,
+      0.0417
+     ],
+     [
+      "sat-c",
+      0.0,
+      0.0714
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-python",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-rust",
+      0.0,
+      0.0
+     ]
+    ]
+   },
+   "outside_share": {
+    "X_higher": 5,
+    "S_higher": 3,
+    "ties": 2,
+    "p_two_sided": 0.7265625,
+    "non_cobol": [
+     5,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3412,
+      0.4471
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "chess-java",
+      0.5414,
+      0.5316
+     ],
+     [
+      "chess-python",
+      0.5,
+      0.4891
+     ],
+     [
+      "chess-rust",
+      0.705,
+      0.6142
+     ],
+     [
+      "sat-c",
+      0.5714,
+      0.6136
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.7324,
+      0.5303
+     ],
+     [
+      "sat-python",
+      0.8652,
+      0.88
+     ],
+     [
+      "sat-rust",
+      0.8108,
+      0.8021
+     ]
+    ]
+   },
+   "strict_hub3_share": {
+    "X_higher": 6,
+    "S_higher": 3,
+    "ties": 1,
+    "p_two_sided": 0.5078125,
+    "non_cobol": [
+     4,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2679,
+      0.3191
+     ],
+     [
+      "chess-cobol",
+      0.3276,
+      0.2069
+     ],
+     [
+      "chess-java",
+      0.2881,
+      0.3889
+     ],
+     [
+      "chess-python",
+      0.4821,
+      0.383
+     ],
+     [
+      "chess-rust",
+      0.4,
+      0.4
+     ],
+     [
+      "sat-c",
+      0.5833,
+      0.3529
+     ],
+     [
+      "sat-cobol",
+      0.5,
+      0.2581
+     ],
+     [
+      "sat-java",
+      0.3158,
+      0.2857
+     ],
+     [
+      "sat-python",
+      0.3333,
+      1.0
+     ],
+     [
+      "sat-rust",
+      0.4444,
+      0.3846
+     ]
+    ]
+   }
+  },
+  "X_vs_K": {
+   "functions": {
+    "X_higher": 0,
+    "K_higher": 10,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     0,
+     8
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      23,
+      45
+     ],
+     [
+      "chess-cobol",
+      26,
+      51
+     ],
+     [
+      "chess-java",
+      32,
+      58
+     ],
+     [
+      "chess-python",
+      22,
+      53
+     ],
+     [
+      "chess-rust",
+      20,
+      47
+     ],
+     [
+      "sat-c",
+      8,
+      29
+     ],
+     [
+      "sat-cobol",
+      11,
+      33
+     ],
+     [
+      "sat-java",
+      16,
+      26
+     ],
+     [
+      "sat-python",
+      12,
+      15
+     ],
+     [
+      "sat-rust",
+      11,
+      19
+     ]
+    ]
+   },
+   "edges": {
+    "X_higher": 0,
+    "K_higher": 10,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     0,
+     8
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      56,
+      82
+     ],
+     [
+      "chess-cobol",
+      58,
+      92
+     ],
+     [
+      "chess-java",
+      63,
+      123
+     ],
+     [
+      "chess-python",
+      51,
+      89
+     ],
+     [
+      "chess-rust",
+      41,
+      102
+     ],
+     [
+      "sat-c",
+      12,
+      42
+     ],
+     [
+      "sat-cobol",
+      14,
+      41
+     ],
+     [
+      "sat-java",
+      19,
+      33
+     ],
+     [
+      "sat-python",
+      12,
+      15
+     ],
+     [
+      "sat-rust",
+      14,
+      29
+     ]
+    ]
+   },
+   "fanout_mean": {
+    "X_higher": 5,
+    "K_higher": 4,
+    "ties": 1,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     3,
+     4
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      2.435,
+      1.822
+     ],
+     [
+      "chess-cobol",
+      2.231,
+      1.804
+     ],
+     [
+      "chess-java",
+      1.969,
+      2.121
+     ],
+     [
+      "chess-python",
+      2.318,
+      1.679
+     ],
+     [
+      "chess-rust",
+      2.05,
+      2.17
+     ],
+     [
+      "sat-c",
+      1.5,
+      1.448
+     ],
+     [
+      "sat-cobol",
+      1.273,
+      1.242
+     ],
+     [
+      "sat-java",
+      1.188,
+      1.269
+     ],
+     [
+      "sat-python",
+      1.0,
+      1.0
+     ],
+     [
+      "sat-rust",
+      1.273,
+      1.526
+     ]
+    ]
+   },
+   "hub3_share": {
+    "X_higher": 9,
+    "K_higher": 0,
+    "ties": 1,
+    "p_two_sided": 0.00390625,
+    "non_cobol": [
+     7,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2679,
+      0.2317
+     ],
+     [
+      "chess-cobol",
+      0.3276,
+      0.2174
+     ],
+     [
+      "chess-java",
+      0.3016,
+      0.1545
+     ],
+     [
+      "chess-python",
+      0.5294,
+      0.2472
+     ],
+     [
+      "chess-rust",
+      0.4146,
+      0.1863
+     ],
+     [
+      "sat-c",
+      0.5833,
+      0.2143
+     ],
+     [
+      "sat-cobol",
+      0.5,
+      0.1951
+     ],
+     [
+      "sat-java",
+      0.3158,
+      0.2121
+     ],
+     [
+      "sat-python",
+      0.3333,
+      0.3333
+     ],
+     [
+      "sat-rust",
+      0.5,
+      0.3793
+     ]
+    ]
+   },
+   "hub3_null": {
+    "X_higher": 10,
+    "K_higher": 0,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2456,
+      0.16
+     ],
+     [
+      "chess-cobol",
+      0.2362,
+      0.1499
+     ],
+     [
+      "chess-java",
+      0.2125,
+      0.1266
+     ],
+     [
+      "chess-python",
+      0.2676,
+      0.1484
+     ],
+     [
+      "chess-rust",
+      0.2926,
+      0.1503
+     ],
+     [
+      "sat-c",
+      0.592,
+      0.247
+     ],
+     [
+      "sat-cobol",
+      0.5011,
+      0.2477
+     ],
+     [
+      "sat-java",
+      0.3981,
+      0.283
+     ],
+     [
+      "sat-python",
+      0.5173,
+      0.4412
+     ],
+     [
+      "sat-rust",
+      0.4863,
+      0.3339
+     ]
+    ]
+   },
+   "hub3_excess": {
+    "X_higher": 6,
+    "K_higher": 4,
+    "ties": 0,
+    "p_two_sided": 0.75390625,
+    "non_cobol": [
+     4,
+     4
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0223,
+      0.0717
+     ],
+     [
+      "chess-cobol",
+      0.0914,
+      0.0675
+     ],
+     [
+      "chess-java",
+      0.089,
+      0.0279
+     ],
+     [
+      "chess-python",
+      0.2618,
+      0.0988
+     ],
+     [
+      "chess-rust",
+      0.122,
+      0.036
+     ],
+     [
+      "sat-c",
+      -0.0087,
+      -0.0327
+     ],
+     [
+      "sat-cobol",
+      -0.0011,
+      -0.0525
+     ],
+     [
+      "sat-java",
+      -0.0823,
+      -0.0708
+     ],
+     [
+      "sat-python",
+      -0.184,
+      -0.1079
+     ],
+     [
+      "sat-rust",
+      0.0137,
+      0.0454
+     ]
+    ]
+   },
+   "indeg_gini": {
+    "X_higher": 5,
+    "K_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3991,
+      0.3745
+     ],
+     [
+      "chess-cobol",
+      0.4403,
+      0.3777
+     ],
+     [
+      "chess-java",
+      0.3953,
+      0.3994
+     ],
+     [
+      "chess-python",
+      0.5588,
+      0.5745
+     ],
+     [
+      "chess-rust",
+      0.4085,
+      0.4059
+     ],
+     [
+      "sat-c",
+      0.3125,
+      0.2989
+     ],
+     [
+      "sat-cobol",
+      0.2857,
+      0.2055
+     ],
+     [
+      "sat-java",
+      0.2072,
+      0.2133
+     ],
+     [
+      "sat-python",
+      0.1528,
+      0.2311
+     ],
+     [
+      "sat-rust",
+      0.2857,
+      0.323
+     ]
+    ]
+   },
+   "depth": {
+    "X_higher": 0,
+    "K_higher": 7,
+    "ties": 3,
+    "p_two_sided": 0.015625,
+    "non_cobol": [
+     0,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      7,
+      9
+     ],
+     [
+      "chess-cobol",
+      8,
+      10
+     ],
+     [
+      "chess-java",
+      11,
+      12
+     ],
+     [
+      "chess-python",
+      8,
+      8
+     ],
+     [
+      "chess-rust",
+      8,
+      11
+     ],
+     [
+      "sat-c",
+      4,
+      6
+     ],
+     [
+      "sat-cobol",
+      4,
+      7
+     ],
+     [
+      "sat-java",
+      5,
+      5
+     ],
+     [
+      "sat-python",
+      4,
+      4
+     ],
+     [
+      "sat-rust",
+      4,
+      5
+     ]
+    ]
+   },
+   "never_called_share": {
+    "X_higher": 2,
+    "K_higher": 2,
+    "ties": 6,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     2,
+     2
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0455,
+      0.0227
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "chess-java",
+      0.0,
+      0.0182
+     ],
+     [
+      "chess-python",
+      0.1,
+      0.0286
+     ],
+     [
+      "chess-rust",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-c",
+      0.0,
+      0.0357
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-python",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-rust",
+      0.0,
+      0.0
+     ]
+    ]
+   },
+   "outside_share": {
+    "X_higher": 6,
+    "K_higher": 3,
+    "ties": 1,
+    "p_two_sided": 0.5078125,
+    "non_cobol": [
+     6,
+     2
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3412,
+      0.5
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.0213
+     ],
+     [
+      "chess-java",
+      0.5414,
+      0.3022
+     ],
+     [
+      "chess-python",
+      0.5,
+      0.5187
+     ],
+     [
+      "chess-rust",
+      0.705,
+      0.6033
+     ],
+     [
+      "sat-c",
+      0.5714,
+      0.3438
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.7324,
+      0.5211
+     ],
+     [
+      "sat-python",
+      0.8652,
+      0.8602
+     ],
+     [
+      "sat-rust",
+      0.8108,
+      0.7786
+     ]
+    ]
+   },
+   "strict_hub3_share": {
+    "X_higher": 10,
+    "K_higher": 0,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2679,
+      0.2317
+     ],
+     [
+      "chess-cobol",
+      0.3276,
+      0.2099
+     ],
+     [
+      "chess-java",
+      0.2881,
+      0.1545
+     ],
+     [
+      "chess-python",
+      0.4821,
+      0.2558
+     ],
+     [
+      "chess-rust",
+      0.4,
+      0.2951
+     ],
+     [
+      "sat-c",
+      0.5833,
+      0.2143
+     ],
+     [
+      "sat-cobol",
+      0.5,
+      0.1951
+     ],
+     [
+      "sat-java",
+      0.3158,
+      0.2121
+     ],
+     [
+      "sat-python",
+      0.3333,
+      0.2308
+     ],
+     [
+      "sat-rust",
+      0.4444,
+      0.3636
+     ]
+    ]
+   }
+  },
+  "S_vs_K": {
+   "functions": {
+    "S_higher": 1,
+    "K_higher": 9,
+    "ties": 0,
+    "p_two_sided": 0.021484375,
+    "non_cobol": [
+     0,
+     8
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      26,
+      45
+     ],
+     [
+      "chess-cobol",
+      55,
+      51
+     ],
+     [
+      "chess-java",
+      20,
+      58
+     ],
+     [
+      "chess-python",
+      24,
+      53
+     ],
+     [
+      "chess-rust",
+      26,
+      47
+     ],
+     [
+      "sat-c",
+      15,
+      29
+     ],
+     [
+      "sat-cobol",
+      23,
+      33
+     ],
+     [
+      "sat-java",
+      21,
+      26
+     ],
+     [
+      "sat-python",
+      4,
+      15
+     ],
+     [
+      "sat-rust",
+      15,
+      19
+     ]
+    ]
+   },
+   "edges": {
+    "S_higher": 0,
+    "K_higher": 10,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     0,
+     8
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      47,
+      82
+     ],
+     [
+      "chess-cobol",
+      74,
+      92
+     ],
+     [
+      "chess-java",
+      36,
+      123
+     ],
+     [
+      "chess-python",
+      46,
+      89
+     ],
+     [
+      "chess-rust",
+      49,
+      102
+     ],
+     [
+      "sat-c",
+      17,
+      42
+     ],
+     [
+      "sat-cobol",
+      31,
+      41
+     ],
+     [
+      "sat-java",
+      28,
+      33
+     ],
+     [
+      "sat-python",
+      3,
+      15
+     ],
+     [
+      "sat-rust",
+      19,
+      29
+     ]
+    ]
+   },
+   "fanout_mean": {
+    "S_higher": 3,
+    "K_higher": 7,
+    "ties": 0,
+    "p_two_sided": 0.34375,
+    "non_cobol": [
+     2,
+     6
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      1.808,
+      1.822
+     ],
+     [
+      "chess-cobol",
+      1.345,
+      1.804
+     ],
+     [
+      "chess-java",
+      1.8,
+      2.121
+     ],
+     [
+      "chess-python",
+      1.917,
+      1.679
+     ],
+     [
+      "chess-rust",
+      1.885,
+      2.17
+     ],
+     [
+      "sat-c",
+      1.133,
+      1.448
+     ],
+     [
+      "sat-cobol",
+      1.348,
+      1.242
+     ],
+     [
+      "sat-java",
+      1.333,
+      1.269
+     ],
+     [
+      "sat-python",
+      0.75,
+      1.0
+     ],
+     [
+      "sat-rust",
+      1.267,
+      1.526
+     ]
+    ]
+   },
+   "hub3_share": {
+    "S_higher": 9,
+    "K_higher": 1,
+    "ties": 0,
+    "p_two_sided": 0.021484375,
+    "non_cobol": [
+     7,
+     1
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3191,
+      0.2317
+     ],
+     [
+      "chess-cobol",
+      0.2432,
+      0.2174
+     ],
+     [
+      "chess-java",
+      0.3889,
+      0.1545
+     ],
+     [
+      "chess-python",
+      0.3913,
+      0.2472
+     ],
+     [
+      "chess-rust",
+      0.3878,
+      0.1863
+     ],
+     [
+      "sat-c",
+      0.3529,
+      0.2143
+     ],
+     [
+      "sat-cobol",
+      0.2581,
+      0.1951
+     ],
+     [
+      "sat-java",
+      0.2857,
+      0.2121
+     ],
+     [
+      "sat-python",
+      1.0,
+      0.3333
+     ],
+     [
+      "sat-rust",
+      0.3684,
+      0.3793
+     ]
+    ]
+   },
+   "hub3_null": {
+    "S_higher": 10,
+    "K_higher": 0,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2497,
+      0.16
+     ],
+     [
+      "chess-cobol",
+      0.1611,
+      0.1499
+     ],
+     [
+      "chess-java",
+      0.2974,
+      0.1266
+     ],
+     [
+      "chess-python",
+      0.2623,
+      0.1484
+     ],
+     [
+      "chess-rust",
+      0.2414,
+      0.1503
+     ],
+     [
+      "sat-c",
+      0.4,
+      0.247
+     ],
+     [
+      "sat-cobol",
+      0.3053,
+      0.2477
+     ],
+     [
+      "sat-java",
+      0.3262,
+      0.283
+     ],
+     [
+      "sat-python",
+      1.0,
+      0.4412
+     ],
+     [
+      "sat-rust",
+      0.4071,
+      0.3339
+     ]
+    ]
+   },
+   "hub3_excess": {
+    "S_higher": 7,
+    "K_higher": 3,
+    "ties": 0,
+    "p_two_sided": 0.34375,
+    "non_cobol": [
+     5,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0695,
+      0.0717
+     ],
+     [
+      "chess-cobol",
+      0.0822,
+      0.0675
+     ],
+     [
+      "chess-java",
+      0.0914,
+      0.0279
+     ],
+     [
+      "chess-python",
+      0.129,
+      0.0988
+     ],
+     [
+      "chess-rust",
+      0.1463,
+      0.036
+     ],
+     [
+      "sat-c",
+      -0.0471,
+      -0.0327
+     ],
+     [
+      "sat-cobol",
+      -0.0472,
+      -0.0525
+     ],
+     [
+      "sat-java",
+      -0.0405,
+      -0.0708
+     ],
+     [
+      "sat-python",
+      0.0,
+      -0.1079
+     ],
+     [
+      "sat-rust",
+      -0.0386,
+      0.0454
+     ]
+    ]
+   },
+   "indeg_gini": {
+    "S_higher": 5,
+    "K_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3592,
+      0.3745
+     ],
+     [
+      "chess-cobol",
+      0.5086,
+      0.3777
+     ],
+     [
+      "chess-java",
+      0.3778,
+      0.3994
+     ],
+     [
+      "chess-python",
+      0.4638,
+      0.5745
+     ],
+     [
+      "chess-rust",
+      0.4278,
+      0.4059
+     ],
+     [
+      "sat-c",
+      0.2745,
+      0.2989
+     ],
+     [
+      "sat-cobol",
+      0.2468,
+      0.2055
+     ],
+     [
+      "sat-java",
+      0.2517,
+      0.2133
+     ],
+     [
+      "sat-python",
+      0.25,
+      0.2311
+     ],
+     [
+      "sat-rust",
+      0.2526,
+      0.323
+     ]
+    ]
+   },
+   "depth": {
+    "S_higher": 1,
+    "K_higher": 8,
+    "ties": 1,
+    "p_two_sided": 0.0390625,
+    "non_cobol": [
+     1,
+     6
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      7,
+      9
+     ],
+     [
+      "chess-cobol",
+      9,
+      10
+     ],
+     [
+      "chess-java",
+      6,
+      12
+     ],
+     [
+      "chess-python",
+      5,
+      8
+     ],
+     [
+      "chess-rust",
+      6,
+      11
+     ],
+     [
+      "sat-c",
+      4,
+      6
+     ],
+     [
+      "sat-cobol",
+      6,
+      7
+     ],
+     [
+      "sat-java",
+      6,
+      5
+     ],
+     [
+      "sat-python",
+      3,
+      4
+     ],
+     [
+      "sat-rust",
+      5,
+      5
+     ]
+    ]
+   },
+   "never_called_share": {
+    "S_higher": 4,
+    "K_higher": 2,
+    "ties": 4,
+    "p_two_sided": 0.6875,
+    "non_cobol": [
+     3,
+     2
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0,
+      0.0227
+     ],
+     [
+      "chess-cobol",
+      0.2264,
+      0.0
+     ],
+     [
+      "chess-java",
+      0.0,
+      0.0182
+     ],
+     [
+      "chess-python",
+      0.0952,
+      0.0286
+     ],
+     [
+      "chess-rust",
+      0.0417,
+      0.0
+     ],
+     [
+      "sat-c",
+      0.0714,
+      0.0357
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-python",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-rust",
+      0.0,
+      0.0
+     ]
+    ]
+   },
+   "outside_share": {
+    "S_higher": 6,
+    "K_higher": 3,
+    "ties": 1,
+    "p_two_sided": 0.5078125,
+    "non_cobol": [
+     6,
+     2
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.4471,
+      0.5
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.0213
+     ],
+     [
+      "chess-java",
+      0.5316,
+      0.3022
+     ],
+     [
+      "chess-python",
+      0.4891,
+      0.5187
+     ],
+     [
+      "chess-rust",
+      0.6142,
+      0.6033
+     ],
+     [
+      "sat-c",
+      0.6136,
+      0.3438
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.5303,
+      0.5211
+     ],
+     [
+      "sat-python",
+      0.88,
+      0.8602
+     ],
+     [
+      "sat-rust",
+      0.8021,
+      0.7786
+     ]
+    ]
+   },
+   "strict_hub3_share": {
+    "S_higher": 9,
+    "K_higher": 1,
+    "ties": 0,
+    "p_two_sided": 0.021484375,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3191,
+      0.2317
+     ],
+     [
+      "chess-cobol",
+      0.2069,
+      0.2099
+     ],
+     [
+      "chess-java",
+      0.3889,
+      0.1545
+     ],
+     [
+      "chess-python",
+      0.383,
+      0.2558
+     ],
+     [
+      "chess-rust",
+      0.4,
+      0.2951
+     ],
+     [
+      "sat-c",
+      0.3529,
+      0.2143
+     ],
+     [
+      "sat-cobol",
+      0.2581,
+      0.1951
+     ],
+     [
+      "sat-java",
+      0.2857,
+      0.2121
+     ],
+     [
+      "sat-python",
+      1.0,
+      0.2308
+     ],
+     [
+      "sat-rust",
+      0.3846,
+      0.3636
+     ]
+    ]
+   }
+  }
+ },
+ "round2_replication": {
+  "X_vs_S2": {
+   "functions": {
+    "X_higher": 3,
+    "S2_higher": 5,
+    "ties": 2,
+    "p_two_sided": 0.7265625,
+    "non_cobol": [
+     3,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      23,
+      23
+     ],
+     [
+      "chess-cobol",
+      26,
+      49
+     ],
+     [
+      "chess-java",
+      32,
+      23
+     ],
+     [
+      "chess-python",
+      22,
+      22
+     ],
+     [
+      "chess-rust",
+      20,
+      23
+     ],
+     [
+      "sat-c",
+      8,
+      15
+     ],
+     [
+      "sat-cobol",
+      11,
+      22
+     ],
+     [
+      "sat-java",
+      16,
+      14
+     ],
+     [
+      "sat-python",
+      12,
+      4
+     ],
+     [
+      "sat-rust",
+      11,
+      17
+     ]
+    ]
+   },
+   "edges": {
+    "X_higher": 5,
+    "S2_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     5,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      56,
+      42
+     ],
+     [
+      "chess-cobol",
+      58,
+      86
+     ],
+     [
+      "chess-java",
+      63,
+      44
+     ],
+     [
+      "chess-python",
+      51,
+      46
+     ],
+     [
+      "chess-rust",
+      41,
+      44
+     ],
+     [
+      "sat-c",
+      12,
+      17
+     ],
+     [
+      "sat-cobol",
+      14,
+      31
+     ],
+     [
+      "sat-java",
+      19,
+      18
+     ],
+     [
+      "sat-python",
+      12,
+      3
+     ],
+     [
+      "sat-rust",
+      14,
+      25
+     ]
+    ]
+   },
+   "fanout_mean": {
+    "X_higher": 7,
+    "S2_higher": 3,
+    "ties": 0,
+    "p_two_sided": 0.34375,
+    "non_cobol": [
+     6,
+     2
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      2.435,
+      1.826
+     ],
+     [
+      "chess-cobol",
+      2.231,
+      1.755
+     ],
+     [
+      "chess-java",
+      1.969,
+      1.913
+     ],
+     [
+      "chess-python",
+      2.318,
+      2.091
+     ],
+     [
+      "chess-rust",
+      2.05,
+      1.913
+     ],
+     [
+      "sat-c",
+      1.5,
+      1.133
+     ],
+     [
+      "sat-cobol",
+      1.273,
+      1.409
+     ],
+     [
+      "sat-java",
+      1.188,
+      1.286
+     ],
+     [
+      "sat-python",
+      1.0,
+      0.75
+     ],
+     [
+      "sat-rust",
+      1.273,
+      1.471
+     ]
+    ]
+   },
+   "hub3_share": {
+    "X_higher": 6,
+    "S2_higher": 4,
+    "ties": 0,
+    "p_two_sided": 0.75390625,
+    "non_cobol": [
+     4,
+     4
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2679,
+      0.3571
+     ],
+     [
+      "chess-cobol",
+      0.3276,
+      0.1744
+     ],
+     [
+      "chess-java",
+      0.3016,
+      0.4091
+     ],
+     [
+      "chess-python",
+      0.5294,
+      0.3913
+     ],
+     [
+      "chess-rust",
+      0.4146,
+      0.3182
+     ],
+     [
+      "sat-c",
+      0.5833,
+      0.3529
+     ],
+     [
+      "sat-cobol",
+      0.5,
+      0.3226
+     ],
+     [
+      "sat-java",
+      0.3158,
+      0.3333
+     ],
+     [
+      "sat-python",
+      0.3333,
+      1.0
+     ],
+     [
+      "sat-rust",
+      0.5,
+      0.36
+     ]
+    ]
+   },
+   "hub3_null": {
+    "X_higher": 6,
+    "S2_higher": 4,
+    "ties": 0,
+    "p_two_sided": 0.75390625,
+    "non_cobol": [
+     4,
+     4
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2456,
+      0.2774
+     ],
+     [
+      "chess-cobol",
+      0.2362,
+      0.1549
+     ],
+     [
+      "chess-java",
+      0.2125,
+      0.2571
+     ],
+     [
+      "chess-python",
+      0.2676,
+      0.2573
+     ],
+     [
+      "chess-rust",
+      0.2926,
+      0.269
+     ],
+     [
+      "sat-c",
+      0.592,
+      0.4134
+     ],
+     [
+      "sat-cobol",
+      0.5011,
+      0.3106
+     ],
+     [
+      "sat-java",
+      0.3981,
+      0.4171
+     ],
+     [
+      "sat-python",
+      0.5173,
+      1.0
+     ],
+     [
+      "sat-rust",
+      0.4863,
+      0.367
+     ]
+    ]
+   },
+   "hub3_excess": {
+    "X_higher": 6,
+    "S2_higher": 4,
+    "ties": 0,
+    "p_two_sided": 0.75390625,
+    "non_cobol": [
+     5,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0223,
+      0.0797
+     ],
+     [
+      "chess-cobol",
+      0.0914,
+      0.0195
+     ],
+     [
+      "chess-java",
+      0.089,
+      0.152
+     ],
+     [
+      "chess-python",
+      0.2618,
+      0.134
+     ],
+     [
+      "chess-rust",
+      0.122,
+      0.0492
+     ],
+     [
+      "sat-c",
+      -0.0087,
+      -0.0605
+     ],
+     [
+      "sat-cobol",
+      -0.0011,
+      0.0119
+     ],
+     [
+      "sat-java",
+      -0.0823,
+      -0.0838
+     ],
+     [
+      "sat-python",
+      -0.184,
+      0.0
+     ],
+     [
+      "sat-rust",
+      0.0137,
+      -0.007
+     ]
+    ]
+   },
+   "indeg_gini": {
+    "X_higher": 5,
+    "S2_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     4,
+     4
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3991,
+      0.3665
+     ],
+     [
+      "chess-cobol",
+      0.4403,
+      0.336
+     ],
+     [
+      "chess-java",
+      0.3953,
+      0.4071
+     ],
+     [
+      "chess-python",
+      0.5588,
+      0.4407
+     ],
+     [
+      "chess-rust",
+      0.4085,
+      0.3893
+     ],
+     [
+      "sat-c",
+      0.3125,
+      0.2745
+     ],
+     [
+      "sat-cobol",
+      0.2857,
+      0.2859
+     ],
+     [
+      "sat-java",
+      0.2072,
+      0.2302
+     ],
+     [
+      "sat-python",
+      0.1528,
+      0.25
+     ],
+     [
+      "sat-rust",
+      0.2857,
+      0.3012
+     ]
+    ]
+   },
+   "depth": {
+    "X_higher": 4,
+    "S2_higher": 4,
+    "ties": 2,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     4,
+     2
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      7,
+      8
+     ],
+     [
+      "chess-cobol",
+      8,
+      10
+     ],
+     [
+      "chess-java",
+      11,
+      6
+     ],
+     [
+      "chess-python",
+      8,
+      4
+     ],
+     [
+      "chess-rust",
+      8,
+      2
+     ],
+     [
+      "sat-c",
+      4,
+      4
+     ],
+     [
+      "sat-cobol",
+      4,
+      6
+     ],
+     [
+      "sat-java",
+      5,
+      5
+     ],
+     [
+      "sat-python",
+      4,
+      3
+     ],
+     [
+      "sat-rust",
+      4,
+      6
+     ]
+    ]
+   },
+   "never_called_share": {
+    "X_higher": 2,
+    "S2_higher": 1,
+    "ties": 7,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     2,
+     1
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0455,
+      0.0
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "chess-java",
+      0.0,
+      0.0
+     ],
+     [
+      "chess-python",
+      0.1,
+      0.0526
+     ],
+     [
+      "chess-rust",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-c",
+      0.0,
+      0.0714
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-python",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-rust",
+      0.0,
+      0.0
+     ]
+    ]
+   },
+   "outside_share": {
+    "X_higher": 3,
+    "S2_higher": 6,
+    "ties": 1,
+    "p_two_sided": 0.5078125,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3412,
+      0.5758
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.0227
+     ],
+     [
+      "chess-java",
+      0.5414,
+      0.5111
+     ],
+     [
+      "chess-python",
+      0.5,
+      0.5306
+     ],
+     [
+      "chess-rust",
+      0.705,
+      0.7215
+     ],
+     [
+      "sat-c",
+      0.5714,
+      0.6531
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.7324,
+      0.661
+     ],
+     [
+      "sat-python",
+      0.8652,
+      0.9062
+     ],
+     [
+      "sat-rust",
+      0.8108,
+      0.734
+     ]
+    ]
+   },
+   "strict_hub3_share": {
+    "X_higher": 5,
+    "S2_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2679,
+      0.3571
+     ],
+     [
+      "chess-cobol",
+      0.3276,
+      0.1744
+     ],
+     [
+      "chess-java",
+      0.2881,
+      0.4091
+     ],
+     [
+      "chess-python",
+      0.4821,
+      0.3913
+     ],
+     [
+      "chess-rust",
+      0.4,
+      0.45
+     ],
+     [
+      "sat-c",
+      0.5833,
+      0.3529
+     ],
+     [
+      "sat-cobol",
+      0.5,
+      0.3226
+     ],
+     [
+      "sat-java",
+      0.3158,
+      0.3333
+     ],
+     [
+      "sat-python",
+      0.3333,
+      1.0
+     ],
+     [
+      "sat-rust",
+      0.4444,
+      0.4
+     ]
+    ]
+   }
+  },
+  "X_vs_K2": {
+   "functions": {
+    "X_higher": 0,
+    "K2_higher": 10,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     0,
+     8
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      23,
+      51
+     ],
+     [
+      "chess-cobol",
+      26,
+      42
+     ],
+     [
+      "chess-java",
+      32,
+      57
+     ],
+     [
+      "chess-python",
+      22,
+      37
+     ],
+     [
+      "chess-rust",
+      20,
+      71
+     ],
+     [
+      "sat-c",
+      8,
+      29
+     ],
+     [
+      "sat-cobol",
+      11,
+      40
+     ],
+     [
+      "sat-java",
+      16,
+      22
+     ],
+     [
+      "sat-python",
+      12,
+      21
+     ],
+     [
+      "sat-rust",
+      11,
+      26
+     ]
+    ]
+   },
+   "edges": {
+    "X_higher": 0,
+    "K2_higher": 10,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     0,
+     8
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      56,
+      87
+     ],
+     [
+      "chess-cobol",
+      58,
+      64
+     ],
+     [
+      "chess-java",
+      63,
+      102
+     ],
+     [
+      "chess-python",
+      51,
+      82
+     ],
+     [
+      "chess-rust",
+      41,
+      177
+     ],
+     [
+      "sat-c",
+      12,
+      42
+     ],
+     [
+      "sat-cobol",
+      14,
+      51
+     ],
+     [
+      "sat-java",
+      19,
+      26
+     ],
+     [
+      "sat-python",
+      12,
+      23
+     ],
+     [
+      "sat-rust",
+      14,
+      42
+     ]
+    ]
+   },
+   "fanout_mean": {
+    "X_higher": 6,
+    "K2_higher": 4,
+    "ties": 0,
+    "p_two_sided": 0.75390625,
+    "non_cobol": [
+     5,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      2.435,
+      1.706
+     ],
+     [
+      "chess-cobol",
+      2.231,
+      1.524
+     ],
+     [
+      "chess-java",
+      1.969,
+      1.789
+     ],
+     [
+      "chess-python",
+      2.318,
+      2.216
+     ],
+     [
+      "chess-rust",
+      2.05,
+      2.493
+     ],
+     [
+      "sat-c",
+      1.5,
+      1.448
+     ],
+     [
+      "sat-cobol",
+      1.273,
+      1.275
+     ],
+     [
+      "sat-java",
+      1.188,
+      1.182
+     ],
+     [
+      "sat-python",
+      1.0,
+      1.095
+     ],
+     [
+      "sat-rust",
+      1.273,
+      1.615
+     ]
+    ]
+   },
+   "hub3_share": {
+    "X_higher": 10,
+    "K2_higher": 0,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2679,
+      0.2184
+     ],
+     [
+      "chess-cobol",
+      0.3276,
+      0.2031
+     ],
+     [
+      "chess-java",
+      0.3016,
+      0.1765
+     ],
+     [
+      "chess-python",
+      0.5294,
+      0.3415
+     ],
+     [
+      "chess-rust",
+      0.4146,
+      0.2203
+     ],
+     [
+      "sat-c",
+      0.5833,
+      0.3333
+     ],
+     [
+      "sat-cobol",
+      0.5,
+      0.2157
+     ],
+     [
+      "sat-java",
+      0.3158,
+      0.2692
+     ],
+     [
+      "sat-python",
+      0.3333,
+      0.2609
+     ],
+     [
+      "sat-rust",
+      0.5,
+      0.2857
+     ]
+    ]
+   },
+   "hub3_null": {
+    "X_higher": 10,
+    "K2_higher": 0,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2456,
+      0.1527
+     ],
+     [
+      "chess-cobol",
+      0.2362,
+      0.1855
+     ],
+     [
+      "chess-java",
+      0.2125,
+      0.1341
+     ],
+     [
+      "chess-python",
+      0.2676,
+      0.1793
+     ],
+     [
+      "chess-rust",
+      0.2926,
+      0.1002
+     ],
+     [
+      "sat-c",
+      0.592,
+      0.251
+     ],
+     [
+      "sat-cobol",
+      0.5011,
+      0.2086
+     ],
+     [
+      "sat-java",
+      0.3981,
+      0.3206
+     ],
+     [
+      "sat-python",
+      0.5173,
+      0.3232
+     ],
+     [
+      "sat-rust",
+      0.4863,
+      0.2621
+     ]
+    ]
+   },
+   "hub3_excess": {
+    "X_higher": 4,
+    "K2_higher": 6,
+    "ties": 0,
+    "p_two_sided": 0.75390625,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0223,
+      0.0657
+     ],
+     [
+      "chess-cobol",
+      0.0914,
+      0.0176
+     ],
+     [
+      "chess-java",
+      0.089,
+      0.0424
+     ],
+     [
+      "chess-python",
+      0.2618,
+      0.1621
+     ],
+     [
+      "chess-rust",
+      0.122,
+      0.1202
+     ],
+     [
+      "sat-c",
+      -0.0087,
+      0.0823
+     ],
+     [
+      "sat-cobol",
+      -0.0011,
+      0.0071
+     ],
+     [
+      "sat-java",
+      -0.0823,
+      -0.0514
+     ],
+     [
+      "sat-python",
+      -0.184,
+      -0.0623
+     ],
+     [
+      "sat-rust",
+      0.0137,
+      0.0236
+     ]
+    ]
+   },
+   "indeg_gini": {
+    "X_higher": 5,
+    "K2_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3991,
+      0.3565
+     ],
+     [
+      "chess-cobol",
+      0.4403,
+      0.3013
+     ],
+     [
+      "chess-java",
+      0.3953,
+      0.4403
+     ],
+     [
+      "chess-python",
+      0.5588,
+      0.5168
+     ],
+     [
+      "chess-rust",
+      0.4085,
+      0.5234
+     ],
+     [
+      "sat-c",
+      0.3125,
+      0.3793
+     ],
+     [
+      "sat-cobol",
+      0.2857,
+      0.224
+     ],
+     [
+      "sat-java",
+      0.2072,
+      0.1993
+     ],
+     [
+      "sat-python",
+      0.1528,
+      0.1532
+     ],
+     [
+      "sat-rust",
+      0.2857,
+      0.3132
+     ]
+    ]
+   },
+   "depth": {
+    "X_higher": 1,
+    "K2_higher": 8,
+    "ties": 1,
+    "p_two_sided": 0.0390625,
+    "non_cobol": [
+     1,
+     6
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      7,
+      12
+     ],
+     [
+      "chess-cobol",
+      8,
+      11
+     ],
+     [
+      "chess-java",
+      11,
+      10
+     ],
+     [
+      "chess-python",
+      8,
+      10
+     ],
+     [
+      "chess-rust",
+      8,
+      11
+     ],
+     [
+      "sat-c",
+      4,
+      6
+     ],
+     [
+      "sat-cobol",
+      4,
+      8
+     ],
+     [
+      "sat-java",
+      5,
+      5
+     ],
+     [
+      "sat-python",
+      4,
+      6
+     ],
+     [
+      "sat-rust",
+      4,
+      7
+     ]
+    ]
+   },
+   "never_called_share": {
+    "X_higher": 2,
+    "K2_higher": 3,
+    "ties": 5,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     2,
+     3
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0455,
+      0.02
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "chess-java",
+      0.0,
+      0.0962
+     ],
+     [
+      "chess-python",
+      0.1,
+      0.069
+     ],
+     [
+      "chess-rust",
+      0.0,
+      0.0725
+     ],
+     [
+      "sat-c",
+      0.0,
+      0.0714
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-python",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-rust",
+      0.0,
+      0.0
+     ]
+    ]
+   },
+   "outside_share": {
+    "X_higher": 7,
+    "K2_higher": 2,
+    "ties": 1,
+    "p_two_sided": 0.1796875,
+    "non_cobol": [
+     7,
+     1
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3412,
+      0.3741
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.0704
+     ],
+     [
+      "chess-java",
+      0.5414,
+      0.3462
+     ],
+     [
+      "chess-python",
+      0.5,
+      0.3955
+     ],
+     [
+      "chess-rust",
+      0.705,
+      0.4552
+     ],
+     [
+      "sat-c",
+      0.5714,
+      0.3333
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.7324,
+      0.6301
+     ],
+     [
+      "sat-python",
+      0.8652,
+      0.7442
+     ],
+     [
+      "sat-rust",
+      0.8108,
+      0.7397
+     ]
+    ]
+   },
+   "strict_hub3_share": {
+    "X_higher": 10,
+    "K2_higher": 0,
+    "ties": 0,
+    "p_two_sided": 0.001953125,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2679,
+      0.2184
+     ],
+     [
+      "chess-cobol",
+      0.3276,
+      0.2326
+     ],
+     [
+      "chess-java",
+      0.2881,
+      0.1782
+     ],
+     [
+      "chess-python",
+      0.4821,
+      0.3457
+     ],
+     [
+      "chess-rust",
+      0.4,
+      0.2917
+     ],
+     [
+      "sat-c",
+      0.5833,
+      0.3333
+     ],
+     [
+      "sat-cobol",
+      0.5,
+      0.2157
+     ],
+     [
+      "sat-java",
+      0.3158,
+      0.2692
+     ],
+     [
+      "sat-python",
+      0.3333,
+      0.2727
+     ],
+     [
+      "sat-rust",
+      0.4444,
+      0.36
+     ]
+    ]
+   }
+  },
+  "S2_vs_K2": {
+   "functions": {
+    "S2_higher": 1,
+    "K2_higher": 9,
+    "ties": 0,
+    "p_two_sided": 0.021484375,
+    "non_cobol": [
+     0,
+     8
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      23,
+      51
+     ],
+     [
+      "chess-cobol",
+      49,
+      42
+     ],
+     [
+      "chess-java",
+      23,
+      57
+     ],
+     [
+      "chess-python",
+      22,
+      37
+     ],
+     [
+      "chess-rust",
+      23,
+      71
+     ],
+     [
+      "sat-c",
+      15,
+      29
+     ],
+     [
+      "sat-cobol",
+      22,
+      40
+     ],
+     [
+      "sat-java",
+      14,
+      22
+     ],
+     [
+      "sat-python",
+      4,
+      21
+     ],
+     [
+      "sat-rust",
+      17,
+      26
+     ]
+    ]
+   },
+   "edges": {
+    "S2_higher": 1,
+    "K2_higher": 9,
+    "ties": 0,
+    "p_two_sided": 0.021484375,
+    "non_cobol": [
+     0,
+     8
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      42,
+      87
+     ],
+     [
+      "chess-cobol",
+      86,
+      64
+     ],
+     [
+      "chess-java",
+      44,
+      102
+     ],
+     [
+      "chess-python",
+      46,
+      82
+     ],
+     [
+      "chess-rust",
+      44,
+      177
+     ],
+     [
+      "sat-c",
+      17,
+      42
+     ],
+     [
+      "sat-cobol",
+      31,
+      51
+     ],
+     [
+      "sat-java",
+      18,
+      26
+     ],
+     [
+      "sat-python",
+      3,
+      23
+     ],
+     [
+      "sat-rust",
+      25,
+      42
+     ]
+    ]
+   },
+   "fanout_mean": {
+    "S2_higher": 5,
+    "K2_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      1.826,
+      1.706
+     ],
+     [
+      "chess-cobol",
+      1.755,
+      1.524
+     ],
+     [
+      "chess-java",
+      1.913,
+      1.789
+     ],
+     [
+      "chess-python",
+      2.091,
+      2.216
+     ],
+     [
+      "chess-rust",
+      1.913,
+      2.493
+     ],
+     [
+      "sat-c",
+      1.133,
+      1.448
+     ],
+     [
+      "sat-cobol",
+      1.409,
+      1.275
+     ],
+     [
+      "sat-java",
+      1.286,
+      1.182
+     ],
+     [
+      "sat-python",
+      0.75,
+      1.095
+     ],
+     [
+      "sat-rust",
+      1.471,
+      1.615
+     ]
+    ]
+   },
+   "hub3_share": {
+    "S2_higher": 9,
+    "K2_higher": 1,
+    "ties": 0,
+    "p_two_sided": 0.021484375,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3571,
+      0.2184
+     ],
+     [
+      "chess-cobol",
+      0.1744,
+      0.2031
+     ],
+     [
+      "chess-java",
+      0.4091,
+      0.1765
+     ],
+     [
+      "chess-python",
+      0.3913,
+      0.3415
+     ],
+     [
+      "chess-rust",
+      0.3182,
+      0.2203
+     ],
+     [
+      "sat-c",
+      0.3529,
+      0.3333
+     ],
+     [
+      "sat-cobol",
+      0.3226,
+      0.2157
+     ],
+     [
+      "sat-java",
+      0.3333,
+      0.2692
+     ],
+     [
+      "sat-python",
+      1.0,
+      0.2609
+     ],
+     [
+      "sat-rust",
+      0.36,
+      0.2857
+     ]
+    ]
+   },
+   "hub3_null": {
+    "S2_higher": 9,
+    "K2_higher": 1,
+    "ties": 0,
+    "p_two_sided": 0.021484375,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.2774,
+      0.1527
+     ],
+     [
+      "chess-cobol",
+      0.1549,
+      0.1855
+     ],
+     [
+      "chess-java",
+      0.2571,
+      0.1341
+     ],
+     [
+      "chess-python",
+      0.2573,
+      0.1793
+     ],
+     [
+      "chess-rust",
+      0.269,
+      0.1002
+     ],
+     [
+      "sat-c",
+      0.4134,
+      0.251
+     ],
+     [
+      "sat-cobol",
+      0.3106,
+      0.2086
+     ],
+     [
+      "sat-java",
+      0.4171,
+      0.3206
+     ],
+     [
+      "sat-python",
+      1.0,
+      0.3232
+     ],
+     [
+      "sat-rust",
+      0.367,
+      0.2621
+     ]
+    ]
+   },
+   "hub3_excess": {
+    "S2_higher": 5,
+    "K2_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0797,
+      0.0657
+     ],
+     [
+      "chess-cobol",
+      0.0195,
+      0.0176
+     ],
+     [
+      "chess-java",
+      0.152,
+      0.0424
+     ],
+     [
+      "chess-python",
+      0.134,
+      0.1621
+     ],
+     [
+      "chess-rust",
+      0.0492,
+      0.1202
+     ],
+     [
+      "sat-c",
+      -0.0605,
+      0.0823
+     ],
+     [
+      "sat-cobol",
+      0.0119,
+      0.0071
+     ],
+     [
+      "sat-java",
+      -0.0838,
+      -0.0514
+     ],
+     [
+      "sat-python",
+      0.0,
+      -0.0623
+     ],
+     [
+      "sat-rust",
+      -0.007,
+      0.0236
+     ]
+    ]
+   },
+   "indeg_gini": {
+    "S2_higher": 5,
+    "K2_higher": 5,
+    "ties": 0,
+    "p_two_sided": 1.0,
+    "non_cobol": [
+     3,
+     5
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3665,
+      0.3565
+     ],
+     [
+      "chess-cobol",
+      0.336,
+      0.3013
+     ],
+     [
+      "chess-java",
+      0.4071,
+      0.4403
+     ],
+     [
+      "chess-python",
+      0.4407,
+      0.5168
+     ],
+     [
+      "chess-rust",
+      0.3893,
+      0.5234
+     ],
+     [
+      "sat-c",
+      0.2745,
+      0.3793
+     ],
+     [
+      "sat-cobol",
+      0.2859,
+      0.224
+     ],
+     [
+      "sat-java",
+      0.2302,
+      0.1993
+     ],
+     [
+      "sat-python",
+      0.25,
+      0.1532
+     ],
+     [
+      "sat-rust",
+      0.3012,
+      0.3132
+     ]
+    ]
+   },
+   "depth": {
+    "S2_higher": 0,
+    "K2_higher": 9,
+    "ties": 1,
+    "p_two_sided": 0.00390625,
+    "non_cobol": [
+     0,
+     7
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      8,
+      12
+     ],
+     [
+      "chess-cobol",
+      10,
+      11
+     ],
+     [
+      "chess-java",
+      6,
+      10
+     ],
+     [
+      "chess-python",
+      4,
+      10
+     ],
+     [
+      "chess-rust",
+      2,
+      11
+     ],
+     [
+      "sat-c",
+      4,
+      6
+     ],
+     [
+      "sat-cobol",
+      6,
+      8
+     ],
+     [
+      "sat-java",
+      5,
+      5
+     ],
+     [
+      "sat-python",
+      3,
+      6
+     ],
+     [
+      "sat-rust",
+      6,
+      7
+     ]
+    ]
+   },
+   "never_called_share": {
+    "S2_higher": 0,
+    "K2_higher": 4,
+    "ties": 6,
+    "p_two_sided": 0.125,
+    "non_cobol": [
+     0,
+     4
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.0,
+      0.02
+     ],
+     [
+      "chess-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "chess-java",
+      0.0,
+      0.0962
+     ],
+     [
+      "chess-python",
+      0.0526,
+      0.069
+     ],
+     [
+      "chess-rust",
+      0.0,
+      0.0725
+     ],
+     [
+      "sat-c",
+      0.0714,
+      0.0714
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-python",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-rust",
+      0.0,
+      0.0
+     ]
+    ]
+   },
+   "outside_share": {
+    "S2_higher": 7,
+    "K2_higher": 2,
+    "ties": 1,
+    "p_two_sided": 0.1796875,
+    "non_cobol": [
+     7,
+     1
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.5758,
+      0.3741
+     ],
+     [
+      "chess-cobol",
+      0.0227,
+      0.0704
+     ],
+     [
+      "chess-java",
+      0.5111,
+      0.3462
+     ],
+     [
+      "chess-python",
+      0.5306,
+      0.3955
+     ],
+     [
+      "chess-rust",
+      0.7215,
+      0.4552
+     ],
+     [
+      "sat-c",
+      0.6531,
+      0.3333
+     ],
+     [
+      "sat-cobol",
+      0.0,
+      0.0
+     ],
+     [
+      "sat-java",
+      0.661,
+      0.6301
+     ],
+     [
+      "sat-python",
+      0.9062,
+      0.7442
+     ],
+     [
+      "sat-rust",
+      0.734,
+      0.7397
+     ]
+    ]
+   },
+   "strict_hub3_share": {
+    "S2_higher": 9,
+    "K2_higher": 1,
+    "ties": 0,
+    "p_two_sided": 0.021484375,
+    "non_cobol": [
+     8,
+     0
+    ],
+    "per_cell": [
+     [
+      "chess-c",
+      0.3571,
+      0.2184
+     ],
+     [
+      "chess-cobol",
+      0.1744,
+      0.2326
+     ],
+     [
+      "chess-java",
+      0.4091,
+      0.1782
+     ],
+     [
+      "chess-python",
+      0.3913,
+      0.3457
+     ],
+     [
+      "chess-rust",
+      0.45,
+      0.2917
+     ],
+     [
+      "sat-c",
+      0.3529,
+      0.3333
+     ],
+     [
+      "sat-cobol",
+      0.3226,
+      0.2157
+     ],
+     [
+      "sat-java",
+      0.3333,
+      0.2692
+     ],
+     [
+      "sat-python",
+      1.0,
+      0.2727
+     ],
+     [
+      "sat-rust",
+      0.4,
+      0.36
+     ]
+    ]
+   }
+  }
+ },
+ "within_vs_between": {
+  "functions": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 7,
+    "median_abs_within": 2.5,
+    "median_abs_between": 6.5
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 9,
+    "median_abs_within": 6.5,
+    "median_abs_between": 22.0
+   }
+  },
+  "edges": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 8,
+    "median_abs_within": 5.0,
+    "median_abs_between": 9.0
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 8,
+    "median_abs_within": 9.0,
+    "median_abs_between": 28.5
+   }
+  },
+  "fanout_mean": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 9,
+    "median_abs_within": 0.054,
+    "median_abs_between": 0.2095
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 5,
+    "median_abs_within": 0.1055,
+    "median_abs_between": 0.136
+   }
+  },
+  "hub3_share": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 8,
+    "median_abs_within": 0.0291,
+    "median_abs_between": 0.1095
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 9,
+    "median_abs_within": 0.0455,
+    "median_abs_between": 0.1339
+   }
+  },
+  "hub3_null": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 8,
+    "median_abs_within": 0.0205,
+    "median_abs_between": 0.0771
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 9,
+    "median_abs_within": 0.0366,
+    "median_abs_between": 0.1172
+   }
+  },
+  "hub3_excess": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 5,
+    "median_abs_within": 0.0374,
+    "median_abs_between": 0.044
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 6,
+    "median_abs_within": 0.0478,
+    "median_abs_between": 0.0504
+   }
+  },
+  "indeg_gini": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 5,
+    "median_abs_within": 0.0262,
+    "median_abs_between": 0.0394
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 4,
+    "median_abs_within": 0.0493,
+    "median_abs_between": 0.0202
+   }
+  },
+  "depth": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 4,
+    "median_abs_within": 1.0,
+    "median_abs_between": 1.0
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 4,
+    "median_abs_within": 1.5,
+    "median_abs_between": 1.5
+   }
+  },
+  "never_called_share": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 2,
+    "median_abs_within": 0.0,
+    "median_abs_between": 0.0024
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 2,
+    "median_abs_within": 0.0014,
+    "median_abs_between": 0.0
+   }
+  },
+  "outside_share": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 2,
+    "median_abs_within": 0.0405,
+    "median_abs_between": 0.0129
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 4,
+    "median_abs_within": 0.079,
+    "median_abs_between": 0.067
+   }
+  },
+  "strict_hub3_share": {
+   "S-S2_vs_S-X": {
+    "cells": 10,
+    "within_closer": 8,
+    "median_abs_within": 0.0263,
+    "median_abs_between": 0.0999
+   },
+   "K-K2_vs_K-X": {
+    "cells": 10,
+    "within_closer": 10,
+    "median_abs_within": 0.0232,
+    "median_abs_between": 0.1113
+   }
+  }
+ },
+ "comparisons_made": 66
+}
