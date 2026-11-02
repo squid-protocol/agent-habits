@@ -1,0 +1,547 @@
+{
+ "where_time_goes": {
+  "K": {
+   "runs": 12,
+   "median_active_s": 1351.5,
+   "median_self_checks": 2.0,
+   "median_checker_runs": 3.0,
+   "median_s_per_checker_run": 538.2,
+   "median_s_to_first_self_check": 532.25,
+   "runs_never_self_checked": 0,
+   "median_tool_calls": 37.5,
+   "median_s_per_tool_call": 38.72035256410257,
+   "nudged_runs": 0,
+   "capped_runs": 0,
+   "failed_runs": 0
+  },
+  "K2": {
+   "runs": 12,
+   "median_active_s": 978.0,
+   "median_self_checks": 2.0,
+   "median_checker_runs": 3.0,
+   "median_s_per_checker_run": 276.75,
+   "median_s_to_first_self_check": 353.75,
+   "runs_never_self_checked": 0,
+   "median_tool_calls": 41.5,
+   "median_s_per_tool_call": 29.15,
+   "nudged_runs": 0,
+   "capped_runs": 1,
+   "failed_runs": 1
+  },
+  "S": {
+   "runs": 12,
+   "median_active_s": 148.0,
+   "median_self_checks": 1.0,
+   "median_checker_runs": 2.0,
+   "median_s_per_checker_run": 62.5,
+   "median_s_to_first_self_check": 114.5,
+   "runs_never_self_checked": 0,
+   "median_tool_calls": 2.0,
+   "median_s_per_tool_call": 40.17857142857143,
+   "nudged_runs": 1,
+   "capped_runs": 0,
+   "failed_runs": 0
+  },
+  "S2": {
+   "runs": 12,
+   "median_active_s": 143.0,
+   "median_self_checks": 1.0,
+   "median_checker_runs": 2.0,
+   "median_s_per_checker_run": 71.5,
+   "median_s_to_first_self_check": 117.2,
+   "runs_never_self_checked": 0,
+   "median_tool_calls": 2.0,
+   "median_s_per_tool_call": 47.16666666666667,
+   "nudged_runs": 0,
+   "capped_runs": 0,
+   "failed_runs": 0
+  },
+  "X": {
+   "runs": 12,
+   "median_active_s": 381.5,
+   "median_self_checks": 4.5,
+   "median_checker_runs": 6.0,
+   "median_s_per_checker_run": 89.75,
+   "median_s_to_first_self_check": 51.8,
+   "runs_never_self_checked": 0,
+   "median_tool_calls": 31.5,
+   "median_s_per_tool_call": 16.494013534617388,
+   "nudged_runs": 5,
+   "capped_runs": 1,
+   "failed_runs": 2
+  }
+ },
+ "between_models_same_cell": {
+  "Haiku/Sonnet (K/S and K2/S2, rep 1)": {
+   "n_cells": 20,
+   "median_ratio_active_s": 6.33,
+   "cells_higher_active_s": "20 of 20",
+   "median_ratio_code_lines": 1.76,
+   "cells_higher_code_lines": "19 of 20",
+   "median_ratio_functions": 1.87,
+   "cells_higher_functions": "20 of 20",
+   "median_ratio_comment_lines": 6.2,
+   "cells_higher_comment_lines": "17 of 18",
+   "median_ratio_bytes": 1.67,
+   "cells_higher_bytes": "20 of 20"
+  },
+  "Haiku/Codex (K/X and K2/X, rep 1)": {
+   "n_cells": 20,
+   "median_ratio_active_s": 1.28,
+   "cells_higher_active_s": "15 of 20",
+   "median_ratio_code_lines": 5.38,
+   "cells_higher_code_lines": "20 of 20",
+   "median_ratio_functions": 2.21,
+   "cells_higher_functions": "20 of 20",
+   "median_ratio_comment_lines": 4.41,
+   "cells_higher_comment_lines": "4 of 4",
+   "median_ratio_bytes": 3.39,
+   "cells_higher_bytes": "20 of 20"
+  },
+  "Codex/Sonnet (X/S and X/S2, rep 1)": {
+   "n_cells": 20,
+   "median_ratio_active_s": 4.17,
+   "cells_higher_active_s": "20 of 20",
+   "median_ratio_code_lines": 0.42,
+   "cells_higher_code_lines": "2 of 20",
+   "median_ratio_functions": 0.82,
+   "cells_higher_functions": "4 of 20",
+   "median_ratio_comment_lines": 0.0,
+   "cells_higher_comment_lines": "3 of 18",
+   "median_ratio_bytes": 0.55,
+   "cells_higher_bytes": "2 of 20"
+  }
+ },
+ "within_model_same_cell": {
+  "Sonnet (S r1 vs S2 r1)": {
+   "code_lines": {
+    "slower_bigger": 8,
+    "slower_smaller": 2,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.109
+   },
+   "functions": {
+    "slower_bigger": 4,
+    "slower_smaller": 4,
+    "ties": 2,
+    "time_ties": 0,
+    "binomial_two_sided_p": 1.0
+   },
+   "comment_lines": {
+    "slower_bigger": 5,
+    "slower_smaller": 4,
+    "ties": 1,
+    "time_ties": 0,
+    "binomial_two_sided_p": 1.0
+   },
+   "bytes": {
+    "slower_bigger": 6,
+    "slower_smaller": 4,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.754
+   },
+   "pairs": 10
+  },
+  "Haiku (K r1 vs K2 r1)": {
+   "code_lines": {
+    "slower_bigger": 4,
+    "slower_smaller": 6,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.754
+   },
+   "functions": {
+    "slower_bigger": 7,
+    "slower_smaller": 2,
+    "ties": 1,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.18
+   },
+   "comment_lines": {
+    "slower_bigger": 7,
+    "slower_smaller": 3,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.344
+   },
+   "bytes": {
+    "slower_bigger": 4,
+    "slower_smaller": 6,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.754
+   },
+   "pairs": 10
+  },
+  "Codex (X r1 vs X r2)": {
+   "code_lines": {
+    "slower_bigger": 1,
+    "slower_smaller": 1,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 1.0
+   },
+   "functions": {
+    "slower_bigger": 0,
+    "slower_smaller": 2,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.5
+   },
+   "comment_lines": {
+    "slower_bigger": 0,
+    "slower_smaller": 1,
+    "ties": 1,
+    "time_ties": 0,
+    "binomial_two_sided_p": 1.0
+   },
+   "bytes": {
+    "slower_bigger": 1,
+    "slower_smaller": 1,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 1.0
+   },
+   "pairs": 2
+  },
+  "all three models": {
+   "code_lines": {
+    "slower_bigger": 13,
+    "slower_smaller": 9,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.523
+   },
+   "functions": {
+    "slower_bigger": 11,
+    "slower_smaller": 8,
+    "ties": 3,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.648
+   },
+   "comment_lines": {
+    "slower_bigger": 12,
+    "slower_smaller": 8,
+    "ties": 2,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.503
+   },
+   "bytes": {
+    "slower_bigger": 11,
+    "slower_smaller": 11,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 1.0
+   },
+   "pairs": 22
+  },
+  "sensitivity: every same-model same-cell pair (not independent)": {
+   "code_lines": {
+    "slower_bigger": 22,
+    "slower_smaller": 19,
+    "ties": 0,
+    "time_ties": 1,
+    "binomial_two_sided_p": 0.755
+   },
+   "functions": {
+    "slower_bigger": 23,
+    "slower_smaller": 12,
+    "ties": 6,
+    "time_ties": 1,
+    "binomial_two_sided_p": 0.09
+   },
+   "comment_lines": {
+    "slower_bigger": 24,
+    "slower_smaller": 13,
+    "ties": 4,
+    "time_ties": 1,
+    "binomial_two_sided_p": 0.099
+   },
+   "bytes": {
+    "slower_bigger": 19,
+    "slower_smaller": 22,
+    "ties": 0,
+    "time_ties": 1,
+    "binomial_two_sided_p": 0.755
+   },
+   "pairs": 42
+  },
+  "sensitivity: main pairs, passed and uncapped only": {
+   "code_lines": {
+    "slower_bigger": 13,
+    "slower_smaller": 8,
+    "ties": 0,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.383
+   },
+   "functions": {
+    "slower_bigger": 10,
+    "slower_smaller": 8,
+    "ties": 3,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.815
+   },
+   "comment_lines": {
+    "slower_bigger": 11,
+    "slower_smaller": 8,
+    "ties": 2,
+    "time_ties": 0,
+    "binomial_two_sided_p": 0.648
+   },
+   "pairs": 21
+  }
+ },
+ "spearman_active_time_vs_size": {
+  "code_lines": {
+   "overall raw": {
+    "n": 60,
+    "rho": 0.4,
+    "p": 0.002
+   },
+   "overall, cell-adjusted": {
+    "n": 60,
+    "rho": 0.56,
+    "p": 0.0
+   },
+   "K cell-adjusted": {
+    "n": 12,
+    "rho": 0.42,
+    "p": 0.174
+   },
+   "K2 cell-adjusted": {
+    "n": 12,
+    "rho": -0.03,
+    "p": 0.931
+   },
+   "S cell-adjusted": {
+    "n": 12,
+    "rho": 0.46,
+    "p": 0.129
+   },
+   "S2 cell-adjusted": {
+    "n": 12,
+    "rho": 0.26,
+    "p": 0.413
+   },
+   "X cell-adjusted": {
+    "n": 12,
+    "rho": 0.31,
+    "p": 0.324
+   },
+   "Codex (both rounds) cell-adjusted": {
+    "n": 12,
+    "rho": 0.31,
+    "p": 0.324
+   },
+   "Haiku (both rounds) cell-adjusted": {
+    "n": 24,
+    "rho": 0.17,
+    "p": 0.43
+   },
+   "Haiku (both rounds) adjusted to the model's own cell median": {
+    "n": 24,
+    "rho": -0.23,
+    "p": 0.277
+   },
+   "Sonnet (both rounds) cell-adjusted": {
+    "n": 24,
+    "rho": 0.46,
+    "p": 0.024
+   },
+   "Sonnet (both rounds) adjusted to the model's own cell median": {
+    "n": 24,
+    "rho": 0.34,
+    "p": 0.102
+   }
+  },
+  "comment_lines": {
+   "overall raw": {
+    "n": 60,
+    "rho": 0.54,
+    "p": 0.0
+   },
+   "overall, cell-adjusted": {
+    "n": 60,
+    "rho": 0.57,
+    "p": 0.0
+   },
+   "K cell-adjusted": {
+    "n": 12,
+    "rho": 0.66,
+    "p": 0.019
+   },
+   "K2 cell-adjusted": {
+    "n": 12,
+    "rho": 0.65,
+    "p": 0.022
+   },
+   "S cell-adjusted": {
+    "n": 12,
+    "rho": 0.28,
+    "p": 0.373
+   },
+   "S2 cell-adjusted": {
+    "n": 12,
+    "rho": -0.28,
+    "p": 0.375
+   },
+   "X cell-adjusted": {
+    "n": 12,
+    "rho": -0.25,
+    "p": 0.437
+   },
+   "Codex (both rounds) cell-adjusted": {
+    "n": 12,
+    "rho": -0.25,
+    "p": 0.437
+   },
+   "Haiku (both rounds) cell-adjusted": {
+    "n": 24,
+    "rho": 0.63,
+    "p": 0.001
+   },
+   "Haiku (both rounds) adjusted to the model's own cell median": {
+    "n": 24,
+    "rho": 0.43,
+    "p": 0.035
+   },
+   "Sonnet (both rounds) cell-adjusted": {
+    "n": 24,
+    "rho": -0.03,
+    "p": 0.873
+   },
+   "Sonnet (both rounds) adjusted to the model's own cell median": {
+    "n": 24,
+    "rho": -0.16,
+    "p": 0.447
+   }
+  },
+  "functions": {
+   "overall raw": {
+    "n": 60,
+    "rho": 0.42,
+    "p": 0.001
+   },
+   "overall, cell-adjusted": {
+    "n": 60,
+    "rho": 0.6,
+    "p": 0.0
+   },
+   "K cell-adjusted": {
+    "n": 12,
+    "rho": -0.03,
+    "p": 0.931
+   },
+   "K2 cell-adjusted": {
+    "n": 12,
+    "rho": 0.1,
+    "p": 0.762
+   },
+   "S cell-adjusted": {
+    "n": 12,
+    "rho": 0.03,
+    "p": 0.917
+   },
+   "S2 cell-adjusted": {
+    "n": 12,
+    "rho": 0.19,
+    "p": 0.555
+   },
+   "X cell-adjusted": {
+    "n": 12,
+    "rho": -0.31,
+    "p": 0.324
+   },
+   "Codex (both rounds) cell-adjusted": {
+    "n": 12,
+    "rho": -0.31,
+    "p": 0.324
+   },
+   "Haiku (both rounds) cell-adjusted": {
+    "n": 24,
+    "rho": 0.02,
+    "p": 0.934
+   },
+   "Haiku (both rounds) adjusted to the model's own cell median": {
+    "n": 24,
+    "rho": 0.33,
+    "p": 0.11
+   },
+   "Sonnet (both rounds) cell-adjusted": {
+    "n": 24,
+    "rho": 0.11,
+    "p": 0.614
+   },
+   "Sonnet (both rounds) adjusted to the model's own cell median": {
+    "n": 24,
+    "rho": 0.0,
+    "p": 0.992
+   }
+  },
+  "bytes": {
+   "overall raw": {
+    "n": 60,
+    "rho": 0.42,
+    "p": 0.001
+   },
+   "overall, cell-adjusted": {
+    "n": 60,
+    "rho": 0.58,
+    "p": 0.0
+   },
+   "K cell-adjusted": {
+    "n": 12,
+    "rho": 0.23,
+    "p": 0.477
+   },
+   "K2 cell-adjusted": {
+    "n": 12,
+    "rho": 0.1,
+    "p": 0.762
+   },
+   "S cell-adjusted": {
+    "n": 12,
+    "rho": 0.48,
+    "p": 0.117
+   },
+   "S2 cell-adjusted": {
+    "n": 12,
+    "rho": 0.33,
+    "p": 0.298
+   },
+   "X cell-adjusted": {
+    "n": 12,
+    "rho": 0.22,
+    "p": 0.482
+   },
+   "Codex (both rounds) cell-adjusted": {
+    "n": 12,
+    "rho": 0.22,
+    "p": 0.482
+   },
+   "Haiku (both rounds) cell-adjusted": {
+    "n": 24,
+    "rho": 0.17,
+    "p": 0.433
+   },
+   "Haiku (both rounds) adjusted to the model's own cell median": {
+    "n": 24,
+    "rho": -0.15,
+    "p": 0.483
+   },
+   "Sonnet (both rounds) cell-adjusted": {
+    "n": 24,
+    "rho": 0.46,
+    "p": 0.024
+   },
+   "Sonnet (both rounds) adjusted to the model's own cell median": {
+    "n": 24,
+    "rho": 0.0,
+    "p": 0.984
+   }
+  }
+ },
+ "note": "EXPLORATORY, not preregistered. Cell-adjusted = log(value / median of that task+language cell), so COBOL-vs-Python size differences do not masquerade as a time effect."
+}

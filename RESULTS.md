@@ -12,11 +12,13 @@ pre-stated rule. The **instrument default** (those cells missing) is in `results
 
 | arm | runs | passed the hidden check | median active time | nudged | hit the 60-min cap |
 |---|---|---|---|---|---|
-| Sonnet r1 | 12 | 12 | 2 m 37 s | 1 | 0 |
-| Sonnet r2 | 12 | 12 | 2 m 33 s | 0 | 0 |
-| Haiku r1 | 12 | 12 | 25 m 26 s | 0 | 0 |
-| Haiku r2 | 12 | 11 | 19 m 43 s | 0 | 1 |
-| Codex | 12 | 10 | 6 m 48 s | 5 | 1 |
+| Sonnet r1 | 12 | 12 | 2 m 28 s | 1 | 0 |
+| Sonnet r2 | 12 | 12 | 2 m 23 s | 0 | 0 |
+| Haiku r1 | 12 | 12 | 22 m 32 s | 0 | 0 |
+| Haiku r2 | 12 | 11 | 16 m 18 s | 0 | 1 |
+| Codex | 12 | 10 | 6 m 22 s | 5 | 1 |
+
+These medians were recomputed from `active_s` in [`runs/runs.csv`](runs/runs.csv), grouped by arm using [`runs_measures.csv`](results/data/runs_measures.csv). This corrects the earlier summary values, which did not match the per-run ledger.
 
 The two capped runs' final code passes the check when checked afterwards (supplementary), so 59 of 60 programs
 work. The one real failure is `sat-c-codex-r1`: too slow on the hard formulas. Two pilot runs under an easier first
@@ -97,10 +99,18 @@ each model (D, E).
 | same model + task, other language | 1.01 |
 | different model, other task or language | 1.07 |
 
-Same cell, model pairs: Haiku–Codex 0.55, Haiku–Sonnet 0.64, Sonnet–Codex 0.66. **Exploratory model
+Same-cell, between-model medians: Haiku–Codex 0.548, Haiku–Sonnet 0.641, Sonnet–Codex 0.660. **Exploratory model
 identification:** the nearest same-cell neighbour is the same model in **43 of 52** runs (83 %; chance 27 %;
-permutation p < 0.001). The portable lens gives 82 %. Language moves a program most; task and model about
-equally.
+permutation p = 0.0005). The portable lens gives 82 %.
+
+**Independent rounds (D11 all-cell extension).** The median same-cell distance between Sonnet rounds S–S2 is
+0.336 across 10 cells; Haiku rounds K–K2 is 0.299. In the nine cells where Codex is available under D16, S–X
+has median 0.605 and K–X median 0.568. S–S2 is closer than S–X in 8/9 cells; K–K2 is closer than K–X in 9/9.
+The [cell-level values](results/data/relations_d16.json) show where these comparisons vary. [D11](preregistration/PREREGISTRATION.md#d11-2026-11-01-before-any-run-of-the-new-rounds-and-before-any-measure-of-any-run-second-rounds-of-s-and-k) specifies the all-cell Sonnet repeat extension; the separately registered V2 remains the two-cell comparison below, labelled underpowered.
+
+**What moves the profile?** A language change within the same model and task has median distance 1.010, larger
+than changing tasks while holding model/language at 0.635, or changing model while holding task/language at 0.621.
+These are descriptive pairwise distances; program pairs reuse runs and are not independent observations.
 
 ## 6. Keywords (exploratory except S6)
 

@@ -1,0 +1,980 @@
+{
+ "question": "Which exploratory (human-steered, older-model) habits survived in the autonomous, newer-model runs?",
+ "status": "exploratory follow-up; not registered; directions only",
+ "count_convention": "cells or pairs where each side's value is higher; ties include 'neither uses it'",
+ "rows": [
+  {
+   "habit": "comment lines per code line",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 10,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 10,
+    "text": "Claude higher in 10 of 10 (Codex 0)",
+    "source": "results/data/explore_rescan.json"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 8,
+    "codex_higher": 2,
+    "tie_or_unused": 0,
+    "cells": 10,
+    "text": "Sonnet higher in 8 of 10 (Codex 2)",
+    "holm": 0.2188,
+    "source": "results/data/families_d16.json family A"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 9,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 10,
+    "text": "Haiku higher in 9 of 10 (Codex 1)",
+    "holm": 0.043,
+    "source": "results/data/families_d16.json family B"
+   },
+   "verdict": "held for Haiku; weakened for Sonnet",
+   "note": "median Claude value: steered 0.114, Sonnet 0.0105, Haiku 0.0565 (Codex ~0 in both sets)"
+  },
+  {
+   "habit": "share of functions documented",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 10,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 10,
+    "text": "Claude higher in 10 of 10 (Codex 0)",
+    "source": "results/data/explore_rescan.json"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 4,
+    "codex_higher": 2,
+    "tie_or_unused": 4,
+    "cells": 10,
+    "text": "Sonnet higher in 4 of 10 (Codex 2, tie 4)",
+    "holm": 0.6875,
+    "source": "results/data/families_d16.json family A"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 10,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 10,
+    "text": "Haiku higher in 10 of 10 (Codex 0)",
+    "holm": 0.0049,
+    "source": "results/data/families_d16.json family B"
+   },
+   "verdict": "held for one model only (Haiku); vanished for Sonnet",
+   "note": "median share: steered Claude 35.4 %, Haiku 35.3 %, Sonnet 0 %"
+  },
+  {
+   "habit": "early exits (COBOL EXIT PARAGRAPH/PERFORM; else return)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 9,
+    "tie_or_unused": 0,
+    "cells": 10,
+    "text": "Claude higher in 1 of 10 (Codex 9)",
+    "source": "results/data/explore_rescan.json"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 9,
+    "tie_or_unused": 0,
+    "cells": 10,
+    "text": "Sonnet higher in 1 of 10 (Codex 9)",
+    "holm": 0.0537,
+    "source": "results/data/families_d16.json family A"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 2,
+    "codex_higher": 8,
+    "tie_or_unused": 0,
+    "cells": 10,
+    "text": "Haiku higher in 2 of 10 (Codex 8)",
+    "holm": 0.1641,
+    "source": "results/data/families_d16.json family B"
+   },
+   "verdict": "held (both models; neither Holm-significant)",
+   "note": ""
+  },
+  {
+   "habit": "Python helper code in non-Python projects",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 0,
+    "codex_higher": 4,
+    "tie_or_unused": 5,
+    "cells": 9,
+    "text": "Claude higher in 0 of 9 (Codex 4, tie 5)",
+    "source": "results/data/explore_rescan.json"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 8,
+    "cells": 8,
+    "text": "Sonnet higher in 0 of 8 (Codex 0, tie 8)",
+    "holm": 1.0,
+    "source": "results/data/families_d16.json family A"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 8,
+    "cells": 8,
+    "text": "Haiku higher in 0 of 8 (Codex 0, tie 8)",
+    "holm": 1.0,
+    "source": "results/data/families_d16.json family B"
+   },
+   "verdict": "vanished (no first-round run of any arm wrote one)",
+   "note": ""
+  },
+  {
+   "habit": "while loops (non-COBOL)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 5,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 5 of 5 (Codex 0)",
+    "source": "results/data/explore_rescan.json"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 6,
+    "codex_higher": 2,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Sonnet higher in 6 of 8 (Codex 2)",
+    "holm": 0.4336,
+    "source": "results/data/families_d16.json family A"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 4,
+    "codex_higher": 4,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Haiku higher in 4 of 8 (Codex 4)",
+    "holm": 1.0,
+    "source": "results/data/families_d16.json family B"
+   },
+   "verdict": "held for Sonnet only (weakened); vanished for Haiku",
+   "note": ""
+  },
+  {
+   "habit": "mean fan-out (non-COBOL)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 5,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 5 of 5 (Codex 0)",
+    "source": "followups/steered-vs-autonomous/measure.py (new); agrees with preregistration/PREREGISTRATION.md section 2 (original engine) (5/5)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 7,
+    "tie_or_unused": 0,
+    "cells": 7,
+    "text": "Sonnet higher in 0 of 7 (Codex 7)",
+    "p_one_sided": 1.0,
+    "source": "results/data/secondary.json S1"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 2,
+    "codex_higher": 5,
+    "tie_or_unused": 0,
+    "cells": 7,
+    "text": "Haiku higher in 2 of 7 (Codex 5)",
+    "source": "followups/steered-vs-autonomous/measure.py (new)"
+   },
+   "verdict": "reversed (both models)",
+   "note": ""
+  },
+  {
+   "habit": "median function complexity (non-COBOL)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 0,
+    "codex_higher": 5,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 0 of 5 (Codex 5)",
+    "source": "followups/steered-vs-autonomous/measure.py (new); agrees with preregistration/PREREGISTRATION.md section 2 (original engine) (5/5)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 2,
+    "codex_higher": 5,
+    "tie_or_unused": 0,
+    "cells": 7,
+    "text": "Sonnet higher in 2 of 7 (Codex 5)",
+    "p_one_sided": 0.2266,
+    "source": "results/data/secondary.json S2"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 6,
+    "tie_or_unused": 1,
+    "cells": 7,
+    "text": "Haiku higher in 0 of 7 (Codex 6, tie 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new)"
+   },
+   "verdict": "held (weaker for Sonnet)",
+   "note": ""
+  },
+  {
+   "habit": "bitwise operations per 100 function lines (non-COBOL)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 5,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 5 of 5 (Codex 0)",
+    "source": "followups/steered-vs-autonomous/measure.py (new); agrees with preregistration/PREREGISTRATION.md section 2 (original engine) (5/5)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 6,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 7,
+    "text": "Sonnet higher in 6 of 7 (Codex 1)",
+    "p_one_sided": 0.0625,
+    "source": "results/data/secondary.json S5"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 5,
+    "codex_higher": 2,
+    "tie_or_unused": 0,
+    "cells": 7,
+    "text": "Haiku higher in 5 of 7 (Codex 2)",
+    "source": "followups/steered-vs-autonomous/measure.py (new)"
+   },
+   "verdict": "held (both models)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `CALL` (cobol)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 2,
+    "codex_higher": 2,
+    "tie_or_unused": 1,
+    "cells": 5,
+    "text": "Claude higher in 2 of 5 (Codex 2, tie 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "no steered lean by this count; Haiku now uses it, Sonnet and Codex do not",
+   "note": ""
+  },
+  {
+   "habit": "keyword `GOBACK` (cobol)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 2,
+    "tie_or_unused": 2,
+    "cells": 5,
+    "text": "Claude higher in 1 of 5 (Codex 2, tie 2)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "weak steered lean; Haiku now uses it, Sonnet and Codex do not",
+   "note": ""
+  },
+  {
+   "habit": "keyword `COMP-5` (cobol)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 2,
+    "codex_higher": 3,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 2 of 5 (Codex 3)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Sonnet higher in 1 of 2 (Codex 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 2,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Haiku higher in 2 of 2 (Codex 0)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "split for Sonnet; reversed for Haiku",
+   "note": ""
+  },
+  {
+   "habit": "keyword `LINKAGE` (cobol)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 1,
+    "tie_or_unused": 3,
+    "cells": 5,
+    "text": "Claude higher in 1 of 5 (Codex 1, tie 3)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "no steered lean (1 v 1); Haiku now uses it, Sonnet and Codex do not",
+   "note": ""
+  },
+  {
+   "habit": "keyword `EXIT` (cobol)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 0,
+    "codex_higher": 5,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 0 of 5 (Codex 5)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Sonnet higher in 1 of 2 (Codex 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 2,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Haiku higher in 0 of 2 (Codex 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "split for Sonnet (1 v 1); held for Haiku",
+   "note": ""
+  },
+  {
+   "habit": "keyword `FILLER` (cobol)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 2,
+    "codex_higher": 0,
+    "tie_or_unused": 3,
+    "cells": 5,
+    "text": "Claude higher in 2 of 5 (Codex 0, tie 3)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Haiku higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "vanished (no arm uses it)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `REDEFINES` (cobol)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 3,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 5,
+    "text": "Claude higher in 3 of 5 (Codex 0, tie 2)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "vanished for Sonnet (unused); held for Haiku in 1 cell",
+   "note": ""
+  },
+  {
+   "habit": "keyword `EVALUATE` (cobol)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 4,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 4 of 5 (Codex 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Sonnet higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 2,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Haiku higher in 2 of 2 (Codex 0)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "held, thin (Sonnet 1 cell, other unused)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `COMPUTE` (cobol)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 4,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 4 of 5 (Codex 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 2,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Sonnet higher in 2 of 2 (Codex 0)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "held for Sonnet; split for Haiku",
+   "note": ""
+  },
+  {
+   "habit": "keyword `DISPLAY` (cobol)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 4,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 4 of 5 (Codex 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Sonnet higher in 1 of 2 (Codex 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "split (1 v 1 for both)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `#[inline` (rust)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 1 of 1 (Codex 0)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "vanished for Sonnet (unused); held for Haiku in 1 cell",
+   "note": ""
+  },
+  {
+   "habit": "keyword `unsafe` (rust)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 1 of 1 (Codex 0)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Haiku higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "vanished (no arm uses it)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `static` (rust)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 1 of 1 (Codex 0)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Sonnet higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "held, thin (1 cell, other unused)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `bool` (c)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 1 of 1 (Codex 0)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "vanished for Sonnet (unused); held for Haiku in 1 cell",
+   "note": ""
+  },
+  {
+   "habit": "keyword `extern` (c)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 1 of 1 (Codex 0)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "vanished for Sonnet (unused); held for Haiku in 1 cell",
+   "note": ""
+  },
+  {
+   "habit": "keyword `throw` (java)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 0,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 0 of 1 (Codex 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 2,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 2,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Haiku higher in 0 of 2 (Codex 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "held (2 of 2 cells, from 1 steered pair)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `synchronized` (java)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 0,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 0 of 1 (Codex 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 1,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 1, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 1,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 0 of 2 (Codex 1, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "held, thin (1 cell; the other unused)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `@dataclass` (python)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 0,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 0 of 1 (Codex 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 0,
+    "tie_or_unused": 2,
+    "cells": 2,
+    "text": "Haiku higher in 0 of 2 (Codex 0, tie 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "vanished (no arm uses it)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `pass` (python)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 0,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 0 of 1 (Codex 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 1,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Sonnet higher in 0 of 2 (Codex 1, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 1,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Haiku higher in 0 of 2 (Codex 1, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "held, thin (1 cell, other unused)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `with` (python)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 0,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 1,
+    "text": "Claude higher in 0 of 1 (Codex 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 0,
+    "tie_or_unused": 1,
+    "cells": 2,
+    "text": "Sonnet higher in 1 of 2 (Codex 0, tie 1)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 2,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 2,
+    "text": "Haiku higher in 2 of 2 (Codex 0)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "reversed (both models)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `while` (non-COBOL)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 5,
+    "codex_higher": 0,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 5 of 5 (Codex 0)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 6,
+    "codex_higher": 2,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Sonnet higher in 6 of 8 (Codex 2)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 4,
+    "codex_higher": 4,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Haiku higher in 4 of 8 (Codex 4)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "(same as the registered while measure)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `return` (non-COBOL)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 4,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 1 of 5 (Codex 4)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 0,
+    "codex_higher": 8,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Sonnet higher in 0 of 8 (Codex 8)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 2,
+    "codex_higher": 6,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Haiku higher in 2 of 8 (Codex 6)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "held (both models)",
+   "note": ""
+  },
+  {
+   "habit": "keyword `if` (non-COBOL)",
+   "exploratory_side": "Codex",
+   "steered": {
+    "claude_higher": 1,
+    "codex_higher": 4,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 1 of 5 (Codex 4)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 4,
+    "codex_higher": 4,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Sonnet higher in 4 of 8 (Codex 4)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 1,
+    "codex_higher": 7,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Haiku higher in 1 of 8 (Codex 7)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "vanished for Sonnet (4 v 4); held for Haiku",
+   "note": ""
+  },
+  {
+   "habit": "keyword `for` (non-COBOL)",
+   "exploratory_side": "Claude",
+   "steered": {
+    "claude_higher": 4,
+    "codex_higher": 1,
+    "tie_or_unused": 0,
+    "cells": 5,
+    "text": "Claude higher in 4 of 5 (Codex 1)",
+    "source": "followups/steered-vs-autonomous/measure.py (new) (keyword_diff counts, as explore_rescan.py)"
+   },
+   "sonnet_vs_codex": {
+    "claude_higher": 3,
+    "codex_higher": 5,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Sonnet higher in 3 of 8 (Codex 5)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "haiku_vs_codex": {
+    "claude_higher": 2,
+    "codex_higher": 6,
+    "tie_or_unused": 0,
+    "cells": 8,
+    "text": "Haiku higher in 2 of 8 (Codex 6)",
+    "source": "results/data/keywords_confirm.json replication_of_exploratory_leans"
+   },
+   "verdict": "reversed (both models)",
+   "note": ""
+  }
+ ]
+}
