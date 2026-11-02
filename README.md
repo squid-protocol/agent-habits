@@ -9,7 +9,8 @@ in all. Then we ignored every name and every word of every comment, measured onl
 
 *By Joe Esquibel, with the GitGalaxy code-scanning engine · November 2026.* This README is the study's write-up; every
 number in it links to the file it came from, and [everything needed to check it](#check-my-work) sits below it in this
-repository. An interactive edition of the same article lives in [`article/`](article/) (see [below](#the-interactive-edition)).
+repository. An interactive edition of the same article is in [`article/`](article/) and on the
+[GitGalaxy docs site](https://squid-protocol.github.io/gitgalaxy/museum-of-code/agent-habits/).
 
 | 83% | 2× as alike | 10 of 10 |
 |---|---|---|
@@ -282,8 +283,9 @@ predicted, what the agents were given, what they wrote, how it was measured, wha
 
 [`article/index.html`](article/index.html) is the same article with every chart interactive: hover any dot, re-sort the
 distance map, draw the wiring for any job, and open a card for each of the 60 programs. GitHub shows HTML as source, so
-serve it locally: `python3 -m http.server -d article 8000` and open <http://localhost:8000>. A public copy will follow on
-the GitGalaxy docs site.
+serve it locally: `python3 -m http.server -d article 8000` and open <http://localhost:8000>. The public copy lives in
+the GitGalaxy Museum of Code: [interactive](https://squid-protocol.github.io/gitgalaxy/museum-of-code/agent-habits/) and
+[text edition](https://squid-protocol.github.io/gitgalaxy/museum-of-code/every-model-has-a-tell/) (`article/build_wiki.py` builds both).
 
 ## Built on Mathieu Acher's paired-agent studies
 
