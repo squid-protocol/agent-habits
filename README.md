@@ -1,52 +1,48 @@
-# Agent habits
+# Do AI coding agents have habits you can measure?
 
-> **Abstract.** We asked whether AI coding agents leave measurable, model-specific habits in the programs they
-> write, and whether a training-free, AST-free structural scanner can see them. Three agent/model combinations
-> (Claude Code with Sonnet 5.5 and with Haiku 5.5, two independent rounds each; Codex CLI with gpt-6-luna) each
-> built a UCI chess engine and a DPLL SAT solver in C, Java, Python, Rust and COBOL without human steering: 60
-> programs, 59 of them working. The hypotheses came from an exploratory analysis of Mathieu Acher's human-steered
-> Claude Code / Codex pairs and were pre-registered with a public timestamp before any run. The predicted
-> Claude-vs-Codex habits were **not confirmed** after correction. Codex's tendency to exit early came closest (9 of
-> 10 cells, Holm p = 0.054); its Python helper scripts disappeared; and the fan-out prediction reversed. Instead,
-> habits proved **model-specific**: Haiku comments and documents more than Sonnet in all 10 cells, and documents
-> more functions than Codex in all 10. Each model's habits replicate across independent rounds. Structure alone is
-> distinctive. With no training step, a program's nearest structural neighbour on the same task and language came
-> from the same model **83 % of the time (chance 27 %, p < 0.001)**. That result was exploratory and is
-> pre-registered for replication on fresh runs and a new task (round 3). We also found that AI-written code can
-> defeat static-analysis safeguards. Codex's ultra-dense programs (whole chess engines in 35–56 lines) were
-> skipped by the scanner's anti-minification guard. The gap was caught by a tree-sitter/ctags cross-check, handled
-> by a pre-stated rule and fixed upstream.
+> **The short version.** We gave three agent/model configurations two programming tasks in five languages and asked whether their code carried measurable structural habits. Across 60 fresh runs, 59 programs passed the final held-out checks. We registered the hypotheses before collecting these runs. The original Sonnet-versus-Codex predictions did not survive statistical correction. Instead, Haiku and Sonnet showed distinct, repeatable patterns in comments and function documentation. A separate exploratory analysis found that structural fingerprints could identify the generating model's nearest same-task, same-language neighbour in 43 of 52 cases.
 
-**Do AI coding agents have habits you can measure from their code?** We gave the same two tasks (a UCI chess
-engine and a DPLL SAT solver) in the same five languages (C, Java, Python, Rust, COBOL) to three agent/model
-combinations, with no human in the loop, and measured what they wrote with
-[GitGalaxy](https://github.com/squid-protocol/gitgalaxy): an AST-free, LLM-free structural scanner.
+I began this study expecting to find a clear Claude-versus-Codex contrast. The first exploration seemed to point that way. Then we wrote down the predictions, fixed the analysis, and ran a fresh set of programs. The headline comparison did not hold up after correction. That was disappointing for about a minute. Then the more interesting result became visible: the habits were specific to model configurations, not a simple vendor divide.
 
-- **Claude Code on Sonnet 5.5**: two independent rounds
-- **Claude Code on Haiku 5.5**: two independent rounds
-- **OpenAI Codex CLI on gpt-6-luna** (ChatGPT Free): one round
+This README is the front door to the study; the repository is the evidence package. The story, figures, preregistration, run records, programs, measurement code, validity checks, and result tables live together so a reader can move from a claim to the evidence behind it.
 
-That makes 60 runs, 57 of which passed the task's hidden test on the first try. Every hypothesis was
-pre-registered, with a public timestamp, before any of this data existed.
+## What we did
 
-## The answer, in one paragraph
+Each configuration received the same UCI chess-engine and DPLL SAT-solver tasks in C, Java, Python, Rust, and COBOL, in fresh environments without human steering. Claude Code ran Sonnet 5.5 and Haiku 5.5 in two independent rounds; Codex CLI ran gpt-6-luna in one. We measured program structure with [GitGalaxy](https://github.com/squid-protocol/gitgalaxy), without AST-based extraction or an LLM classifier. The preregistered predictions were adapted from an earlier exploratory study of human-steered agent runs.
 
-Each model writes code with a **stable, recognisable structure**. Given only GitGalaxy's structural fingerprint of
-a program, its nearest neighbour among programs for the same task and language comes from **the same model 83 % of
-the time** (43 of 52; chance 27 %, permutation p < 0.001). Two runs of one model sit about half as far apart
-as two different models (sfs profile distance 0.32 vs 0.62). The *habits* that separate the models are not the
-ones the earlier exploratory study suggested:
+- **60 fresh runs** across 3 agent/model configurations, 2 tasks, and 5 languages
+- **59 of 60 programs passed** the final held-out check; 57 passed on the first check
+- **Every hypothesis and decision rule was preregistered** before confirmation data existed
+- **Structural measurement checked independently** against Tree-sitter and ctags
 
-- **Haiku comments and documents the most**: more than Sonnet in all 10 cells, and documents more functions than
-  Codex in all 10.
-- **Sonnet vs Codex**, the pre-registered headline comparison, confirmed nothing after correction. Every testable
-  direction matched the exploratory study, and the closest was **Codex exits early more** (9 of 10 cells,
-  Holm p = 0.054).
-- **Codex writes extraordinarily dense code** (whole chess engines in 35-56 lines). Dense enough that the scanner's
-  anti-minification guard skipped four Codex programs; that was found, handled by a pre-stated rule, and fixed
-  upstream ([gitgalaxy#7501](https://github.com/squid-protocol/gitgalaxy/issues/7501)).
+## A structural fingerprint
 
-Full results, with every registered verdict, are in [RESULTS.md](RESULTS.md).
+For each program, we compared its GitGalaxy structural profile with programs for the same task and language. Its nearest neighbour came from the same model in **43 of 52 cases (83%)**, against a 27% chance baseline. This is an exploratory attribution result, not a trained classifier and not yet a replicated finding. The planned next step is fresh-run replication, including a new task.
+
+![Exploratory nearest-neighbour attribution and structural distances: same-model neighbours occurred in 43 of 52 cases; same-model profiles were closer than different-model profiles.](figures/structural-fingerprint.svg)
+
+The distance comparison helps explain the result: two runs from the same model had a median structural distance of 0.32, compared with 0.62 between different models working on the same task and language. Language itself moved the profile more than task or model, which is why these comparisons hold task and language constant.
+
+## The preregistered result was not the expected result
+
+The headline Sonnet-versus-Codex family confirmed no hypothesis after Holm correction. Codex's early-exit pattern came closest: it pointed in the predicted direction in 9 of 10 cells, but its adjusted p-value was 0.054. The exploratory fan-out prediction reversed in every testable cell.
+
+A different comparison did produce clear results. Haiku had more comment lines than Sonnet in all 10 cells and documented a larger share of functions in all 10; it also documented more functions than Codex in all 10. Sonnet used `while` more than Haiku in the eight non-COBOL cells. These are model-specific patterns, not evidence that one vendor's coding agent has a single stable style.
+
+![Registered findings: the original Sonnet-Codex early-exit comparison was inconclusive, while Haiku-Sonnet differences in comments and documented functions were consistent across all ten cells.](figures/registered-findings.svg)
+
+I think the negative result is part of the contribution. A repository like this should make it easy to see what the experiment predicted, what the data supported, and where the measurement itself needed repair. During validation, Codex's dense programs triggered GitGalaxy's anti-minification guard and four programs were initially skipped. Cross-checking against Tree-sitter and ctags exposed that blind spot; we applied the rule recorded in advance, reported both instrument-default and corrected results, and fixed the scanner upstream ([issue #7501](https://github.com/squid-protocol/gitgalaxy/issues/7501)).
+
+## Follow the evidence
+
+- [Every registered result, sensitivity analysis, and exploratory finding](RESULTS.md)
+- [Public preregistration and dated deviations](preregistration/PREREGISTRATION.md)
+- [All 60 generated programs, prompts, run records, and checks](runs/)
+- [Measurement scripts and result tables](measure/) · [results/data/](results/data/)
+- [GitGalaxy validity appraisal against Tree-sitter and ctags](validity/)
+- [Figure source](figures/generate.py)
+
+The claims here are deliberately bounded. This study does not rank agent quality or establish that the same habits appear in other models, tasks, languages, or human-steered work. The nearest-neighbour result remains exploratory until it is replicated. The full methods, caveats, and data are linked above for readers who want to reproduce, challenge, or extend the work.
 
 ## Built on Mathieu Acher's paired-agent studies
 
