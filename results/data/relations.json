@@ -1,0 +1,300 @@
+{
+ "structure": {
+  "groups": {
+   "1 same task+language, same model (another run)": {
+    "n": 41,
+    "median": 0.329,
+    "mean": 0.332
+   },
+   "2 same task+language, different model": {
+    "n": 104,
+    "median": 0.641,
+    "mean": 0.731
+   },
+   "3 same model + language, other task": {
+    "n": 60,
+    "median": 0.613,
+    "mean": 0.684
+   },
+   "4 same model + task, other language": {
+    "n": 236,
+    "median": 0.999,
+    "mean": 0.99
+   },
+   "5 same model, other task and language": {
+    "n": 243,
+    "median": 1.016,
+    "mean": 1.054
+   },
+   "6 different model, other task or language": {
+    "n": 856,
+    "median": 1.079,
+    "mean": 1.145
+   }
+  },
+  "model_pairs_same_cell": {
+   "codex vs haiku": {
+    "n": 20,
+    "median": 0.593,
+    "mean": 0.925
+   },
+   "codex vs sonnet": {
+    "n": 20,
+    "median": 0.795,
+    "mean": 0.942
+   },
+   "haiku vs sonnet": {
+    "n": 64,
+    "median": 0.637,
+    "mean": 0.604
+   }
+  },
+  "V2_registered": {
+   "cells": [
+    {
+     "cell": "chess-rust",
+     "note": "not evaluable: Codex runs excluded (D16)"
+    },
+    {
+     "cell": "sat-python",
+     "within": 0.3,
+     "between": 0.771,
+     "ratio": 0.389,
+     "within_pairs": 2
+    }
+   ],
+   "median_ratio": 0.389,
+   "passes_(>=0.85)": false,
+   "note": "underpowered by registration (two cells)"
+  },
+  "per_cell_r1": [
+   {
+    "cell": "chess-c",
+    "S-S2": 0.246,
+    "K-K2": 0.287,
+    "S-K": 0.749
+   },
+   {
+    "cell": "chess-cobol",
+    "S-S2": 0.329,
+    "K-K2": 0.294,
+    "S-X": 0.52,
+    "K-X": 0.565,
+    "S-K": 0.292
+   },
+   {
+    "cell": "chess-java",
+    "S-S2": 0.154,
+    "K-K2": 0.299,
+    "S-X": 2.606,
+    "K-X": 2.814,
+    "S-K": 0.629
+   },
+   {
+    "cell": "chess-python",
+    "S-S2": 0.339,
+    "K-K2": 0.438,
+    "S-X": 0.893,
+    "K-X": 1.217,
+    "S-K": 0.636
+   },
+   {
+    "cell": "chess-rust",
+    "S-S2": 0.39,
+    "K-K2": 0.368,
+    "S-K": 0.557
+   },
+   {
+    "cell": "sat-c",
+    "S-S2": 0.385,
+    "K-K2": 0.219,
+    "S-K": 0.878
+   },
+   {
+    "cell": "sat-cobol",
+    "S-S2": 0.113,
+    "K-K2": 0.14,
+    "S-X": 0.276,
+    "K-X": 0.371,
+    "S-K": 0.184
+   },
+   {
+    "cell": "sat-java",
+    "S-S2": 0.605,
+    "K-K2": 0.267,
+    "S-X": 0.598,
+    "K-X": 0.886,
+    "S-K": 0.679
+   },
+   {
+    "cell": "sat-python",
+    "S-S2": 0.156,
+    "K-K2": 0.421,
+    "S-X": 0.738,
+    "K-X": 0.501,
+    "S-K": 0.637
+   },
+   {
+    "cell": "sat-rust",
+    "S-S2": 0.477,
+    "K-K2": 0.395,
+    "S-X": 1.344,
+    "K-X": 1.406,
+    "S-K": 0.37
+   }
+  ],
+  "D11_V2_allcell": {
+   "cells_evaluable": 7,
+   "cells_S-S2_<_S-X": 6
+  }
+ },
+ "portable": {
+  "groups": {
+   "1 same task+language, same model (another run)": {
+    "n": 41,
+    "median": 0.327,
+    "mean": 0.329
+   },
+   "2 same task+language, different model": {
+    "n": 104,
+    "median": 0.635,
+    "mean": 0.718
+   },
+   "3 same model + language, other task": {
+    "n": 60,
+    "median": 0.614,
+    "mean": 0.684
+   },
+   "4 same model + task, other language": {
+    "n": 236,
+    "median": 0.997,
+    "mean": 0.985
+   },
+   "5 same model, other task and language": {
+    "n": 243,
+    "median": 1.005,
+    "mean": 1.053
+   },
+   "6 different model, other task or language": {
+    "n": 856,
+    "median": 1.069,
+    "mean": 1.138
+   }
+  },
+  "model_pairs_same_cell": {
+   "codex vs haiku": {
+    "n": 20,
+    "median": 0.563,
+    "mean": 0.902
+   },
+   "codex vs sonnet": {
+    "n": 20,
+    "median": 0.761,
+    "mean": 0.915
+   },
+   "haiku vs sonnet": {
+    "n": 64,
+    "median": 0.632,
+    "mean": 0.599
+   }
+  },
+  "V2_registered": {
+   "cells": [
+    {
+     "cell": "chess-rust",
+     "note": "not evaluable: Codex runs excluded (D16)"
+    },
+    {
+     "cell": "sat-python",
+     "within": 0.299,
+     "between": 0.735,
+     "ratio": 0.407,
+     "within_pairs": 2
+    }
+   ],
+   "median_ratio": 0.407,
+   "passes_(>=0.85)": false,
+   "note": "underpowered by registration (two cells)"
+  },
+  "per_cell_r1": [
+   {
+    "cell": "chess-c",
+    "S-S2": 0.246,
+    "K-K2": 0.284,
+    "S-K": 0.745
+   },
+   {
+    "cell": "chess-cobol",
+    "S-S2": 0.334,
+    "K-K2": 0.292,
+    "S-X": 0.507,
+    "K-X": 0.545,
+    "S-K": 0.294
+   },
+   {
+    "cell": "chess-java",
+    "S-S2": 0.147,
+    "K-K2": 0.295,
+    "S-X": 2.559,
+    "K-X": 2.768,
+    "S-K": 0.625
+   },
+   {
+    "cell": "chess-python",
+    "S-S2": 0.333,
+    "K-K2": 0.444,
+    "S-X": 0.894,
+    "K-X": 1.228,
+    "S-K": 0.632
+   },
+   {
+    "cell": "chess-rust",
+    "S-S2": 0.383,
+    "K-K2": 0.358,
+    "S-K": 0.551
+   },
+   {
+    "cell": "sat-c",
+    "S-S2": 0.368,
+    "K-K2": 0.222,
+    "S-K": 0.862
+   },
+   {
+    "cell": "sat-cobol",
+    "S-S2": 0.108,
+    "K-K2": 0.14,
+    "S-X": 0.267,
+    "K-X": 0.359,
+    "S-K": 0.178
+   },
+   {
+    "cell": "sat-java",
+    "S-S2": 0.599,
+    "K-K2": 0.268,
+    "S-X": 0.574,
+    "K-X": 0.858,
+    "S-K": 0.682
+   },
+   {
+    "cell": "sat-python",
+    "S-S2": 0.153,
+    "K-K2": 0.42,
+    "S-X": 0.702,
+    "K-X": 0.476,
+    "S-K": 0.634
+   },
+   {
+    "cell": "sat-rust",
+    "S-S2": 0.465,
+    "K-K2": 0.39,
+    "S-X": 1.312,
+    "K-X": 1.374,
+    "S-K": 0.369
+   }
+  ],
+  "D11_V2_allcell": {
+   "cells_evaluable": 7,
+   "cells_S-S2_<_S-X": 6
+  }
+ }
+}

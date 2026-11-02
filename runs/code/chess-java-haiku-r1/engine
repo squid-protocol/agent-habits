@@ -1,0 +1,4 @@
+#!/bin/sh
+# Starts the UCI engine (build first with ./build.sh).
+DIR=$(cd "$(dirname "$0")" && pwd)
+exec java -Xss64m -XX:+UseSerialGC -cp "$DIR/out" Main "$@"

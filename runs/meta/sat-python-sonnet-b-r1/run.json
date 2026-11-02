@@ -1,0 +1,22 @@
+{
+ "run_id": "sat-python-sonnet-b-r1",
+ "task": "sat",
+ "lang": "python",
+ "agent": "sonnet-b",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-sonnet-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T20:13:18Z",
+ "ended": "2026-11-01T20:17:22Z",
+ "active_s": 100,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "1e2fa0a2-6c9a-45fe-b86d-62ab3035bd3e",
+ "note": ""
+}

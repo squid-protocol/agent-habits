@@ -1,0 +1,285 @@
+{
+ "engine": "7d2e1f6272692aaa28ab62b2a0b7e65640d1def7",
+ "tests": {
+  "1": {
+   "measure": "doc_per_code_line",
+   "cells": 10,
+   "S_higher": 10,
+   "X_higher": 0,
+   "tie": 0,
+   "predicted": "S > X",
+   "p": 0.001,
+   "per_cell": [
+    [
+     "chess-c",
+     0.09,
+     0.0
+    ],
+    [
+     "chess-cobol",
+     0.125,
+     0.035
+    ],
+    [
+     "chess-cpp",
+     0.081,
+     0.027
+    ],
+    [
+     "chess-java",
+     0.146,
+     0.001
+    ],
+    [
+     "chess-python",
+     0.134,
+     0.034
+    ],
+    [
+     "chess-rust",
+     0.068,
+     0.001
+    ],
+    [
+     "compress-cobol",
+     0.103,
+     0.0
+    ],
+    [
+     "doom-cobol",
+     0.157,
+     0.0
+    ],
+    [
+     "pygame-cobol",
+     0.081,
+     0.028
+    ],
+    [
+     "sat-cobol",
+     0.172,
+     0.003
+    ]
+   ],
+   "p_holm": 0.0049
+  },
+  "2": {
+   "measure": "funcs_commented_share",
+   "cells": 10,
+   "S_higher": 10,
+   "X_higher": 0,
+   "tie": 0,
+   "predicted": "S > X",
+   "p": 0.001,
+   "per_cell": [
+    [
+     "chess-c",
+     0.2,
+     0.0
+    ],
+    [
+     "chess-cobol",
+     0.894,
+     0.0
+    ],
+    [
+     "chess-cpp",
+     0.033,
+     0.011
+    ],
+    [
+     "chess-java",
+     0.304,
+     0.0
+    ],
+    [
+     "chess-python",
+     0.489,
+     0.074
+    ],
+    [
+     "chess-rust",
+     0.126,
+     0.0
+    ],
+    [
+     "compress-cobol",
+     0.404,
+     0.0
+    ],
+    [
+     "doom-cobol",
+     0.978,
+     0.0
+    ],
+    [
+     "pygame-cobol",
+     0.304,
+     0.0
+    ],
+    [
+     "sat-cobol",
+     0.491,
+     0.072
+    ]
+   ],
+   "p_holm": 0.0049
+  },
+  "3": {
+   "measure": "early_exit_per_1k",
+   "cells": 10,
+   "S_higher": 1,
+   "X_higher": 9,
+   "tie": 0,
+   "predicted": "X > S",
+   "p": 0.0107,
+   "per_cell": [
+    [
+     "chess-c",
+     69.2063492063492,
+     102.34113712374582
+    ],
+    [
+     "chess-cobol",
+     4.908644668666485,
+     18.089565409221265
+    ],
+    [
+     "chess-cpp",
+     110.69915254237289,
+     97.6916735366859
+    ],
+    [
+     "chess-java",
+     63.338301043219076,
+     85.71428571428571
+    ],
+    [
+     "chess-python",
+     71.7741935483871,
+     82.03753351206434
+    ],
+    [
+     "chess-rust",
+     15.308641975308642,
+     47.51619870410367
+    ],
+    [
+     "compress-cobol",
+     53.873781426372496,
+     66.0
+    ],
+    [
+     "doom-cobol",
+     2.675227394328518,
+     5.238095238095238
+    ],
+    [
+     "pygame-cobol",
+     0.0,
+     4.316546762589928
+    ],
+    [
+     "sat-cobol",
+     30.737704918032787,
+     43.18936877076412
+    ]
+   ],
+   "p_holm": 0.0322
+  },
+  "4": {
+   "measure": "python_helper",
+   "cells": 9,
+   "S_higher": 0,
+   "X_higher": 4,
+   "tie": 5,
+   "predicted": "X > S",
+   "p": 0.0625,
+   "per_cell": [
+    [
+     "chess-c",
+     0,
+     1
+    ],
+    [
+     "chess-cobol",
+     0,
+     1
+    ],
+    [
+     "chess-cpp",
+     0,
+     1
+    ],
+    [
+     "chess-java",
+     0,
+     1
+    ],
+    [
+     "chess-rust",
+     0,
+     0
+    ],
+    [
+     "compress-cobol",
+     1,
+     1
+    ],
+    [
+     "doom-cobol",
+     0,
+     0
+    ],
+    [
+     "pygame-cobol",
+     0,
+     0
+    ],
+    [
+     "sat-cobol",
+     0,
+     0
+    ]
+   ],
+   "p_holm": 0.0625
+  },
+  "5": {
+   "measure": "while_per_1k",
+   "cells": 5,
+   "S_higher": 5,
+   "X_higher": 0,
+   "tie": 0,
+   "predicted": "S > X",
+   "p": 0.0312,
+   "per_cell": [
+    [
+     "chess-c",
+     39.36507936507937,
+     8.02675585284281
+    ],
+    [
+     "chess-cpp",
+     21.716101694915253,
+     18.549051937345425
+    ],
+    [
+     "chess-java",
+     13.040238450074515,
+     4.166666666666667
+    ],
+    [
+     "chess-python",
+     6.451612903225806,
+     3.753351206434316
+    ],
+    [
+     "chess-rust",
+     13.82716049382716,
+     5.399568034557236
+    ]
+   ],
+   "p_holm": 0.0625
+  }
+ }
+}

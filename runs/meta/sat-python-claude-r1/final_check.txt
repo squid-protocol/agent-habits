@@ -1,0 +1,15 @@
+PASS
+  ok   planted 3-SAT n=40: SAT
+  ok   planted 3-SAT n=80: SAT
+  ok   planted 3-SAT n=120: SAT
+  ok   pigeonhole 5->4: UNSAT
+  ok   pigeonhole 7->6: UNSAT
+  ok   random 3-SAT n=14 #0: SAT
+  ok   random 3-SAT n=14 #1: UNSAT
+  ok   random 3-SAT n=14 #2: SAT
+  ok   random 3-SAT n=14 #3: SAT
+  ok   random 3-SAT n=14 #4: UNSAT
+  ok   random 3-SAT n=14 #5: SAT
+  ok   empty formula n=3: SAT
+  ok   unit conflict: UNSAT
+  ok   hard formulas: 12 of 13 answered correctly within 60s (need 11, no wrong answers)

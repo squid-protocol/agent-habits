@@ -1,0 +1,22 @@
+{
+ "run_id": "chess-rust-haiku-r1",
+ "task": "chess",
+ "lang": "rust",
+ "agent": "haiku",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-haiku-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T18:36:45Z",
+ "ended": "2026-11-01T18:53:24Z",
+ "active_s": 978,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "79178b9b-2544-4e7b-b3eb-168d2837d2dc",
+ "note": ""
+}

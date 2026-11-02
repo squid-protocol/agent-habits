@@ -1,0 +1,10 @@
+cell_lang,shape,cause_class,slots
+cobol,CT_only,ctags phantom (statement/scope terminator ending in X tagged as paragraph),180
+rust,TS+CT_only,saturation exclusion (GG never read the file),50
+cobol,CT_only,ctags counts environment/data-division headers (GG counts procedure-division units only),49
+c,TS+CT_only,saturation exclusion (GG never read the file),31
+cobol,CT_only,name-shape difference (GG names it X),15
+cobol,CT_only,GG miss,12
+java,TS+CT_only,GG miss,3
+java,TS+CT_only,GG miss (GG has zero functions in this file),1
+java,GG+CT_only,TS node-map gap,1

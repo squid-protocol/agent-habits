@@ -1,0 +1,306 @@
+#!/usr/bin/env python3
+"""A small CDCL SAT solver for DIMACS CNF (DPLL with clause learning)."""
+import sys
+import re
+
+
+class Solver:
+    def __init__(self, n, clauses):
+        self.n = n
+        self.clauses = []
+        self.watches = [[] for _ in range(2 * n)]
+        self.assign = [0] * (n + 1)  # -1 false, 1 true
+        self.level = [0] * (n + 1)
+        self.reason = [-1] * (n + 1)
+        self.trail = []
+        self.limits = []
+        self.qhead = 0
+        self.activity = [0.0] * (n + 1)
+        self.static_score = [0.0] * (n + 1)
+        self.var_inc = 1.0
+        self.var_decay = 0.95
+        self.phase = [1] * (n + 1)
+        self.heap = []
+        self.heap_pos = [-1] * (n + 1)
+        self.watch_pos = []
+        for c in clauses:
+            self.add_clause(c, original=True)
+        # A weighted occurrence score gives useful decisions before conflict
+        # learning has had time to build VSIDS activity.  On planted instances,
+        # the more frequent polarity is also a strong initial phase estimate.
+        for c in clauses:
+            weight = 2.0 ** (-len(c))
+            for lit in c:
+                v = abs(lit)
+                self.static_score[v] += weight
+                self.activity[v] += 1.0
+                self.phase[v] = (1 if lit > 0 else -1) if (lit > 0) == (self.phase[v] > 0) else self.phase[v]
+        # Select polarity by weighted clause occurrence, retaining true on ties.
+        pos = [0.0] * (n + 1)
+        neg = [0.0] * (n + 1)
+        for c in clauses:
+            weight = 2.0 ** (-len(c))
+            for lit in c:
+                (pos if lit > 0 else neg)[abs(lit)] += weight
+        for v in range(1, n + 1):
+            self.phase[v] = 1 if pos[v] >= neg[v] else -1
+
+    def wi(self, lit):
+        # index of the list watching lit
+        return 2 * (abs(lit) - 1) + (lit < 0)
+
+    def val(self, lit):
+        v = self.assign[abs(lit)]
+        return v if lit > 0 else -v
+
+    def add_clause(self, lits, original=False):
+        # Input normalization is done by the parser; learned clauses are already unique.
+        if not lits:
+            self.clauses.append([])
+            self.watch_pos.append((0, 0))
+            return len(self.clauses) - 1
+        idx = len(self.clauses)
+        self.clauses.append(list(lits))
+        if len(lits) == 1:
+            self.watch_pos.append((0, 0))
+            self.watches[self.wi(lits[0])].append(idx)
+        else:
+            self.watch_pos.append((0, 1))
+            self.watches[self.wi(lits[0])].append(idx)
+            self.watches[self.wi(lits[1])].append(idx)
+        return idx
+
+    def enqueue(self, lit, reason):
+        v = abs(lit)
+        wanted = 1 if lit > 0 else -1
+        if self.assign[v]:
+            return self.assign[v] == wanted
+        self.assign[v] = wanted
+        self.phase[v] = wanted
+        self.level[v] = len(self.limits)
+        self.reason[v] = reason
+        self.trail.append(lit)
+        return True
+
+    def propagate(self):
+        while self.qhead < len(self.trail):
+            p = self.trail[self.qhead]
+            self.qhead += 1
+            false_lit = -p
+            ws = self.watches[self.wi(false_lit)]
+            i = 0
+            while i < len(ws):
+                ci = ws[i]
+                c = self.clauses[ci]
+                a, b = self.watch_pos[ci]
+                if c[a] == false_lit:
+                    wi, oi = a, b
+                elif c[b] == false_lit:
+                    wi, oi = b, a
+                else:
+                    # A stale entry can arise when the other watch moved.
+                    ws[i] = ws[-1]; ws.pop()
+                    continue
+                other = c[oi]
+                if self.val(other) > 0:
+                    i += 1
+                    continue
+                found = -1
+                for k, lit in enumerate(c):
+                    if k != oi and k != wi and self.val(lit) >= 0:
+                        found = k
+                        break
+                if found >= 0:
+                    if wi == a:
+                        self.watch_pos[ci] = (found, b)
+                    else:
+                        self.watch_pos[ci] = (a, found)
+                    ws[i] = ws[-1]; ws.pop()
+                    self.watches[self.wi(c[found])].append(ci)
+                    continue
+                if self.val(other) < 0 or not self.enqueue(other, ci):
+                    return ci
+                i += 1
+        return -1
+
+    def bump(self, v):
+        self.activity[v] += self.var_inc
+        if self.activity[v] > 1e100:
+            self.activity = [x * 1e-100 for x in self.activity]
+            self.var_inc *= 1e-100
+
+    def analyze(self, conflict):
+        learnt = [0]
+        seen = bytearray(self.n + 1)
+        path = 0
+        idx = len(self.trail) - 1
+        clause = self.clauses[conflict]
+        p = 0
+        while True:
+            for q in clause:
+                v = abs(q)
+                if v == abs(p) or seen[v] or self.level[v] == 0:
+                    continue
+                seen[v] = 1
+                self.bump(v)
+                if self.level[v] == len(self.limits):
+                    path += 1
+                else:
+                    learnt.append(q)
+            while idx >= 0 and not seen[abs(self.trail[idx])]:
+                idx -= 1
+            p = self.trail[idx]
+            idx -= 1
+            v = abs(p)
+            seen[v] = 0
+            path -= 1
+            if path == 0:
+                break
+            ri = self.reason[v]
+            clause = self.clauses[ri] if ri >= 0 else []
+        learnt[0] = -p
+        back = 0
+        if len(learnt) > 1:
+            best = 1
+            for j in range(1, len(learnt)):
+                lv = self.level[abs(learnt[j])]
+                if lv > back:
+                    back, best = lv, j
+            learnt[1], learnt[best] = learnt[best], learnt[1]
+        self.var_inc /= self.var_decay
+        return learnt, back
+
+    def backtrack(self, level):
+        if len(self.limits) <= level:
+            return
+        cut = self.limits[level]
+        for lit in reversed(self.trail[cut:]):
+            v = abs(lit)
+            self.assign[v] = 0
+            self.reason[v] = -1
+        del self.trail[cut:]
+        del self.limits[level:]
+        self.qhead = min(self.qhead, len(self.trail))
+
+    def choose(self):
+        # Scan is often quicker than maintaining a Python heap at these sizes.
+        best, score = 0, -1.0
+        for v in range(1, self.n + 1):
+            value = self.activity[v] + self.static_score[v]
+            if not self.assign[v] and value > score:
+                best, score = v, value
+        return best
+
+    def solve(self):
+        for i, c in enumerate(self.clauses):
+            if not c:
+                return None
+            if len(c) == 1 and not self.enqueue(c[0], i):
+                return None
+        confl = self.propagate()
+        if confl >= 0:
+            return None
+        conflicts = 0
+        restart_at = 100
+        since_restart = 0
+        while True:
+            confl = self.propagate()
+            if confl >= 0:
+                conflicts += 1
+                since_restart += 1
+                if not self.limits:
+                    return None
+                learnt, back = self.analyze(confl)
+                self.backtrack(back)
+                ci = self.add_clause(learnt)
+                if not self.enqueue(learnt[0], ci):
+                    return None
+                if since_restart >= restart_at:
+                    self.backtrack(0)
+                    since_restart = 0
+                    restart_at = int(restart_at * 1.5) + 1
+            else:
+                v = self.choose()
+                if not v:
+                    return self.assign[:]
+                self.limits.append(len(self.trail))
+                lit = v if self.phase[v] > 0 else -v
+                self.enqueue(lit, -1)
+
+
+def parse(path):
+    text = open(path, encoding="ascii").read()
+    toks = []
+    header = None
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith('c'):
+            continue
+        if line.startswith('p'):
+            parts = line.split()
+            if len(parts) != 4 or parts[1] != 'cnf':
+                raise ValueError("invalid DIMACS header")
+            header = (int(parts[2]), int(parts[3]))
+        else:
+            toks.extend(map(int, line.split()))
+    if header is None:
+        raise ValueError("missing DIMACS header")
+    n, m = header
+    clauses, cur = [], []
+    for x in toks:
+        if x == 0:
+            normalized = []
+            have = set()
+            tautology = False
+            for lit in cur:
+                if abs(lit) > n:
+                    raise ValueError("literal exceeds declared variable count")
+                if -lit in have:
+                    tautology = True
+                    break
+                if lit not in have:
+                    have.add(lit); normalized.append(lit)
+            if not tautology:
+                clauses.append(normalized)
+            cur = []
+        else:
+            if abs(x) > n:
+                raise ValueError("literal exceeds declared variable count")
+            cur.append(x)
+    if cur:
+        raise ValueError("unterminated clause")
+    if len(clauses) != m:
+        # Tautological clauses still count in the DIMACS header; account for them
+        # by validating the raw terminators separately only in well-formed input.
+        raw_count = sum(1 for x in toks if x == 0)
+        if raw_count != m:
+            raise ValueError("clause count does not match header")
+    return n, clauses
+
+
+def main():
+    if len(sys.argv) != 2:
+        print("usage: solver FILE", file=sys.stderr)
+        return 1
+    try:
+        n, clauses = parse(sys.argv[1])
+        s = Solver(n, clauses)
+        model = s.solve()
+    except (OSError, ValueError) as e:
+        print("c error:", e, file=sys.stderr)
+        return 1
+    if model is None:
+        print("s UNSATISFIABLE")
+        return 20
+    print("s SATISFIABLE")
+    # A complete model is required; variables not needed by search default true.
+    vals = [str(v if model[v] >= 0 else -v) for v in range(1, n + 1)]
+    for start in range(0, len(vals), 20):
+        print("v " + " ".join(vals[start:start + 20]) + (" " if vals[start:start + 20] else "") + ("0" if start + 20 >= len(vals) else ""))
+    if n == 0:
+        print("v 0")
+    return 10
+
+
+if __name__ == '__main__':
+    sys.exit(main())

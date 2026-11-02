@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")"
+if [ ! -d out ]; then ./build.sh; fi
+exec java -cp out Main

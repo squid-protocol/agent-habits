@@ -1,0 +1,22 @@
+{
+ "run_id": "chess-java-codex-r1",
+ "task": "chess",
+ "lang": "java",
+ "agent": "codex",
+ "rep": 1,
+ "cli": "Codex CLI 0.166.0",
+ "model": "gpt-6-luna",
+ "setting": "model_reasoning_effort=medium",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T19:07:32Z",
+ "ended": "2026-11-01T19:13:49Z",
+ "active_s": 290,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "01a19882-84a2-7b82-9220-e57b5c6081a1",
+ "note": ""
+}

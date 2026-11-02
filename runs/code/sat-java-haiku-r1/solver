@@ -1,0 +1,4 @@
+#!/bin/sh
+# Usage: ./solver FILE  -- solves a DIMACS CNF formula (s/v output, exit 10 SAT, 20 UNSAT).
+DIR=$(cd "$(dirname "$0")" && pwd)
+exec java -Xss16m -XX:+UseSerialGC -cp "$DIR/build/classes" Solver "$@"

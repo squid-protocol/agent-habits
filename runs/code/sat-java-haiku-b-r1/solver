@@ -1,0 +1,4 @@
+#!/bin/sh
+# Usage: ./solver FILE   (DIMACS CNF). Runs the compiled CDCL solver in build/.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec java -Xss16m -cp "$DIR/build" Solver "$@"

@@ -1,0 +1,563 @@
+#!/usr/bin/env python3
+"""A SAT solver for DIMACS CNF formulas, standard library only.
+
+The search is DPLL: unit propagation with two watched literals, then branching
+and backtracking. On top of that plain DPLL loop it adds the usual techniques
+that make hard instances tractable:
+
+  * conflict analysis to the first unique implication point (1UIP), with the
+    learned clause added to the database (clause learning turns backtracking
+    into non-chronological backjumping);
+  * VSIDS variable activities kept in a heap for branching;
+  * phase saving, so the solver returns to the polarity it last had;
+  * Luby restarts;
+  * periodic deletion of learned clauses, keeping those with low LBD.
+
+Usage:  ./solver FILE
+Output: "s SATISFIABLE" + "v ..." lines and exit code 10, or
+        "s UNSATISFIABLE" and exit code 20.
+
+Literal encoding inside the solver: variable v > 0 is literal 2*v (positive)
+and 2*v + 1 (negative), so the negation of literal l is l ^ 1.
+"""
+
+import gc
+import heapq
+import sys
+
+
+def parse(text):
+    """Return (declared variable count, list of clauses as lists of DIMACS ints)."""
+    nvars = 0
+    clauses = []
+    cur = []
+    for line in text.splitlines():
+        s = line.strip()
+        if not s or s[0] == "c":
+            continue
+        if s[0] == "%":  # end-of-data marker used by some benchmark archives
+            break
+        if s[0] == "p":
+            parts = s.split()
+            if len(parts) >= 3:
+                nvars = int(parts[2])
+            continue
+        for tok in s.split():
+            x = int(tok)
+            if x == 0:
+                clauses.append(cur)
+                cur = []
+            else:
+                cur.append(x)
+    if cur:  # tolerate a missing final 0
+        clauses.append(cur)
+    return nvars, clauses
+
+
+def luby(x):
+    """The x-th term (0-based) of the Luby sequence 1,1,2,1,1,2,4,..."""
+    size, seq = 1, 0
+    while size < x + 1:
+        seq += 1
+        size = 2 * size + 1
+    while size - 1 != x:
+        size = (size - 1) >> 1
+        seq -= 1
+        x = x % size
+    return 1 << seq
+
+
+def preprocess(nvars, clauses):
+    """Return (n, problem, units): literal-coded clauses of size >= 2, unit literals, or None if
+    an empty clause is present. Tautologies and duplicate literals are removed."""
+    n = nvars
+    for c in clauses:
+        for x in c:
+            if abs(x) > n:
+                n = abs(x)
+    units = []
+    problem = []
+    for c in clauses:
+        lits = []
+        seen_lits = set()
+        taut = False
+        for x in c:
+            l = 2 * x if x > 0 else -2 * x + 1
+            if l in seen_lits:
+                continue
+            if (l ^ 1) in seen_lits:
+                taut = True
+                break
+            seen_lits.add(l)
+            lits.append(l)
+        if taut:
+            continue
+        if not lits:
+            return n, None, None
+        if len(lits) == 1:
+            units.append(lits[0])
+        else:
+            problem.append(lits)
+    return n, problem, units
+
+
+def cdcl(n, problem, units):
+    """Conflict-driven search. A generator: it yields every few conflicts so the caller can
+    interleave other work, and returns (True, model) or (False, None) through StopIteration."""
+    # ---- state ----
+    val = [0] * (2 * n + 2)     # per literal: 1 true, -1 false, 0 unassigned
+    level = [0] * (n + 1)
+    reason = [None] * (n + 1)   # clause that implied the variable, None for decisions
+    watches = [[] for _ in range(2 * n + 2)]
+    trail = []
+    trail_lim = []              # trail_lim[k] = trail length when level k+1 started
+    qhead = 0
+    dl = 0                      # current decision level
+    act = [0.0] * (n + 1)
+    var_inc = 1.0
+    var_decay = 1.0 / 0.99
+    phase = [False] * (n + 1)   # saved phase: True means the variable was last true
+    seen = bytearray(n + 1)
+    heap = [(0.0, v) for v in range(1, n + 1)]
+    heapq.heapify(heap)
+    learnts = []
+    lbd_of = {}                 # id(clause) -> LBD, for learned clauses only
+
+    for c in problem:
+        watches[c[0]].append(c)
+        watches[c[1]].append(c)
+
+    for l in units:
+        if val[l] == -1:
+            return False, None
+        if val[l] == 0:
+            val[l] = 1
+            val[l ^ 1] = -1
+            level[l >> 1] = 0
+            trail.append(l)
+
+    def analyze(confl, dl):
+        """First-UIP learning. Returns (learnt clause, backjump level, LBD, touched vars)."""
+        learnt = [0]
+        touched = []
+        pathc = 0
+        p = -1
+        idx = len(trail) - 1
+        c = confl
+        while True:
+            start = 0 if p < 0 else 1  # c[0] is the implied literal p itself
+            for k in range(start, len(c)):
+                q = c[k]
+                v = q >> 1
+                if not seen[v] and level[v] > 0:
+                    seen[v] = 1
+                    touched.append(v)
+                    if level[v] >= dl:
+                        pathc += 1
+                    else:
+                        learnt.append(q)
+            while not seen[trail[idx] >> 1]:
+                idx -= 1
+            p = trail[idx]
+            idx -= 1
+            c = reason[p >> 1]
+            pathc -= 1
+            if pathc == 0:
+                break
+        learnt[0] = p ^ 1
+
+        # Local minimisation: drop a literal implied by the others in the clause.
+        out = [learnt[0]]
+        for k in range(1, len(learnt)):
+            q = learnt[k]
+            r = reason[q >> 1]
+            if r is None:
+                out.append(q)
+                continue
+            qv = q >> 1
+            redundant = True
+            for l in r:
+                v = l >> 1
+                if v != qv and not seen[v] and level[v] > 0:
+                    redundant = False
+                    break
+            if not redundant:
+                out.append(q)
+        learnt = out
+
+        for v in touched:
+            seen[v] = 0
+
+        bt = 0
+        if len(learnt) > 1:
+            best = 1
+            for k in range(2, len(learnt)):
+                if level[learnt[k] >> 1] > level[learnt[best] >> 1]:
+                    best = k
+            learnt[1], learnt[best] = learnt[best], learnt[1]
+            bt = level[learnt[1] >> 1]
+        lbd = len({level[q >> 1] for q in learnt})
+        return learnt, bt, lbd, touched
+
+    # ---- main loop ----
+    conflicts = 0
+    restarts = 0
+    run_limit = 100 * luby(0)
+    confl_run = 0
+    reductions = 0
+    next_reduce = 2000
+
+    while True:
+        # Unit propagation.
+        confl = None
+        while qhead < len(trail):
+            p = trail[qhead]
+            qhead += 1
+            fl = p ^ 1              # this literal just became false
+            ws = watches[fl]
+            i = j = 0
+            nws = len(ws)
+            while i < nws:
+                c = ws[i]
+                i += 1
+                if c[0] == fl:
+                    c[0] = c[1]
+                    c[1] = fl
+                first = c[0]
+                if val[first] == 1:
+                    ws[j] = c
+                    j += 1
+                    continue
+                moved = False
+                for k in range(2, len(c)):
+                    lk = c[k]
+                    if val[lk] != -1:
+                        c[1] = lk
+                        c[k] = fl
+                        watches[lk].append(c)
+                        moved = True
+                        break
+                if moved:
+                    continue
+                ws[j] = c
+                j += 1
+                if val[first] == -1:
+                    confl = c
+                    while i < nws:
+                        ws[j] = ws[i]
+                        j += 1
+                        i += 1
+                    break
+                # Unit clause: imply its first literal.
+                v = first >> 1
+                val[first] = 1
+                val[first ^ 1] = -1
+                level[v] = dl
+                reason[v] = c
+                trail.append(first)
+            del ws[j:]
+            if confl is not None:
+                break
+
+        if confl is not None:
+            conflicts += 1
+            confl_run += 1
+            if dl == 0:
+                return False, None
+            if conflicts % 50 == 0:
+                yield
+            learnt, bt, lbd, touched = analyze(confl, dl)
+
+            for v in touched:
+                act[v] += var_inc
+            var_inc *= var_decay
+            if var_inc > 1e100 or any(act[v] > 1e100 for v in touched):
+                for v in range(1, n + 1):
+                    act[v] *= 1e-100
+                var_inc *= 1e-100
+                heap = [(-act[v], v) for v in range(1, n + 1) if val[2 * v] == 0]
+                heapq.heapify(heap)
+
+            # Backjump to bt, undoing assignments above it.
+            if bt < dl:
+                lim = trail_lim[bt]
+                for l in trail[lim:]:
+                    v = l >> 1
+                    val[l] = 0
+                    val[l ^ 1] = 0
+                    phase[v] = (l & 1) == 0
+                    heapq.heappush(heap, (-act[v], v))
+                    reason[v] = None
+                del trail[lim:]
+                del trail_lim[bt:]
+                qhead = lim
+                dl = bt
+
+            if len(learnt) == 1:
+                l = learnt[0]
+                val[l] = 1
+                val[l ^ 1] = -1
+                level[l >> 1] = 0
+                reason[l >> 1] = None
+                trail.append(l)
+            else:
+                c = learnt
+                learnts.append(c)
+                lbd_of[id(c)] = lbd
+                watches[c[0]].append(c)
+                watches[c[1]].append(c)
+                l = c[0]
+                v = l >> 1
+                val[l] = 1
+                val[l ^ 1] = -1
+                level[v] = dl
+                reason[v] = c
+                trail.append(l)
+            continue
+
+        # No conflict: maybe restart, maybe shrink the learned clause database.
+        if confl_run >= run_limit:
+            restarts += 1
+            confl_run = 0
+            run_limit = 100 * luby(restarts)
+            if dl > 0:
+                lim = trail_lim[0]
+                for l in trail[lim:]:
+                    v = l >> 1
+                    val[l] = 0
+                    val[l ^ 1] = 0
+                    phase[v] = (l & 1) == 0
+                    heapq.heappush(heap, (-act[v], v))
+                    reason[v] = None
+                del trail[lim:]
+                del trail_lim[:]
+                qhead = lim
+                dl = 0
+            continue
+
+        if conflicts >= next_reduce:
+            reductions += 1
+            next_reduce = conflicts + 2000 + 300 * reductions
+            learnts.sort(key=lambda cl: (lbd_of[id(cl)], len(cl)), reverse=True)
+            drop = set()
+            for cl in learnts[: len(learnts) // 2]:
+                # Keep glue clauses (LBD <= 2) and clauses that are the reason for a current assignment.
+                if lbd_of[id(cl)] <= 2 or reason[cl[0] >> 1] is cl:
+                    continue
+                drop.add(id(cl))
+            if drop:
+                learnts = [cl for cl in learnts if id(cl) not in drop]
+                for k in drop:
+                    del lbd_of[k]
+                for w in watches:
+                    w.clear()
+                for cl in problem:
+                    watches[cl[0]].append(cl)
+                    watches[cl[1]].append(cl)
+                for cl in learnts:
+                    watches[cl[0]].append(cl)
+                    watches[cl[1]].append(cl)
+
+        # Branch on the most active unassigned variable.
+        if len(heap) > 4 * n + 1000:
+            heap = [(-act[v], v) for v in range(1, n + 1) if val[2 * v] == 0]
+            heapq.heapify(heap)
+        v = 0
+        while heap:
+            _, cand = heapq.heappop(heap)
+            if val[2 * cand] == 0:
+                v = cand
+                break
+        if v == 0:
+            model = [False] * (n + 1)
+            for u in range(1, n + 1):
+                model[u] = val[2 * u] == 1
+            return True, model
+        dl += 1
+        trail_lim.append(len(trail))
+        lit = 2 * v if phase[v] else 2 * v + 1
+        level[v] = dl
+        reason[v] = None
+        val[lit] = 1
+        val[lit ^ 1] = -1
+        trail.append(lit)
+
+
+class ProbSAT:
+    """Local search (probSAT with the polynomial break-count distribution, for 3-SAT).
+
+    It starts from a random assignment and repeatedly flips a variable of a random unsatisfied
+    clause, choosing among its literals with probability proportional to (eps + break)^-cb.
+    It can only ever establish satisfiability, and the caller verifies any model it returns.
+    State persists between calls to run(), so it can be resumed."""
+
+    EPS = 1.0
+    CB = 2.38
+
+    def __init__(self, n, clauses, seed=12345):
+        import random
+        self.rng = random.Random(seed)
+        self.n = n
+        self.cls = clauses
+        m = len(clauses)
+        occ = [[] for _ in range(2 * n + 2)]
+        for ci, c in enumerate(clauses):
+            for l in c:
+                occ[l].append(ci)
+        self.occ = occ
+        tv = [0] * (2 * n + 2)
+        for v in range(1, n + 1):
+            tv[2 * v + (0 if self.rng.random() < 0.5 else 1)] = 1
+        self.tv = tv
+        ntrue = [0] * m
+        uns = []
+        upos = [-1] * m
+        for ci, c in enumerate(clauses):
+            k = 0
+            for l in c:
+                k += tv[l]
+            ntrue[ci] = k
+            if k == 0:
+                upos[ci] = len(uns)
+                uns.append(ci)
+        self.ntrue = ntrue
+        self.uns = uns
+        self.upos = upos
+        maxocc = max((len(o) for o in occ), default=0)
+        self.wtab = [(self.EPS + b) ** (-self.CB) for b in range(maxocc + 2)]
+
+    def model(self):
+        n = self.n
+        model = [False] * (n + 1)
+        for v in range(1, n + 1):
+            model[v] = self.tv[2 * v] == 1
+        return model
+
+    def run(self, deadline):
+        """Flip until a model is found (returns True) or the deadline passes (returns False)."""
+        import time
+        uns, upos, ntrue, occ, tv, cls = self.uns, self.upos, self.ntrue, self.occ, self.tv, self.cls
+        wtab = self.wtab
+        rng = self.rng
+        rand = rng.random
+        steps = 0
+        while uns:
+            steps += 1
+            if steps & 255 == 0 and time.perf_counter() > deadline:
+                return False
+            c = uns[int(rand() * len(uns))]
+            lits = cls[c]
+            weights = []
+            total = 0.0
+            for l in lits:
+                b = 0
+                for d in occ[l ^ 1]:
+                    if ntrue[d] == 1:
+                        b += 1
+                w = wtab[b]
+                weights.append(w)
+                total += w
+            r = rand() * total
+            pick = lits[-1]
+            acc = 0.0
+            for idx in range(len(lits)):
+                acc += weights[idx]
+                if r < acc:
+                    pick = lits[idx]
+                    break
+            # Make `pick` true: the literal currently true for its variable becomes false.
+            f = pick ^ 1
+            tv[f] = 0
+            tv[pick] = 1
+            for d in occ[f]:
+                k = ntrue[d] - 1
+                ntrue[d] = k
+                if k == 0:
+                    upos[d] = len(uns)
+                    uns.append(d)
+            for d in occ[pick]:
+                k = ntrue[d]
+                ntrue[d] = k + 1
+                if k == 0:
+                    p = upos[d]
+                    last = uns.pop()
+                    if last != d:
+                        uns[p] = last
+                        upos[last] = p
+                    upos[d] = -1
+        return True
+
+
+def advance(gen, deadline):
+    """Run a cdcl() generator until the deadline. Returns (finished, result)."""
+    import time
+    while time.perf_counter() < deadline:
+        try:
+            next(gen)
+        except StopIteration as stop:
+            return True, stop.value
+    return False, None
+
+
+def solve(nvars, clauses):
+    """Return (True, model) with model[v] a bool for v in 1..n, or (False, None).
+
+    Local search and conflict-driven search run in alternation with growing time slices. Local
+    search can only find models; conflict-driven search can prove unsatisfiability as well."""
+    import time
+    n, problem, units = preprocess(nvars, clauses)
+    if problem is None:
+        return False, None
+    gen = cdcl(n, problem, units)
+    done, result = advance(gen, time.perf_counter() + 0.2)  # small formulas finish here
+    if done:
+        return result
+    ls = ProbSAT(n, problem + [[l] for l in units])
+    if ls.run(time.perf_counter() + 1.0):  # a head start: most satisfiable instances end here
+        return True, ls.model()
+    slice_s = 0.5
+    while True:
+        if ls.run(time.perf_counter() + slice_s / 10):
+            return True, ls.model()
+        done, result = advance(gen, time.perf_counter() + slice_s)
+        if done:
+            return result
+        slice_s *= 2
+
+
+def check_model(clauses, model):
+    for c in clauses:
+        if not any((model[abs(x)] if x > 0 else not model[abs(x)]) for x in c):
+            return False
+    return True
+
+
+def main(argv):
+    if len(argv) != 2:
+        sys.stderr.write("usage: solver FILE\n")
+        return 2
+    with open(argv[1], "r", errors="replace") as f:
+        text = f.read()
+    nvars, clauses = parse(text)
+    gc.disable()  # the solver allocates many small lists and has no cycles to collect
+    sat, model = solve(nvars, clauses)
+    out = sys.stdout
+    if not sat:
+        out.write("s UNSATISFIABLE\n")
+        out.flush()
+        return 20
+    if not check_model(clauses, model):
+        sys.stderr.write("internal error: model does not satisfy the formula\n")
+        return 1
+    n = len(model) - 1
+    out.write("s SATISFIABLE\n")
+    tokens = [str(v if model[v] else -v) for v in range(1, n + 1)]
+    tokens.append("0")
+    for k in range(0, len(tokens), 20):
+        out.write("v " + " ".join(tokens[k:k + 20]) + "\n")
+    out.flush()
+    return 10
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

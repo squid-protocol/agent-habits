@@ -1,0 +1,312 @@
+#!/usr/bin/env python3
+import sys, heapq
+
+
+def parse(path):
+    nv = 0
+    clauses = []
+    cur = []
+    with open(path) as f:
+        for line in f:
+            if not line or line[0] in 'c%':
+                if line and line[0] == '%':
+                    break
+                continue
+            if line[0] == 'p':
+                nv = int(line.split()[2])
+                continue
+            for t in line.split():
+                x = int(t)
+                if x == 0:
+                    clauses.append(cur)
+                    cur = []
+                else:
+                    cur.append(x)
+    if cur:
+        clauses.append(cur)
+    for c in clauses:
+        for x in c:
+            if abs(x) > nv:
+                nv = abs(x)
+    return nv, clauses
+
+
+def luby(i):
+    k = 1
+    while (1 << k) - 1 < i + 1:
+        k += 1
+    while True:
+        if (1 << k) - 1 == i + 1:
+            return 1 << (k - 1)
+        i -= (1 << (k - 1)) - 1
+        k = 1
+        while (1 << k) - 1 < i + 1:
+            k += 1
+
+
+def solve(n, raw):
+    val = [0] * (2 * n + 2)
+    level = [0] * (n + 1)
+    reason = [None] * (n + 1)
+    trail = []
+    lim = []
+    act = [0.0] * (n + 1)
+    phase = [1] * (n + 1)
+    seen = [0] * (n + 1)
+    watches = [[] for _ in range(2 * n + 2)]
+    heap = [(0.0, v) for v in range(1, n + 1)]
+    inheap = [True] * (n + 1)
+    heapq.heapify(heap)
+    units = []
+    for c in raw:
+        s = set()
+        taut = False
+        for x in c:
+            l = 2 * x if x > 0 else -2 * x + 1
+            if l ^ 1 in s:
+                taut = True
+                break
+            s.add(l)
+        if taut:
+            continue
+        c = list(s)
+        if not c:
+            return None
+        if len(c) == 1:
+            units.append(c[0])
+        else:
+            watches[c[0]].append(c)
+            watches[c[1]].append(c)
+    for l in units:
+        if val[l] == -1:
+            return None
+        if val[l] == 0:
+            val[l] = 1
+            val[l ^ 1] = -1
+            trail.append(l)
+            reason[l >> 1] = None
+    qhead = 0
+    inc = 1.0
+    learnts = []
+    maxl = 3000
+    nconf = 0
+    restart_i = 0
+    next_restart = 100 * luby(0)
+    since = 0
+    hpush = heapq.heappush
+    hpop = heapq.heappop
+
+    while True:
+        # propagate
+        confl = None
+        while qhead < len(trail):
+            p = trail[qhead]
+            qhead += 1
+            fl = p ^ 1
+            ws = watches[fl]
+            i = j = 0
+            m = len(ws)
+            while i < m:
+                c = ws[i]
+                i += 1
+                if c[0] == fl:
+                    c[0] = c[1]
+                    c[1] = fl
+                a = c[0]
+                if val[a] == 1:
+                    ws[j] = c
+                    j += 1
+                    continue
+                for k in range(2, len(c)):
+                    b = c[k]
+                    if val[b] != -1:
+                        c[1] = b
+                        c[k] = fl
+                        watches[b].append(c)
+                        break
+                else:
+                    ws[j] = c
+                    j += 1
+                    if val[a] == -1:
+                        confl = c
+                        while i < m:
+                            ws[j] = ws[i]
+                            j += 1
+                            i += 1
+                        break
+                    val[a] = 1
+                    val[a ^ 1] = -1
+                    v = a >> 1
+                    level[v] = len(lim)
+                    reason[v] = c
+                    trail.append(a)
+            del ws[j:]
+            if confl is not None:
+                break
+        if confl is not None:
+            nconf += 1
+            since += 1
+            if not lim:
+                return None
+            cur = len(lim)
+            learnt = [0]
+            counter = 0
+            idx = len(trail) - 1
+            c = confl
+            start = 0
+            while True:
+                for q in (c if start == 0 else c[1:]):
+                    v = q >> 1
+                    if not seen[v] and level[v] > 0:
+                        seen[v] = 1
+                        act[v] += inc
+                        if act[v] > 1e100:
+                            for u in range(1, n + 1):
+                                act[u] *= 1e-100
+                            inc *= 1e-100
+                        if inheap[v]:
+                            hpush(heap, (-act[v], v))
+                        if level[v] >= cur:
+                            counter += 1
+                        else:
+                            learnt.append(q)
+                while not seen[trail[idx] >> 1]:
+                    idx -= 1
+                p = trail[idx]
+                idx -= 1
+                c = reason[p >> 1]
+                seen[p >> 1] = 0
+                counter -= 1
+                if counter == 0:
+                    break
+                start = 1
+            learnt[0] = p ^ 1
+            inc /= 0.95
+            orig = learnt
+            out = [learnt[0]]
+            for q in learnt[1:]:
+                r = reason[q >> 1]
+                if r is None:
+                    out.append(q)
+                    continue
+                for x in r[1:]:
+                    xv = x >> 1
+                    if not seen[xv] and level[xv] > 0:
+                        out.append(q)
+                        break
+            for q in orig[1:]:
+                seen[q >> 1] = 0
+            learnt = out
+            if len(learnt) == 1:
+                bl = 0
+            else:
+                bi = 1
+                for k in range(2, len(learnt)):
+                    if level[learnt[k] >> 1] > level[learnt[bi] >> 1]:
+                        bi = k
+                learnt[1], learnt[bi] = learnt[bi], learnt[1]
+                bl = level[learnt[1] >> 1]
+            lbd = len({level[q >> 1] for q in learnt})
+            # backtrack
+            if len(lim) > bl:
+                t = lim[bl]
+                for l in trail[t:]:
+                    v = l >> 1
+                    val[l] = 0
+                    val[l ^ 1] = 0
+                    phase[v] = l & 1
+                    reason[v] = None
+                    if not inheap[v]:
+                        inheap[v] = True
+                        hpush(heap, (-act[v], v))
+                del trail[t:]
+                del lim[bl:]
+                qhead = t
+            a = learnt[0]
+            if len(learnt) == 1:
+                reason[a >> 1] = None
+            else:
+                watches[learnt[0]].append(learnt)
+                watches[learnt[1]].append(learnt)
+                learnts.append((lbd, len(learnt), learnt))
+                reason[a >> 1] = learnt
+            val[a] = 1
+            val[a ^ 1] = -1
+            level[a >> 1] = bl
+            trail.append(a)
+            continue
+        # restart
+        if since >= next_restart:
+            since = 0
+            restart_i += 1
+            next_restart = 100 * luby(restart_i)
+            if lim:
+                t = lim[0]
+                for l in trail[t:]:
+                    v = l >> 1
+                    val[l] = 0
+                    val[l ^ 1] = 0
+                    phase[v] = l & 1
+                    reason[v] = None
+                    if not inheap[v]:
+                        inheap[v] = True
+                        hpush(heap, (-act[v], v))
+                del trail[t:]
+                del lim[:]
+                qhead = t
+        if len(learnts) > maxl:
+            maxl += 500
+            learnts.sort(key=lambda e: (e[0], e[1]))
+            keep = learnts[:len(learnts) // 2]
+            dele = set()
+            for e in learnts[len(learnts) // 2:]:
+                c = e[2]
+                if e[0] <= 2 or (val[c[0]] == 1 and reason[c[0] >> 1] is c):
+                    keep.append(e)
+                else:
+                    dele.add(id(c))
+            learnts = keep
+            for l in range(2, 2 * n + 2):
+                w = watches[l]
+                if w:
+                    watches[l] = [c for c in w if id(c) not in dele]
+        # decide
+        d = 0
+        while heap:
+            _, v = hpop(heap)
+            inheap[v] = False
+            if val[2 * v] == 0:
+                d = v
+                break
+        if d == 0:
+            return val
+        if len(heap) > 20 * n + 1000:
+            heap = [(-act[v], v) for v in range(1, n + 1) if val[2 * v] == 0]
+            heapq.heapify(heap)
+            for v in range(1, n + 1):
+                inheap[v] = val[2 * v] == 0
+        lim.append(len(trail))
+        a = 2 * d + phase[d]
+        val[a] = 1
+        val[a ^ 1] = -1
+        level[d] = len(lim)
+        reason[d] = None
+        trail.append(a)
+
+
+def main():
+    n, cl = parse(sys.argv[1])
+    r = solve(n, cl)
+    if r is None:
+        print("s UNSATISFIABLE")
+        sys.exit(20)
+    print("s SATISFIABLE")
+    lits = [str(v if r[2 * v] == 1 else -v) for v in range(1, n + 1)]
+    for i in range(0, len(lits), 20):
+        print("v " + " ".join(lits[i:i + 20]))
+    print("v 0")
+    sys.exit(10)
+
+
+if __name__ == "__main__":
+    main()

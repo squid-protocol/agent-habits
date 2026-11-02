@@ -1,0 +1,22 @@
+{
+ "run_id": "sat-cobol-haiku-r1",
+ "task": "sat",
+ "lang": "cobol",
+ "agent": "haiku",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-haiku-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T19:35:42Z",
+ "ended": "2026-11-01T20:07:05Z",
+ "active_s": 1855,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "bd882440-6648-49b8-9c86-d69bb292a0cc",
+ "note": ""
+}

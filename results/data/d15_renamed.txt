@@ -1,0 +1,12 @@
+sat-python-haiku-b-r1/solver
+sat-python-haiku-b-r2/solver
+sat-python-haiku-r2/solver
+chess-python-haiku-r1/engine
+chess-python-codex-r1/engine
+sat-python-claude-r2/solver
+sat-python-sonnet-b-r1/solver
+sat-python-codex-r1/solver
+chess-python-haiku-b-r1/engine
+sat-python-haiku-r1/solver
+sat-python-codex-r2/solver
+sat-python-claude-r1/solver

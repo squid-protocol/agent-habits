@@ -1,0 +1,905 @@
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SATSOLVER.
+ENVIRONMENT DIVISION.
+INPUT-OUTPUT SECTION.
+FILE-CONTROL.
+    SELECT CNF-FILE ASSIGN TO DYNAMIC WS-FNAME
+        ORGANIZATION LINE SEQUENTIAL
+        FILE STATUS WS-FS.
+DATA DIVISION.
+FILE SECTION.
+FD CNF-FILE RECORD IS VARYING IN SIZE FROM 1 TO 16384
+    DEPENDING ON WS-RLEN.
+01 CNF-REC PIC X(16384).
+WORKING-STORAGE SECTION.
+01 WS-FNAME PIC X(512).
+01 WS-FS PIC XX.
+01 WS-RLEN BINARY-LONG.
+01 EOF-FLAG BINARY-LONG VALUE 0.
+01 NV BINARY-LONG VALUE 0.
+01 NC BINARY-LONG VALUE 0.
+01 MAXV BINARY-LONG VALUE 300000.
+*> literal tables (codes 2v, 2v+1)
+01 T-LV-G.
+   05 T-LV BINARY-LONG OCCURS 600010.
+01 T-NEG-G.
+   05 T-NEG BINARY-LONG OCCURS 600010.
+01 T-VAR-G.
+   05 T-VAR BINARY-LONG OCCURS 600010.
+01 T-WHEAD-G.
+   05 T-WHEAD BINARY-LONG OCCURS 600010.
+01 T-MARK-G.
+   05 T-MARK BINARY-LONG OCCURS 600010.
+*> variable tables
+01 V-LEVEL-G.
+   05 V-LEVEL BINARY-LONG OCCURS 300010.
+01 V-REASON-G.
+   05 V-REASON BINARY-LONG OCCURS 300010.
+01 V-PHASE-G.
+   05 V-PHASE BINARY-LONG OCCURS 300010.
+01 V-SEEN-G.
+   05 V-SEEN BINARY-LONG OCCURS 300010.
+01 V-ACT-G.
+   05 V-ACT BINARY-DOUBLE OCCURS 300010.
+01 V-HEAP-G.
+   05 V-HEAP BINARY-LONG OCCURS 300010.
+01 V-HPOS-G.
+   05 V-HPOS BINARY-LONG OCCURS 300010.
+01 V-TRAIL-G.
+   05 V-TRAIL BINARY-LONG OCCURS 300010.
+01 V-TLIM-G.
+   05 V-TLIM BINARY-LONG OCCURS 300010.
+01 V-LBUF-G.
+   05 V-LBUF BINARY-LONG OCCURS 300010.
+01 V-LBUF2-G.
+   05 V-LBUF2 BINARY-LONG OCCURS 300010.
+01 V-LST-G.
+   05 V-LST BINARY-LONG OCCURS 300010.
+*> clause tables
+01 C-ST-G.
+   05 C-ST BINARY-LONG OCCURS 2000010.
+01 C-LN-G.
+   05 C-LN BINARY-LONG OCCURS 2000010.
+01 C-LBD-G.
+   05 C-LBD BINARY-LONG OCCURS 2000010.
+01 C-LRN-G.
+   05 C-LRN BINARY-LONG OCCURS 2000010.
+01 UNITS-G.
+   05 T-UNIT BINARY-LONG OCCURS 2000010.
+01 ARENA-G.
+   05 T-LIT BINARY-LONG OCCURS 16000010.
+01 NODE-G.
+   05 W-CL BINARY-LONG OCCURS 4000010.
+   05 W-BL BINARY-LONG OCCURS 4000010.
+   05 W-NX BINARY-LONG OCCURS 4000010.
+01 CBUF-G.
+   05 CBUF BINARY-LONG OCCURS 300010.
+01 HIST-G.
+   05 HIST BINARY-LONG OCCURS 70.
+*> scalars
+01 NCL BINARY-LONG VALUE 0.
+01 ARENAN BINARY-LONG VALUE 0.
+01 NODEN BINARY-LONG VALUE 0.
+01 NU BINARY-LONG VALUE 0.
+01 CN BINARY-LONG VALUE 0.
+01 STAMP BINARY-LONG VALUE 0.
+01 TN BINARY-LONG VALUE 0.
+01 QHEAD BINARY-LONG VALUE 1.
+01 DL BINARY-LONG VALUE 0.
+01 CONFL BINARY-LONG VALUE 0.
+01 HN BINARY-LONG VALUE 0.
+01 HI BINARY-LONG VALUE 0.
+01 HP BINARY-LONG.
+01 HC BINARY-LONG.
+01 HV BINARY-LONG.
+01 HPV BINARY-LONG.
+01 HA BINARY-DOUBLE.
+01 VINC BINARY-DOUBLE VALUE 1000000.
+01 VLIM BINARY-DOUBLE VALUE 1000000000000000.
+01 NLEARN BINARY-LONG VALUE 0.
+01 LLIMIT BINARY-LONG VALUE 3000.
+01 NCONF BINARY-DOUBLE VALUE 0.
+01 CONF-SINCE BINARY-LONG VALUE 0.
+01 RESTART-LIM BINARY-LONG VALUE 100.
+01 RCNT BINARY-LONG VALUE 0.
+01 NEED-REDUCE BINARY-LONG VALUE 0.
+01 RESULT-FLAG BINARY-LONG VALUE 0.
+*> parse scalars
+01 PL-I BINARY-LONG.
+01 PL-CH PIC X.
+01 PL-IN BINARY-LONG.
+01 PL-NEG BINARY-LONG.
+01 PL-VAL BINARY-LONG.
+01 PL-D BINARY-LONG.
+01 P1 PIC X(30).
+01 P2 PIC X(30).
+01 P3 PIC X(30).
+01 P4 PIC X(30).
+01 AC-I BINARY-LONG.
+01 AC-K BINARY-LONG.
+01 AC-L BINARY-LONG.
+01 AC-T BINARY-LONG.
+01 AC-S BINARY-LONG.
+*> propagate scalars
+01 P-LIT BINARY-LONG.
+01 P-FL BINARY-LONG.
+01 P-PREV BINARY-LONG.
+01 P-W BINARY-LONG.
+01 P-NXT BINARY-LONG.
+01 P-BL BINARY-LONG.
+01 P-C BINARY-LONG.
+01 P-S BINARY-LONG.
+01 P-S1 BINARY-LONG.
+01 P-FIRST BINARY-LONG.
+01 P-E BINARY-LONG.
+01 P-K BINARY-LONG.
+01 P-L2 BINARY-LONG.
+01 P-FOUND BINARY-LONG.
+01 P-V BINARY-LONG.
+*> analyze scalars
+01 A-PATH BINARY-LONG.
+01 A-P BINARY-LONG.
+01 A-LN BINARY-LONG.
+01 A-LN2 BINARY-LONG.
+01 A-IDX BINARY-LONG.
+01 A-C BINARY-LONG.
+01 A-S BINARY-LONG.
+01 A-E BINARY-LONG.
+01 A-J BINARY-LONG.
+01 A-J0 BINARY-LONG.
+01 A-Q BINARY-LONG.
+01 A-V BINARY-LONG.
+01 A-U BINARY-LONG.
+01 A-R BINARY-LONG.
+01 A-KEEP BINARY-LONG.
+01 A-BJ BINARY-LONG.
+01 A-M BINARY-LONG.
+01 A-T BINARY-LONG.
+01 A-LBD BINARY-LONG.
+01 A-LST BINARY-LONG VALUE 0.
+01 BK-L BINARY-LONG.
+01 BK-I BINARY-LONG.
+01 BK-LIT BINARY-LONG.
+01 BK-V BINARY-LONG.
+01 BK-LO BINARY-LONG.
+01 DC-V BINARY-LONG.
+01 DC-LIT BINARY-LONG.
+01 EN-LIT BINARY-LONG.
+01 EN-RSN BINARY-LONG.
+01 EN-V BINARY-LONG.
+01 BM-V BINARY-LONG.
+*> luby
+01 L-I BINARY-LONG.
+01 L-SIZE BINARY-LONG.
+01 L-SEQ BINARY-LONG.
+01 L-TMP BINARY-LONG.
+01 L-R BINARY-LONG.
+*> reduce
+01 R-E BINARY-LONG.
+01 R-TARGET BINARY-LONG.
+01 R-ACC BINARY-LONG.
+01 R-THR BINARY-LONG.
+01 R-C BINARY-LONG.
+01 R-K BINARY-LONG.
+01 R-L BINARY-LONG.
+01 R-S BINARY-LONG.
+01 R-N BINARY-LONG.
+01 R-D BINARY-LONG.
+01 R-J BINARY-LONG.
+*> output
+01 O-LINE PIC X(100).
+01 O-PTR BINARY-LONG.
+01 O-NUM PIC -(7)9.
+01 O-V BINARY-LONG.
+01 O-TXT PIC X(12).
+
+PROCEDURE DIVISION.
+MAIN-LOGIC.
+    ACCEPT WS-FNAME FROM COMMAND-LINE
+    PERFORM VARYING AC-I FROM 2 BY 1 UNTIL AC-I > MAXV * 2 + 1
+        IF FUNCTION MOD(AC-I, 2) = 0
+            COMPUTE T-NEG(AC-I) = AC-I + 1
+        ELSE
+            COMPUTE T-NEG(AC-I) = AC-I - 1
+        END-IF
+        COMPUTE T-VAR(AC-I) = AC-I / 2
+    END-PERFORM
+    PERFORM READ-FILE
+    IF RESULT-FLAG = 20
+        PERFORM DO-UNSAT
+    END-IF
+    PERFORM INIT-SEARCH
+    IF RESULT-FLAG = 20
+        PERFORM DO-UNSAT
+    END-IF
+    COMPUTE LLIMIT = NC / 3
+    IF LLIMIT < 3000
+        MOVE 3000 TO LLIMIT
+    END-IF
+    MOVE 0 TO RCNT
+    MOVE 0 TO L-I
+    PERFORM LUBY
+    COMPUTE RESTART-LIM = 100 * L-R
+    PERFORM SEARCH-LOOP
+    IF RESULT-FLAG = 20
+        PERFORM DO-UNSAT
+    END-IF
+    PERFORM DO-SAT.
+
+DO-UNSAT.
+    DISPLAY "s UNSATISFIABLE"
+    MOVE 20 TO RETURN-CODE
+    STOP RUN.
+
+DO-SAT.
+    DISPLAY "s SATISFIABLE"
+    MOVE SPACES TO O-LINE
+    MOVE 1 TO O-PTR
+    MOVE "v" TO O-LINE(1:1)
+    MOVE 2 TO O-PTR
+    PERFORM VARYING O-V FROM 1 BY 1 UNTIL O-V > NV
+        IF T-LV(2 * O-V) = 1
+            MOVE O-V TO O-NUM
+        ELSE
+            COMPUTE O-NUM = 0 - O-V
+        END-IF
+        MOVE FUNCTION TRIM(O-NUM) TO O-TXT
+        STRING " " DELIMITED BY SIZE
+               FUNCTION TRIM(O-TXT) DELIMITED BY SIZE
+               INTO O-LINE WITH POINTER O-PTR
+        IF O-PTR > 70
+            DISPLAY FUNCTION TRIM(O-LINE TRAILING)
+            MOVE SPACES TO O-LINE
+            MOVE "v" TO O-LINE(1:1)
+            MOVE 2 TO O-PTR
+        END-IF
+    END-PERFORM
+    STRING " 0" DELIMITED BY SIZE INTO O-LINE WITH POINTER O-PTR
+    DISPLAY FUNCTION TRIM(O-LINE TRAILING)
+    MOVE 10 TO RETURN-CODE
+    STOP RUN.
+
+READ-FILE.
+    OPEN INPUT CNF-FILE
+    IF WS-FS NOT = "00"
+        DISPLAY "cannot open file"
+        MOVE 1 TO RETURN-CODE
+        STOP RUN
+    END-IF
+    MOVE 0 TO CN
+    PERFORM UNTIL EOF-FLAG = 1
+        READ CNF-FILE
+            AT END MOVE 1 TO EOF-FLAG
+            NOT AT END PERFORM PROCESS-LINE
+        END-READ
+    END-PERFORM
+    CLOSE CNF-FILE
+    IF CN > 0
+        PERFORM ADD-CLAUSE
+    END-IF.
+
+PROCESS-LINE.
+    MOVE 1 TO PL-I
+    PERFORM UNTIL PL-I > WS-RLEN
+            OR (CNF-REC(PL-I:1) NOT = SPACE AND CNF-REC(PL-I:1) NOT = X"09")
+        ADD 1 TO PL-I
+    END-PERFORM
+    IF PL-I > WS-RLEN
+        EXIT PARAGRAPH
+    END-IF
+    MOVE CNF-REC(PL-I:1) TO PL-CH
+    IF PL-CH = "c"
+        EXIT PARAGRAPH
+    END-IF
+    IF PL-CH = "%"
+        MOVE 1 TO EOF-FLAG
+        EXIT PARAGRAPH
+    END-IF
+    IF PL-CH = "p"
+        MOVE SPACES TO P1 P2 P3 P4
+        UNSTRING CNF-REC(PL-I:WS-RLEN - PL-I + 1)
+            DELIMITED BY ALL SPACES OR ALL X"09"
+            INTO P1 P2 P3 P4
+        COMPUTE NV = FUNCTION NUMVAL(P3)
+        COMPUTE NC = FUNCTION NUMVAL(P4)
+        EXIT PARAGRAPH
+    END-IF
+    MOVE 0 TO PL-IN
+    MOVE 0 TO PL-NEG
+    MOVE 0 TO PL-VAL
+    PERFORM VARYING PL-I FROM PL-I BY 1 UNTIL PL-I > WS-RLEN
+        MOVE CNF-REC(PL-I:1) TO PL-CH
+        IF PL-CH >= "0" AND PL-CH <= "9"
+            COMPUTE PL-D = FUNCTION ORD(PL-CH) - 49
+            COMPUTE PL-VAL = PL-VAL * 10 + PL-D
+            MOVE 1 TO PL-IN
+        ELSE
+            IF PL-CH = "-"
+                MOVE 1 TO PL-NEG
+            ELSE
+                IF PL-IN = 1
+                    PERFORM FINISH-TOKEN
+                END-IF
+            END-IF
+        END-IF
+    END-PERFORM
+    IF PL-IN = 1
+        PERFORM FINISH-TOKEN
+    END-IF.
+
+FINISH-TOKEN.
+    IF PL-VAL = 0
+        PERFORM ADD-CLAUSE
+        MOVE 0 TO CN
+    ELSE
+        IF PL-VAL > MAXV
+            DISPLAY "too many variables"
+            MOVE 1 TO RETURN-CODE
+            STOP RUN
+        END-IF
+        IF PL-VAL > NV
+            MOVE PL-VAL TO NV
+        END-IF
+        ADD 1 TO CN
+        IF PL-NEG = 1
+            COMPUTE CBUF(CN) = 2 * PL-VAL + 1
+        ELSE
+            COMPUTE CBUF(CN) = 2 * PL-VAL
+        END-IF
+    END-IF
+    MOVE 0 TO PL-IN
+    MOVE 0 TO PL-NEG
+    MOVE 0 TO PL-VAL.
+
+ADD-CLAUSE.
+    ADD 1 TO STAMP
+    MOVE 0 TO AC-K
+    MOVE 0 TO AC-T
+    PERFORM VARYING AC-I FROM 1 BY 1 UNTIL AC-I > CN
+        MOVE CBUF(AC-I) TO AC-L
+        IF T-MARK(T-NEG(AC-L)) = STAMP
+            MOVE 1 TO AC-T
+        END-IF
+        IF T-MARK(AC-L) NOT = STAMP
+            MOVE STAMP TO T-MARK(AC-L)
+            ADD 1 TO AC-K
+            MOVE AC-L TO CBUF(AC-K)
+        END-IF
+    END-PERFORM
+    IF AC-T = 1
+        EXIT PARAGRAPH
+    END-IF
+    IF AC-K = 0
+        MOVE 20 TO RESULT-FLAG
+        EXIT PARAGRAPH
+    END-IF
+    IF AC-K = 1
+        ADD 1 TO NU
+        MOVE CBUF(1) TO T-UNIT(NU)
+        EXIT PARAGRAPH
+    END-IF
+    IF NCL >= 1900000 OR ARENAN + AC-K > 15000000
+        DISPLAY "formula too large"
+        MOVE 1 TO RETURN-CODE
+        STOP RUN
+    END-IF
+    ADD 1 TO NCL
+    COMPUTE C-ST(NCL) = ARENAN + 1
+    MOVE AC-K TO C-LN(NCL)
+    MOVE 0 TO C-LRN(NCL)
+    MOVE 0 TO C-LBD(NCL)
+    PERFORM VARYING AC-I FROM 1 BY 1 UNTIL AC-I > AC-K
+        ADD 1 TO ARENAN
+        MOVE CBUF(AC-I) TO T-LIT(ARENAN)
+    END-PERFORM
+    MOVE C-ST(NCL) TO AC-S
+    PERFORM ATTACH-CLAUSE.
+
+ATTACH-CLAUSE.
+    *> uses NCL as clause, AC-S as start
+    ADD 1 TO NODEN
+    MOVE NCL TO W-CL(NODEN)
+    MOVE T-LIT(AC-S + 1) TO W-BL(NODEN)
+    MOVE T-WHEAD(T-LIT(AC-S)) TO W-NX(NODEN)
+    MOVE NODEN TO T-WHEAD(T-LIT(AC-S))
+    ADD 1 TO NODEN
+    MOVE NCL TO W-CL(NODEN)
+    MOVE T-LIT(AC-S) TO W-BL(NODEN)
+    MOVE T-WHEAD(T-LIT(AC-S + 1)) TO W-NX(NODEN)
+    MOVE NODEN TO T-WHEAD(T-LIT(AC-S + 1)).
+
+INIT-SEARCH.
+    MOVE 1 TO QHEAD
+    MOVE 0 TO TN
+    MOVE 0 TO DL
+    MOVE 0 TO HN
+    PERFORM VARYING BM-V FROM 1 BY 1 UNTIL BM-V > NV
+        MOVE BM-V TO HV
+        PERFORM HEAP-INSERT
+    END-PERFORM
+    PERFORM VARYING AC-I FROM 1 BY 1 UNTIL AC-I > NU
+        MOVE T-UNIT(AC-I) TO EN-LIT
+        IF T-LV(EN-LIT) = -1
+            MOVE 20 TO RESULT-FLAG
+            EXIT PARAGRAPH
+        END-IF
+        IF T-LV(EN-LIT) = 0
+            MOVE 0 TO EN-RSN
+            PERFORM ENQUEUE
+        END-IF
+    END-PERFORM.
+
+ENQUEUE.
+    MOVE 1 TO T-LV(EN-LIT)
+    MOVE -1 TO T-LV(T-NEG(EN-LIT))
+    MOVE T-VAR(EN-LIT) TO EN-V
+    MOVE DL TO V-LEVEL(EN-V)
+    MOVE EN-RSN TO V-REASON(EN-V)
+    ADD 1 TO TN
+    MOVE EN-LIT TO V-TRAIL(TN).
+
+HEAP-INSERT.
+    ADD 1 TO HN
+    MOVE HV TO V-HEAP(HN)
+    MOVE HN TO V-HPOS(HV)
+    MOVE HN TO HI
+    PERFORM HEAP-UP.
+
+HEAP-UP.
+    MOVE V-HEAP(HI) TO HV
+    MOVE V-ACT(HV) TO HA
+    PERFORM UNTIL HI <= 1
+        COMPUTE HP = HI / 2
+        MOVE V-HEAP(HP) TO HPV
+        IF V-ACT(HPV) >= HA
+            EXIT PERFORM
+        END-IF
+        MOVE HPV TO V-HEAP(HI)
+        MOVE HI TO V-HPOS(HPV)
+        MOVE HP TO HI
+    END-PERFORM
+    MOVE HV TO V-HEAP(HI)
+    MOVE HI TO V-HPOS(HV).
+
+HEAP-DOWN.
+    MOVE V-HEAP(HI) TO HV
+    MOVE V-ACT(HV) TO HA
+    PERFORM UNTIL 1 = 2
+        COMPUTE HC = 2 * HI
+        IF HC > HN
+            EXIT PERFORM
+        END-IF
+        IF HC < HN
+            IF V-ACT(V-HEAP(HC + 1)) > V-ACT(V-HEAP(HC))
+                ADD 1 TO HC
+            END-IF
+        END-IF
+        MOVE V-HEAP(HC) TO HPV
+        IF V-ACT(HPV) <= HA
+            EXIT PERFORM
+        END-IF
+        MOVE HPV TO V-HEAP(HI)
+        MOVE HI TO V-HPOS(HPV)
+        MOVE HC TO HI
+    END-PERFORM
+    MOVE HV TO V-HEAP(HI)
+    MOVE HI TO V-HPOS(HV).
+
+HEAP-POP.
+    *> result in HV
+    MOVE V-HEAP(1) TO HV
+    MOVE 0 TO V-HPOS(HV)
+    MOVE V-HEAP(HN) TO HPV
+    SUBTRACT 1 FROM HN
+    IF HN > 0
+        MOVE HPV TO V-HEAP(1)
+        MOVE 1 TO V-HPOS(HPV)
+        MOVE 1 TO HI
+        MOVE HV TO BM-V
+        PERFORM HEAP-DOWN
+        MOVE BM-V TO HV
+    END-IF.
+
+BUMP-VAR.
+    ADD VINC TO V-ACT(A-V)
+    IF V-HPOS(A-V) > 0
+        MOVE V-HPOS(A-V) TO HI
+        PERFORM HEAP-UP
+    END-IF.
+
+DECAY-ACT.
+    COMPUTE VINC = VINC + VINC / 19
+    IF VINC > VLIM
+        PERFORM VARYING A-J FROM 1 BY 1 UNTIL A-J > NV
+            COMPUTE V-ACT(A-J) = V-ACT(A-J) / 100000000
+        END-PERFORM
+        COMPUTE VINC = VINC / 100000000
+    END-IF.
+
+PROPAGATE.
+    MOVE 0 TO CONFL
+    PERFORM UNTIL QHEAD > TN
+        MOVE V-TRAIL(QHEAD) TO P-LIT
+        ADD 1 TO QHEAD
+        MOVE T-NEG(P-LIT) TO P-FL
+        MOVE 0 TO P-PREV
+        MOVE T-WHEAD(P-FL) TO P-W
+        PERFORM UNTIL P-W = 0
+            MOVE W-NX(P-W) TO P-NXT
+            MOVE W-BL(P-W) TO P-BL
+            IF T-LV(P-BL) = 1
+                MOVE P-W TO P-PREV
+                MOVE P-NXT TO P-W
+                EXIT PERFORM CYCLE
+            END-IF
+            MOVE W-CL(P-W) TO P-C
+            MOVE C-ST(P-C) TO P-S
+            COMPUTE P-S1 = P-S + 1
+            IF T-LIT(P-S) = P-FL
+                MOVE T-LIT(P-S1) TO T-LIT(P-S)
+                MOVE P-FL TO T-LIT(P-S1)
+            END-IF
+            MOVE T-LIT(P-S) TO P-FIRST
+            IF P-FIRST NOT = P-BL
+                IF T-LV(P-FIRST) = 1
+                    MOVE P-FIRST TO W-BL(P-W)
+                    MOVE P-W TO P-PREV
+                    MOVE P-NXT TO P-W
+                    EXIT PERFORM CYCLE
+                END-IF
+            END-IF
+            COMPUTE P-E = P-S + C-LN(P-C) - 1
+            MOVE 0 TO P-FOUND
+            COMPUTE P-K = P-S + 2
+            PERFORM UNTIL P-K > P-E
+                MOVE T-LIT(P-K) TO P-L2
+                IF T-LV(P-L2) NOT = -1
+                    MOVE 1 TO P-FOUND
+                    MOVE P-L2 TO T-LIT(P-S1)
+                    MOVE P-FL TO T-LIT(P-K)
+                    IF P-PREV = 0
+                        MOVE P-NXT TO T-WHEAD(P-FL)
+                    ELSE
+                        MOVE P-NXT TO W-NX(P-PREV)
+                    END-IF
+                    MOVE T-WHEAD(P-L2) TO W-NX(P-W)
+                    MOVE P-W TO T-WHEAD(P-L2)
+                    MOVE P-FIRST TO W-BL(P-W)
+                    EXIT PERFORM
+                END-IF
+                ADD 1 TO P-K
+            END-PERFORM
+            IF P-FOUND = 0
+                MOVE P-W TO P-PREV
+                IF T-LV(P-FIRST) = -1
+                    MOVE P-C TO CONFL
+                    COMPUTE QHEAD = TN + 1
+                    EXIT PERFORM
+                ELSE
+                    MOVE 1 TO T-LV(P-FIRST)
+                    MOVE -1 TO T-LV(T-NEG(P-FIRST))
+                    MOVE T-VAR(P-FIRST) TO P-V
+                    MOVE DL TO V-LEVEL(P-V)
+                    MOVE P-C TO V-REASON(P-V)
+                    ADD 1 TO TN
+                    MOVE P-FIRST TO V-TRAIL(TN)
+                END-IF
+            END-IF
+            MOVE P-NXT TO P-W
+        END-PERFORM
+    END-PERFORM.
+
+BACKTRACK.
+    *> to level BK-L
+    IF DL <= BK-L
+        EXIT PARAGRAPH
+    END-IF
+    COMPUTE BK-LO = V-TLIM(BK-L + 1)
+    PERFORM VARYING BK-I FROM TN BY -1 UNTIL BK-I < BK-LO
+        MOVE V-TRAIL(BK-I) TO BK-LIT
+        MOVE T-VAR(BK-LIT) TO BK-V
+        IF FUNCTION MOD(BK-LIT, 2) = 0
+            MOVE 1 TO V-PHASE(BK-V)
+        ELSE
+            MOVE 0 TO V-PHASE(BK-V)
+        END-IF
+        MOVE 0 TO T-LV(BK-LIT)
+        MOVE 0 TO T-LV(T-NEG(BK-LIT))
+        MOVE 0 TO V-REASON(BK-V)
+        IF V-HPOS(BK-V) = 0
+            MOVE BK-V TO HV
+            PERFORM HEAP-INSERT
+        END-IF
+    END-PERFORM
+    COMPUTE TN = BK-LO - 1
+    MOVE BK-LO TO QHEAD
+    MOVE BK-L TO DL.
+
+ANALYZE.
+    MOVE 0 TO A-PATH
+    MOVE 0 TO A-P
+    MOVE 1 TO A-LN
+    MOVE TN TO A-IDX
+    MOVE CONFL TO A-C
+    PERFORM UNTIL 1 = 2
+        MOVE C-ST(A-C) TO A-S
+        COMPUTE A-E = A-S + C-LN(A-C) - 1
+        IF A-P = 0
+            MOVE A-S TO A-J
+        ELSE
+            COMPUTE A-J = A-S + 1
+        END-IF
+        PERFORM UNTIL A-J > A-E
+            MOVE T-LIT(A-J) TO A-Q
+            MOVE T-VAR(A-Q) TO A-V
+            IF V-SEEN(A-V) = 0
+                IF V-LEVEL(A-V) > 0
+                    PERFORM BUMP-VAR
+                    MOVE 1 TO V-SEEN(A-V)
+                    IF V-LEVEL(A-V) >= DL
+                        ADD 1 TO A-PATH
+                    ELSE
+                        ADD 1 TO A-LN
+                        MOVE A-Q TO V-LBUF(A-LN)
+                    END-IF
+                END-IF
+            END-IF
+            ADD 1 TO A-J
+        END-PERFORM
+        PERFORM UNTIL V-SEEN(T-VAR(V-TRAIL(A-IDX))) = 1
+            SUBTRACT 1 FROM A-IDX
+        END-PERFORM
+        MOVE V-TRAIL(A-IDX) TO A-P
+        SUBTRACT 1 FROM A-IDX
+        MOVE T-VAR(A-P) TO A-V
+        MOVE 0 TO V-SEEN(A-V)
+        SUBTRACT 1 FROM A-PATH
+        IF A-PATH = 0
+            EXIT PERFORM
+        END-IF
+        MOVE V-REASON(A-V) TO A-C
+    END-PERFORM
+    MOVE T-NEG(A-P) TO V-LBUF(1)
+    *> minimize
+    MOVE 1 TO A-LN2
+    MOVE V-LBUF(1) TO V-LBUF2(1)
+    PERFORM VARYING A-J FROM 2 BY 1 UNTIL A-J > A-LN
+        MOVE V-LBUF(A-J) TO A-Q
+        MOVE T-VAR(A-Q) TO A-V
+        MOVE V-REASON(A-V) TO A-R
+        MOVE 1 TO A-KEEP
+        IF A-R > 0
+            MOVE 0 TO A-KEEP
+            COMPUTE A-J0 = C-ST(A-R) + 1
+            COMPUTE A-E = C-ST(A-R) + C-LN(A-R) - 1
+            PERFORM VARYING A-M FROM A-J0 BY 1 UNTIL A-M > A-E
+                MOVE T-VAR(T-LIT(A-M)) TO A-U
+                IF V-SEEN(A-U) = 0
+                    IF V-LEVEL(A-U) > 0
+                        MOVE 1 TO A-KEEP
+                        EXIT PERFORM
+                    END-IF
+                END-IF
+            END-PERFORM
+        END-IF
+        IF A-KEEP = 1
+            ADD 1 TO A-LN2
+            MOVE A-Q TO V-LBUF2(A-LN2)
+        END-IF
+    END-PERFORM
+    PERFORM VARYING A-J FROM 2 BY 1 UNTIL A-J > A-LN
+        MOVE 0 TO V-SEEN(T-VAR(V-LBUF(A-J)))
+    END-PERFORM
+    *> backjump level
+    MOVE 0 TO A-BJ
+    IF A-LN2 > 1
+        MOVE 2 TO A-M
+        MOVE V-LEVEL(T-VAR(V-LBUF2(2))) TO A-BJ
+        PERFORM VARYING A-J FROM 3 BY 1 UNTIL A-J > A-LN2
+            IF V-LEVEL(T-VAR(V-LBUF2(A-J))) > A-BJ
+                MOVE V-LEVEL(T-VAR(V-LBUF2(A-J))) TO A-BJ
+                MOVE A-J TO A-M
+            END-IF
+        END-PERFORM
+        MOVE V-LBUF2(2) TO A-T
+        MOVE V-LBUF2(A-M) TO V-LBUF2(2)
+        MOVE A-T TO V-LBUF2(A-M)
+    END-IF
+    *> LBD
+    ADD 1 TO A-LST
+    MOVE 0 TO A-LBD
+    PERFORM VARYING A-J FROM 1 BY 1 UNTIL A-J > A-LN2
+        MOVE V-LEVEL(T-VAR(V-LBUF2(A-J))) TO A-T
+        IF V-LST(A-T + 1) NOT = A-LST
+            MOVE A-LST TO V-LST(A-T + 1)
+            ADD 1 TO A-LBD
+        END-IF
+    END-PERFORM
+    MOVE A-BJ TO BK-L
+    PERFORM BACKTRACK
+    IF A-LN2 = 1
+        MOVE V-LBUF2(1) TO EN-LIT
+        MOVE 0 TO EN-RSN
+        PERFORM ENQUEUE
+    ELSE
+        ADD 1 TO NCL
+        COMPUTE C-ST(NCL) = ARENAN + 1
+        MOVE A-LN2 TO C-LN(NCL)
+        MOVE 1 TO C-LRN(NCL)
+        MOVE A-LBD TO C-LBD(NCL)
+        ADD 1 TO NLEARN
+        MOVE C-ST(NCL) TO AC-S
+        PERFORM VARYING A-J FROM 1 BY 1 UNTIL A-J > A-LN2
+            ADD 1 TO ARENAN
+            MOVE V-LBUF2(A-J) TO T-LIT(ARENAN)
+        END-PERFORM
+        PERFORM ATTACH-CLAUSE
+        MOVE V-LBUF2(1) TO EN-LIT
+        MOVE NCL TO EN-RSN
+        PERFORM ENQUEUE
+    END-IF.
+
+LUBY.
+    MOVE 1 TO L-SIZE
+    MOVE 0 TO L-SEQ
+    PERFORM UNTIL L-SIZE >= L-I + 1
+        ADD 1 TO L-SEQ
+        COMPUTE L-SIZE = 2 * L-SIZE + 1
+    END-PERFORM
+    PERFORM UNTIL L-SIZE - 1 = L-I
+        COMPUTE L-SIZE = (L-SIZE - 1) / 2
+        SUBTRACT 1 FROM L-SEQ
+        DIVIDE L-I BY L-SIZE GIVING L-TMP REMAINDER L-I
+    END-PERFORM
+    MOVE 1 TO L-R
+    PERFORM L-SEQ TIMES
+        COMPUTE L-R = L-R * 2
+    END-PERFORM.
+
+REDUCE-DB.
+    *> at level 0, fully propagated
+    PERFORM VARYING R-L FROM 1 BY 1 UNTIL R-L > 64
+        MOVE 0 TO HIST(R-L)
+    END-PERFORM
+    MOVE 0 TO R-E
+    PERFORM VARYING R-C FROM 1 BY 1 UNTIL R-C > NCL
+        IF C-LRN(R-C) = 1
+            IF C-LN(R-C) > 2
+                IF C-LBD(R-C) > 2
+                    MOVE C-LBD(R-C) TO R-L
+                    IF R-L > 64
+                        MOVE 64 TO R-L
+                    END-IF
+                    ADD 1 TO HIST(R-L)
+                    ADD 1 TO R-E
+                END-IF
+            END-IF
+        END-IF
+    END-PERFORM
+    COMPUTE R-TARGET = R-E / 2
+    MOVE 0 TO R-ACC
+    MOVE 1000 TO R-THR
+    PERFORM VARYING R-L FROM 64 BY -1 UNTIL R-L < 3
+        ADD HIST(R-L) TO R-ACC
+        IF R-ACC >= R-TARGET
+            MOVE R-L TO R-THR
+            EXIT PERFORM
+        END-IF
+    END-PERFORM
+    IF R-E = 0
+        MOVE 1000 TO R-THR
+    END-IF
+    *> clear stale reasons
+    PERFORM VARYING R-C FROM 1 BY 1 UNTIL R-C > TN
+        MOVE 0 TO V-REASON(T-VAR(V-TRAIL(R-C)))
+    END-PERFORM
+    *> compact
+    MOVE 0 TO R-K
+    MOVE 0 TO R-D
+    MOVE 0 TO NLEARN
+    PERFORM VARYING R-C FROM 1 BY 1 UNTIL R-C > NCL
+        MOVE 0 TO R-N
+        IF C-LRN(R-C) = 1
+            IF C-LN(R-C) > 2
+                IF C-LBD(R-C) >= R-THR
+                    MOVE 1 TO R-N
+                END-IF
+            END-IF
+        END-IF
+        IF R-N = 0
+            ADD 1 TO R-K
+            MOVE C-ST(R-C) TO R-S
+            MOVE C-LN(R-C) TO R-N
+            MOVE C-LBD(R-C) TO R-L
+            MOVE C-LRN(R-C) TO R-J
+            COMPUTE C-ST(R-K) = R-D + 1
+            MOVE R-N TO C-LN(R-K)
+            MOVE R-L TO C-LBD(R-K)
+            MOVE R-J TO C-LRN(R-K)
+            IF R-J = 1
+                ADD 1 TO NLEARN
+            END-IF
+            IF R-D + 1 = R-S
+                ADD R-N TO R-D
+            ELSE
+                PERFORM R-N TIMES
+                    ADD 1 TO R-D
+                    MOVE T-LIT(R-S) TO T-LIT(R-D)
+                    ADD 1 TO R-S
+                END-PERFORM
+            END-IF
+        END-IF
+    END-PERFORM
+    MOVE R-K TO NCL
+    MOVE R-D TO ARENAN
+    *> rebuild watches
+    PERFORM VARYING R-L FROM 2 BY 1 UNTIL R-L > 2 * NV + 1
+        MOVE 0 TO T-WHEAD(R-L)
+    END-PERFORM
+    MOVE 0 TO NODEN
+    PERFORM VARYING NCL FROM 1 BY 1 UNTIL NCL > R-K
+        MOVE C-ST(NCL) TO AC-S
+        PERFORM ATTACH-CLAUSE
+    END-PERFORM
+    MOVE R-K TO NCL
+    COMPUTE LLIMIT = LLIMIT + LLIMIT / 10.
+
+SEARCH-LOOP.
+    PERFORM UNTIL 1 = 2
+        PERFORM PROPAGATE
+        IF CONFL NOT = 0
+            IF DL = 0
+                MOVE 20 TO RESULT-FLAG
+                EXIT PARAGRAPH
+            END-IF
+            PERFORM ANALYZE
+            PERFORM DECAY-ACT
+            ADD 1 TO NCONF
+            ADD 1 TO CONF-SINCE
+        ELSE
+            IF CONF-SINCE >= RESTART-LIM
+                MOVE 0 TO BK-L
+                PERFORM BACKTRACK
+                MOVE 0 TO CONF-SINCE
+                ADD 1 TO RCNT
+                MOVE RCNT TO L-I
+                PERFORM LUBY
+                COMPUTE RESTART-LIM = 100 * L-R
+                IF NLEARN >= LLIMIT OR ARENAN > 12000000 OR NCL > 1500000
+                    PERFORM PROPAGATE
+                    IF CONFL NOT = 0
+                        MOVE 20 TO RESULT-FLAG
+                        EXIT PARAGRAPH
+                    END-IF
+                    PERFORM REDUCE-DB
+                END-IF
+            ELSE
+                PERFORM DECIDE
+                IF DC-LIT = 0
+                    MOVE 10 TO RESULT-FLAG
+                    EXIT PARAGRAPH
+                END-IF
+            END-IF
+        END-IF
+    END-PERFORM.
+
+DECIDE.
+    MOVE 0 TO DC-LIT
+    PERFORM UNTIL HN = 0
+        PERFORM HEAP-POP
+        IF T-LV(2 * HV) = 0
+            IF V-PHASE(HV) = 1
+                COMPUTE DC-LIT = 2 * HV
+            ELSE
+                COMPUTE DC-LIT = 2 * HV + 1
+            END-IF
+            EXIT PERFORM
+        END-IF
+    END-PERFORM
+    IF DC-LIT NOT = 0
+        ADD 1 TO DL
+        COMPUTE V-TLIM(DL) = TN + 1
+        MOVE DC-LIT TO EN-LIT
+        MOVE 0 TO EN-RSN
+        PERFORM ENQUEUE
+    END-IF.

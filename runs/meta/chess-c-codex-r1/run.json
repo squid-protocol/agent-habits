@@ -1,0 +1,22 @@
+{
+ "run_id": "chess-c-codex-r1",
+ "task": "chess",
+ "lang": "c",
+ "agent": "codex",
+ "rep": 1,
+ "cli": "Codex CLI 0.166.0",
+ "model": "gpt-6-luna",
+ "setting": "model_reasoning_effort=medium",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T18:54:41Z",
+ "ended": "2026-11-01T19:07:32Z",
+ "active_s": 640,
+ "sessions": 2,
+ "nudges": 1,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "01a19876-c024-73f0-a6b3-40547dce4415",
+ "note": ""
+}

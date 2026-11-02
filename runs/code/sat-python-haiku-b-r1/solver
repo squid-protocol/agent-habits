@@ -1,0 +1,549 @@
+#!/usr/bin/env python3
+"""A SAT solver for DIMACS CNF, written with the Python standard library only.
+
+Search is DPLL-based: unit propagation over two watched literals per clause, branching on one
+unassigned variable at a time, and backtracking on conflicts. On top of that the CDCL engine adds
+first-UIP clause learning with non-chronological backjumping, VSIDS branching with phase saving,
+Luby restarts and LBD-based deletion of learnt clauses.
+
+Random-walk local search (probSAT) runs in alternation with CDCL, in rounds of doubling budget.
+It only ever answers SAT, and CDCL alone decides UNSAT, so the answer is never wrong.
+
+Usage:  ./solver FILE
+Output: "s SATISFIABLE" followed by "v" lines ending in 0 (exit 10),
+        or "s UNSATISFIABLE" (exit 20).
+"""
+
+import heapq
+import random
+import sys
+
+SAT_EXIT = 10
+UNSAT_EXIT = 20
+
+LS_FLIPS = 30_000        # local-search flips in round 0 (doubles each round)
+CDCL_CONFLICTS = 3_000    # CDCL conflicts in round 0 (doubles each round)
+
+
+def parse(path):
+    """Return (nvars, clauses); clauses are lists of non-zero DIMACS integers."""
+    nvars = 0
+    clauses = []
+    cur = []
+    with open(path, "r", errors="replace") as f:
+        for line in f:
+            s = line.strip()
+            if not s or s[0] == "c":
+                continue
+            if s[0] == "%":  # end-of-formula marker used by SATLIB files
+                break
+            if s[0] == "p":
+                parts = s.split()
+                if len(parts) >= 3:
+                    nvars = max(nvars, int(parts[2]))
+                continue
+            for tok in s.split():
+                x = int(tok)
+                if x == 0:
+                    clauses.append(cur)
+                    cur = []
+                else:
+                    cur.append(x)
+                    if abs(x) > nvars:
+                        nvars = abs(x)
+    if cur:  # final clause without its terminating 0
+        clauses.append(cur)
+    return nvars, clauses
+
+
+def normalize(clauses):
+    """Convert to literal codes: variable v gives 2*v for +v and 2*v+1 for -v, so the negation of l is l ^ 1.
+    Duplicate literals are removed and tautologies dropped. Returns None if a clause is empty."""
+    out = []
+    for cl in clauses:
+        lits = set()
+        taut = False
+        for d in cl:
+            code = 2 * d if d > 0 else -2 * d + 1
+            if (code ^ 1) in lits:
+                taut = True
+                break
+            lits.add(code)
+        if taut:
+            continue
+        if not lits:
+            return None
+        out.append(sorted(lits))
+    return out
+
+
+def luby(y, x):
+    """The x-th term (0-based) of the Luby sequence scaled by y."""
+    size, seq = 1, 0
+    while size < x + 1:
+        seq += 1
+        size = 2 * size + 1
+    while size - 1 != x:
+        size = (size - 1) >> 1
+        seq -= 1
+        x = x % size
+    return y ** seq
+
+
+class LocalSearch:
+    """probSAT: random walk that picks a violated clause and flips a variable with probability
+    proportional to (1 + breaks)^-CB. Can be resumed across calls to run()."""
+
+    CB = 2.06
+
+    def __init__(self, nvars, clauses, seed):
+        self.nv = nvars
+        self.cls = clauses
+        self.rng = random.Random(seed)
+        self.occ = [[] for _ in range(2 * nvars + 2)]  # occ[l]: clauses containing literal l
+        for ci, c in enumerate(clauses):
+            for l in c:
+                self.occ[l].append(ci)
+        self.val = [0] + [self.rng.randrange(2) for _ in range(nvars)]  # 1 = true
+        m = len(clauses)
+        self.numtrue = [0] * m
+        self.unsat = []
+        self.pos = [-1] * m
+        for ci, c in enumerate(clauses):
+            t = 0
+            for l in c:
+                t += self.val[l >> 1] ^ (l & 1)
+            self.numtrue[ci] = t
+            if t == 0:
+                self.pos[ci] = len(self.unsat)
+                self.unsat.append(ci)
+        maxocc = max((len(o) for o in self.occ), default=0)
+        self.weight = [(1.0 + b) ** -self.CB for b in range(maxocc + 2)]
+
+    def run(self, max_flips):
+        """Returns True as soon as every clause is satisfied, False if the flip budget runs out first."""
+        unsat = self.unsat
+        if not unsat:
+            return True
+        cls = self.cls
+        occ = self.occ
+        val = self.val
+        numtrue = self.numtrue
+        pos = self.pos
+        weight = self.weight
+        rng = self.rng
+        rand = rng.random
+        for _ in range(max_flips):
+            ci = unsat[rng.randrange(len(unsat))]
+            c = cls[ci]
+            if len(c) == 1:
+                l = c[0]
+            else:
+                ws = []
+                for l in c:
+                    v = l >> 1
+                    tl = 2 * v + (0 if val[v] else 1)  # the literal of v that is currently true
+                    b = 0
+                    for cj in occ[tl]:
+                        if numtrue[cj] == 1:
+                            b += 1
+                    ws.append(weight[b])
+                r = rand() * sum(ws)
+                k = 0
+                acc = ws[0]
+                last = len(ws) - 1
+                while acc < r and k < last:
+                    k += 1
+                    acc += ws[k]
+                l = c[k]
+            # flip variable of l, which makes l true
+            v = l >> 1
+            val[v] ^= 1
+            t_lit = 2 * v + (0 if val[v] else 1)  # becomes true
+            for cj in occ[t_lit]:
+                numtrue[cj] += 1
+                if numtrue[cj] == 1:
+                    p = pos[cj]
+                    last_ci = unsat.pop()
+                    if last_ci != cj:
+                        unsat[p] = last_ci
+                        pos[last_ci] = p
+                    pos[cj] = -1
+            for cj in occ[t_lit ^ 1]:
+                numtrue[cj] -= 1
+                if numtrue[cj] == 0:
+                    pos[cj] = len(unsat)
+                    unsat.append(cj)
+            if not unsat:
+                return True
+        return False
+
+    def model(self):
+        return [0] + [1 if self.val[v] else 0 for v in range(1, self.nv + 1)]
+
+
+class CDCL:
+    """Conflict-driven clause learning over the literal codes described in normalize()."""
+
+    def __init__(self, nvars):
+        self.n = nvars
+        size = 2 * (nvars + 1)
+        self.val = [0] * size            # per literal: 1 true, -1 false, 0 unassigned
+        self.level = [0] * (nvars + 1)
+        self.reason = [None] * (nvars + 1)
+        self.trail = []
+        self.trail_lim = []
+        self.qhead = 0
+        self.watches = [[] for _ in range(size)]  # watches[l]: clauses that watch literal l
+        self.activity = [0.0] * (nvars + 1)
+        self.var_inc = 1.0
+        self.phase = [0] * (nvars + 1)   # saved polarity, 1 = last assigned true
+        self.heap = [(0.0, v) for v in range(1, nvars + 1)]
+        self.seen = bytearray(nvars + 1)
+        self.learnts = []
+        self.lbd = {}                    # id(clause) -> LBD, for learnt clauses only
+        self.conflicts = 0
+        self.restarts = 0
+        self.since_restart = 0
+        self.budget = 1000 * luby(2, 0)
+        self.next_reduce = 2000
+        self.reductions = 0
+
+    # ----- setup -------------------------------------------------------------
+
+    def load(self, clauses):
+        """Add normalised clauses. Returns False if a unit conflicts with an earlier unit."""
+        val = self.val
+        for c in clauses:
+            if len(c) == 1:
+                l = c[0]
+                if val[l] == -1:
+                    return False
+                if val[l] == 0:
+                    self.enqueue(l, None)
+            else:
+                self.watches[c[0]].append(c)
+                self.watches[c[1]].append(c)
+        return True
+
+    # ----- assignment ----------------------------------------------------------
+
+    def enqueue(self, lit, reason):
+        v = lit >> 1
+        self.val[lit] = 1
+        self.val[lit ^ 1] = -1
+        self.level[v] = len(self.trail_lim)
+        self.reason[v] = reason
+        self.trail.append(lit)
+
+    def propagate(self):
+        """Unit propagation with two watched literals. Returns a conflicting clause or None."""
+        val = self.val
+        watches = self.watches
+        trail = self.trail
+        level = self.level
+        reason = self.reason
+        dl = len(self.trail_lim)
+        qh = self.qhead
+        while qh < len(trail):
+            p = trail[qh]
+            qh += 1
+            f = p ^ 1                     # literal that has just become false
+            ws = watches[f]
+            i = j = 0
+            n = len(ws)
+            while i < n:
+                c = ws[i]
+                i += 1
+                if c[0] == f:             # keep the other watch in position 0
+                    first = c[1]
+                    c[0] = first
+                    c[1] = f
+                else:
+                    first = c[0]
+                if val[first] == 1:      # clause already satisfied
+                    ws[j] = c
+                    j += 1
+                    continue
+                lc = len(c)
+                k = 2
+                while k < lc:
+                    l = c[k]
+                    if val[l] != -1:      # move the watch to a non-false literal
+                        c[1] = l
+                        c[k] = f
+                        watches[l].append(c)
+                        break
+                    k += 1
+                else:
+                    ws[j] = c
+                    j += 1
+                    if val[first] == -1:  # every literal is false: conflict
+                        while i < n:
+                            ws[j] = ws[i]
+                            j += 1
+                            i += 1
+                        del ws[j:]
+                        self.qhead = qh
+                        return c
+                    # unit clause: first must be true
+                    val[first] = 1
+                    val[first ^ 1] = -1
+                    v = first >> 1
+                    level[v] = dl
+                    reason[v] = c
+                    trail.append(first)
+            del ws[j:]
+        self.qhead = qh
+        return None
+
+    def backtrack(self, lvl):
+        if len(self.trail_lim) <= lvl:
+            return
+        lim = self.trail_lim[lvl]
+        trail = self.trail
+        val = self.val
+        reason = self.reason
+        phase = self.phase
+        activity = self.activity
+        heap = self.heap
+        for i in range(len(trail) - 1, lim - 1, -1):
+            lit = trail[i]
+            v = lit >> 1
+            phase[v] = (lit & 1) ^ 1
+            val[lit] = 0
+            val[lit ^ 1] = 0
+            reason[v] = None
+            heapq.heappush(heap, (-activity[v], v))
+        del trail[lim:]
+        del self.trail_lim[lvl:]
+        self.qhead = len(trail)
+        if len(heap) > 4 * self.n + 1000:  # drop stale heap entries
+            self.rebuild_heap()
+
+    def rebuild_heap(self):
+        val = self.val
+        act = self.activity
+        self.heap = [(-act[v], v) for v in range(1, self.n + 1) if val[2 * v] == 0]
+        heapq.heapify(self.heap)
+
+    def pick(self):
+        """Highest-activity unassigned variable, or 0 when everything is assigned."""
+        heap = self.heap
+        val = self.val
+        while heap:
+            _, v = heapq.heappop(heap)
+            if val[2 * v] == 0:
+                return v
+        return 0
+
+    def rescale(self):
+        act = self.activity
+        for u in range(1, self.n + 1):
+            act[u] *= 1e-100
+        self.var_inc *= 1e-100
+        self.rebuild_heap()
+
+    # ----- conflict analysis -------------------------------------------------------
+
+    def analyze(self, confl):
+        """First-UIP learning. Returns (learnt clause, backjump level, LBD); learnt[0] is the asserting literal."""
+        level = self.level
+        seen = self.seen
+        trail = self.trail
+        reason = self.reason
+        cur = len(self.trail_lim)
+        act = self.activity
+        var_inc = self.var_inc
+        learnt = [0]
+        path = 0          # current-level literals still to resolve
+        p = -1
+        idx = len(trail) - 1
+        c = confl
+        while True:
+            start = 0 if p < 0 else 1   # reason clauses have their implied literal in position 0
+            for k in range(start, len(c)):
+                q = c[k]
+                v = q >> 1
+                if not seen[v] and level[v] > 0:
+                    seen[v] = 1
+                    act[v] += var_inc
+                    if act[v] > 1e100:
+                        self.rescale()
+                        var_inc = self.var_inc
+                    if level[v] >= cur:
+                        path += 1
+                    else:
+                        learnt.append(q)
+            while not seen[trail[idx] >> 1]:
+                idx -= 1
+            p = trail[idx]
+            idx -= 1
+            v = p >> 1
+            seen[v] = 0
+            path -= 1
+            if path == 0:
+                break
+            c = reason[v]
+        learnt[0] = p ^ 1
+
+        # Local minimisation: drop a literal whose reason is covered by the rest of the clause.
+        orig = learnt[:]
+        j = 1
+        for i in range(1, len(learnt)):
+            q = learnt[i]
+            r = reason[q >> 1]
+            redundant = r is not None
+            if redundant:
+                for k in range(1, len(r)):
+                    u = r[k] >> 1
+                    if not seen[u] and level[u] > 0:
+                        redundant = False
+                        break
+            if not redundant:
+                learnt[j] = q
+                j += 1
+        del learnt[j:]
+        for q in orig:
+            seen[q >> 1] = 0
+
+        if len(learnt) == 1:
+            bt = 0
+        else:
+            m = 1
+            for i in range(2, len(learnt)):
+                if level[learnt[i] >> 1] > level[learnt[m] >> 1]:
+                    m = i
+            learnt[1], learnt[m] = learnt[m], learnt[1]
+            bt = level[learnt[1] >> 1]
+        lbd = len({level[q >> 1] for q in learnt})
+        return learnt, bt, lbd
+
+    def reduce_db(self):
+        """Delete about half of the learnt clauses, keeping glue clauses (LBD <= 2) and clauses that are reasons."""
+        reason = self.reason
+        lbd = self.lbd
+        keep, cand = [], []
+        for c in self.learnts:
+            if lbd[id(c)] <= 2 or reason[c[0] >> 1] is c:
+                keep.append(c)
+            else:
+                cand.append(c)
+        cand.sort(key=lambda c: (lbd[id(c)], len(c)))
+        half = len(cand) // 2
+        drop = cand[half:]
+        if drop:
+            removed = {id(c) for c in drop}
+            for c in drop:
+                del lbd[id(c)]
+            for lit in range(len(self.watches)):
+                ws = self.watches[lit]
+                if ws:
+                    self.watches[lit] = [c for c in ws if id(c) not in removed]
+        self.learnts = keep + cand[:half]
+
+    # ----- main loop -------------------------------------------------------------
+
+    def solve(self, max_conflicts=None):
+        """Search until the formula is decided or max_conflicts conflicts have occurred in this call.
+        Returns True (satisfiable, assignment on the trail), False (unsatisfiable), or None (budget used up).
+        Calling again resumes the search."""
+        conflicts_here = 0
+        while True:
+            confl = self.propagate()
+            if confl is not None:
+                self.conflicts += 1
+                conflicts_here += 1
+                self.since_restart += 1
+                if not self.trail_lim:
+                    return False
+                learnt, bt, lbd = self.analyze(confl)
+                self.backtrack(bt)
+                if len(learnt) == 1:
+                    self.enqueue(learnt[0], None)
+                else:
+                    self.learnts.append(learnt)
+                    self.lbd[id(learnt)] = lbd
+                    self.watches[learnt[0]].append(learnt)
+                    self.watches[learnt[1]].append(learnt)
+                    self.enqueue(learnt[0], learnt)
+                self.var_inc *= 1.0 / 0.95
+                if self.conflicts >= self.next_reduce:
+                    self.reductions += 1
+                    self.reduce_db()
+                    self.next_reduce = self.conflicts + 2000 + 300 * self.reductions
+                if max_conflicts is not None and conflicts_here >= max_conflicts:
+                    self.backtrack(0)
+                    return None
+            else:
+                if self.since_restart >= self.budget:
+                    self.restarts += 1
+                    self.since_restart = 0
+                    self.budget = 1000 * luby(2, self.restarts)
+                    self.backtrack(0)
+                    continue
+                v = self.pick()
+                if v == 0:
+                    return True
+                self.trail_lim.append(len(self.trail))
+                self.enqueue(2 * v + (0 if self.phase[v] else 1), None)
+
+    def model(self):
+        return [0] + [1 if self.val[2 * v] == 1 else 0 for v in range(1, self.n + 1)]
+
+
+def write_model(model, n):
+    out = ["s SATISFIABLE"]
+    line = "v"
+    for v in range(1, n + 1):
+        tok = str(v if model[v] else -v)
+        if len(line) + len(tok) + 1 > 78:
+            out.append(line)
+            line = "v"
+        line += " " + tok
+    line += " 0"
+    out.append(line)
+    sys.stdout.write("\n".join(out) + "\n")
+
+
+def solve_formula(nvars, clauses):
+    """Returns a model (list indexed by variable, 0 unused) or None if unsatisfiable."""
+    norm = normalize(clauses)
+    if norm is None:
+        return None
+    cdcl = CDCL(nvars)
+    if not cdcl.load(norm):
+        return None
+    ls = LocalSearch(nvars, norm, seed=12345)
+    r = 0
+    while True:
+        if ls.run(LS_FLIPS << r):
+            return ls.model()
+        res = cdcl.solve(CDCL_CONFLICTS << r)
+        if res is True:
+            return cdcl.model()
+        if res is False:
+            return None
+        r += 1
+
+
+def main(argv):
+    if len(argv) != 2:
+        sys.stderr.write("usage: solver FILE\n")
+        return 2
+    nvars, clauses = parse(argv[1])
+    model = solve_formula(nvars, clauses)
+    if model is None:
+        sys.stdout.write("s UNSATISFIABLE\n")
+        return UNSAT_EXIT
+    # Never report a model that does not satisfy the input.
+    for cl in clauses:
+        if not any(model[abs(x)] == (x > 0) for x in cl):
+            sys.stderr.write("internal error: model check failed\n")
+            return 1
+    write_model(model, nvars)
+    return SAT_EXIT
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

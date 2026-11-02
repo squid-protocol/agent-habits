@@ -1,0 +1,16 @@
+FAIL
+  ok   planted 3-SAT n=40: SAT
+  ok   planted 3-SAT n=80: SAT
+  ok   planted 3-SAT n=120: SAT
+  ok   pigeonhole 5->4: UNSAT
+  ok   pigeonhole 7->6: UNSAT
+  ok   random 3-SAT n=14 #0: SAT
+  ok   random 3-SAT n=14 #1: UNSAT
+  ok   random 3-SAT n=14 #2: SAT
+  ok   random 3-SAT n=14 #3: SAT
+  ok   random 3-SAT n=14 #4: UNSAT
+  ok   random 3-SAT n=14 #5: SAT
+  ok   empty formula n=3: SAT
+  ok   unit conflict: UNSAT
+  FAIL hard formulas: 8 of 13 answered correctly within 60s (need 11, no wrong answers)
+         unanswered: random-n250-0.cnf; random-n250-1.cnf; planted-n2000-0.cnf; planted-n2000-1.cnf

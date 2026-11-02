@@ -1,0 +1,150 @@
+run,arm,task,cell_lang,file,file_kind,gg_reason,size_bytes,lines,max_line_len,is_source_code,is_main_cell_source
+chess-c-claude-r1,claude,chess,c,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+chess-c-claude-r1,claude,chess,c,engine,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",30280,,,0,0
+chess-c-codex-r1,codex,chess,c,engine,binary (ELF),Blocked (Binary Format Detected),37840,,,0,0
+chess-c-codex-r1,codex,chess,c,engine.c,c,Blocked (Saturation: Line 38 exceeds 500 chars),10414,56,995,1,1
+chess-c-haiku-b-r1,haiku-b,chess,c,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",11,2,6,0,0
+chess-c-haiku-b-r1,haiku-b,chess,c,engine,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",35400,,,0,0
+chess-c-haiku-r1,haiku,chess,c,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",11,2,6,0,0
+chess-c-haiku-r1,haiku,chess,c,engine,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",35824,,,0,0
+chess-c-sonnet-b-r1,sonnet-b,chess,c,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+chess-c-sonnet-b-r1,sonnet-b,chess,c,engine,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",34328,,,0,0
+chess-cobol-claude-r1,claude,chess,cobol,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",22,3,10,0,0
+chess-cobol-claude-r1,claude,chess,cobol,engine,shell,"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",63,2,50,1,0
+chess-cobol-claude-r1,claude,chess,cobol,engine_bin,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",76136,,,0,0
+chess-cobol-codex-r1,codex,chess,cobol,engine,binary (ELF),Blocked (Binary Format Detected),57992,,,0,0
+chess-cobol-haiku-b-r1,haiku-b,chess,cobol,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",11,2,6,0,0
+chess-cobol-haiku-b-r1,haiku-b,chess,cobol,engine,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",89528,,,0,0
+chess-cobol-haiku-r1,haiku,chess,cobol,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",16,3,6,0,0
+chess-cobol-haiku-r1,haiku,chess,cobol,engine,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",94920,,,0,0
+chess-cobol-sonnet-b-r1,sonnet-b,chess,cobol,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",30,5,10,0,0
+chess-cobol-sonnet-b-r1,sonnet-b,chess,cobol,engine,shell,"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",51,2,38,1,0
+chess-cobol-sonnet-b-r1,sonnet-b,chess,cobol,engine_bin,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",75320,,,0,0
+chess-java-claude-r1,claude,chess,java,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",5,1,4,0,0
+chess-java-claude-r1,claude,chess,java,out/Engine.class,build output (.class),not recorded (no file_data or excluded_artifacts row),18291,210,1558,0,0
+chess-java-codex-r1,codex,chess,java,out/AbortSearch.class,build output (.class),not recorded (no file_data or excluded_artifacts row),199,4,100,0,0
+chess-java-codex-r1,codex,chess,java,out/Board.class,build output (.class),not recorded (no file_data or excluded_artifacts row),7654,109,931,0,0
+chess-java-codex-r1,codex,chess,java,out/Main.class,build output (.class),not recorded (no file_data or excluded_artifacts row),5472,59,641,0,0
+chess-java-codex-r1,codex,chess,java,out/Move.class,build output (.class),not recorded (no file_data or excluded_artifacts row),1339,6,892,0,0
+chess-java-codex-r1,codex,chess,java,out/Search.class,build output (.class),not recorded (no file_data or excluded_artifacts row),3415,46,364,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/classes/engine/Board.class,build output (.class),not recorded (no file_data or excluded_artifacts row),7721,70,1140,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/classes/engine/Eval.class,build output (.class),not recorded (no file_data or excluded_artifacts row),3640,64,342,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/classes/engine/Main.class,build output (.class),not recorded (no file_data or excluded_artifacts row),360,10,108,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/classes/engine/Move.class,build output (.class),not recorded (no file_data or excluded_artifacts row),1586,16,442,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/classes/engine/MoveGen.class,build output (.class),not recorded (no file_data or excluded_artifacts row),2582,46,290,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/classes/engine/Perft.class,build output (.class),not recorded (no file_data or excluded_artifacts row),683,14,96,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/classes/engine/Search.class,build output (.class),not recorded (no file_data or excluded_artifacts row),7083,79,1074,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/classes/engine/TT.class,build output (.class),not recorded (no file_data or excluded_artifacts row),807,10,160,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/classes/engine/Uci.class,build output (.class),not recorded (no file_data or excluded_artifacts row),7385,87,596,0,0
+chess-java-haiku-b-r1,haiku-b,chess,java,build/sources.txt,plaintext,not recorded (no file_data or excluded_artifacts row),193,9,23,0,0
+chess-java-haiku-r1,haiku,chess,java,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",5,1,4,0,0
+chess-java-haiku-r1,haiku,chess,java,out/Eval.class,build output (.class),not recorded (no file_data or excluded_artifacts row),3927,68,477,0,0
+chess-java-haiku-r1,haiku,chess,java,out/Main.class,build output (.class),not recorded (no file_data or excluded_artifacts row),7220,90,529,0,0
+chess-java-haiku-r1,haiku,chess,java,out/Position.class,build output (.class),not recorded (no file_data or excluded_artifacts row),11522,118,1165,0,0
+chess-java-haiku-r1,haiku,chess,java,out/Search.class,build output (.class),not recorded (no file_data or excluded_artifacts row),7352,92,974,0,0
+chess-java-sonnet-b-r1,sonnet-b,chess,java,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",5,1,4,0,0
+chess-java-sonnet-b-r1,sonnet-b,chess,java,out/Main.class,build output (.class),not recorded (no file_data or excluded_artifacts row),20235,255,696,0,0
+chess-python-claude-r1,claude,chess,python,__pycache__/engine.cpython-311.pyc,build output (.pyc),not recorded (no file_data or excluded_artifacts row),39922,230,2518,0,0
+chess-python-codex-r1,codex,chess,python,__pycache__/enginecpython-311.pyc,build output (.pyc),not recorded (no file_data or excluded_artifacts row),22173,131,1052,0,0
+chess-python-haiku-b-r1,haiku-b,chess,python,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",19,2,12,0,0
+chess-python-haiku-b-r1,haiku-b,chess,python,__pycache__/enginecpython-311.pyc,build output (.pyc),not recorded (no file_data or excluded_artifacts row),52888,285,2857,0,0
+chess-python-haiku-r1,haiku,chess,python,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",13,1,12,0,0
+chess-python-sonnet-b-r1,sonnet-b,chess,python,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",13,1,12,0,0
+chess-python-sonnet-b-r1,sonnet-b,chess,python,__pycache__/engine.cpython-311.pyc,build output (.pyc),not recorded (no file_data or excluded_artifacts row),38484,230,1692,0,0
+chess-rust-claude-r1,claude,chess,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+chess-rust-claude-r1,claude,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),149,7,49,0,0
+chess-rust-claude-r1,claude,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),138,11,17,0,0
+chess-rust-claude-r2,claude,chess,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+chess-rust-claude-r2,claude,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),149,7,49,0,0
+chess-rust-claude-r2,claude,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),154,12,17,0,0
+chess-rust-codex-r1,codex,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),153,7,49,0,0
+chess-rust-codex-r1,codex,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),110,8,20,0,0
+chess-rust-codex-r1,codex,chess,rust,engine,binary (ELF),Blocked (Binary Format Detected),535344,,,0,0
+chess-rust-codex-r1,codex,chess,rust,src/main.rs,rust,Blocked (Saturation: Line 14 exceeds 500 chars),11351,35,2303,1,1
+chess-rust-codex-r2,codex,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),151,7,49,0,0
+chess-rust-codex-r2,codex,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),109,8,20,0,0
+chess-rust-codex-r2,codex,chess,rust,engine,binary (ELF),Blocked (Binary Format Detected),576312,,,0,0
+chess-rust-codex-r2,codex,chess,rust,src/main.rs,rust,Blocked (Saturation: Line 16 exceeds 500 chars),13723,37,2540,1,1
+chess-rust-haiku-b-r1,haiku-b,chess,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",15,2,7,0,0
+chess-rust-haiku-b-r1,haiku-b,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),149,7,49,0,0
+chess-rust-haiku-b-r1,haiku-b,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),154,12,17,0,0
+chess-rust-haiku-b-r1,haiku-b,chess,rust,engine,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",476656,,,0,0
+chess-rust-haiku-b-r2,haiku-b,chess,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",16,2,7,0,0
+chess-rust-haiku-b-r2,haiku-b,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),150,7,49,0,0
+chess-rust-haiku-b-r2,haiku-b,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),215,17,20,0,0
+chess-rust-haiku-b-r2,haiku-b,chess,rust,engine,binary (ELF),Blocked (Binary Format Detected),457096,,,0,0
+chess-rust-haiku-r1,haiku,chess,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",16,2,7,0,0
+chess-rust-haiku-r1,haiku,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),150,7,49,0,0
+chess-rust-haiku-r1,haiku,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),142,11,17,0,0
+chess-rust-haiku-r1,haiku,chess,rust,engine,binary (ELF),Blocked (Binary Format Detected),517424,,,0,0
+chess-rust-haiku-r2,haiku,chess,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",15,2,7,0,0
+chess-rust-haiku-r2,haiku,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),150,7,49,0,0
+chess-rust-haiku-r2,haiku,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),234,14,64,0,0
+chess-rust-haiku-r2,haiku,chess,rust,engine,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",458408,,,0,0
+chess-rust-sonnet-b-r1,sonnet-b,chess,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+chess-rust-sonnet-b-r1,sonnet-b,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),149,7,49,0,0
+chess-rust-sonnet-b-r1,sonnet-b,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),154,12,17,0,0
+chess-rust-sonnet-b-r2,sonnet-b,chess,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+chess-rust-sonnet-b-r2,sonnet-b,chess,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),156,7,49,0,0
+chess-rust-sonnet-b-r2,sonnet-b,chess,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),197,14,21,0,0
+sat-c-claude-r1,claude,sat,c,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+sat-c-claude-r1,claude,sat,c,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",21952,,,0,0
+sat-c-codex-r1,codex,sat,c,solver,binary (ELF),Blocked (Binary Format Detected),16824,,,0,0
+sat-c-codex-r1,codex,sat,c,solver.c,c,Blocked (Saturation: Line 15 exceeds 500 chars),2746,15,1082,1,1
+sat-c-haiku-b-r1,haiku-b,sat,c,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",11,2,6,0,0
+sat-c-haiku-b-r1,haiku-b,sat,c,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",22456,,,0,0
+sat-c-haiku-r1,haiku,sat,c,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",11,2,6,0,0
+sat-c-haiku-r1,haiku,sat,c,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",22352,,,0,0
+sat-c-sonnet-b-r1,sonnet-b,sat,c,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+sat-c-sonnet-b-r1,sonnet-b,sat,c,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",22184,,,0,0
+sat-cobol-claude-r1,claude,sat,cobol,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",11,2,6,0,0
+sat-cobol-claude-r1,claude,sat,cobol,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",46360,,,0,0
+sat-cobol-codex-r1,codex,sat,cobol,solver,binary (ELF),Blocked (Binary Format Detected),32664,,,0,0
+sat-cobol-haiku-b-r1,haiku-b,sat,cobol,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",19,4,6,0,0
+sat-cobol-haiku-b-r1,haiku-b,sat,cobol,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",51176,,,0,0
+sat-cobol-haiku-r1,haiku,sat,cobol,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",11,2,6,0,0
+sat-cobol-haiku-r1,haiku,sat,cobol,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",47032,,,0,0
+sat-cobol-sonnet-b-r1,sonnet-b,sat,cobol,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+sat-cobol-sonnet-b-r1,sonnet-b,sat,cobol,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",36184,,,0,0
+sat-java-claude-r1,claude,sat,java,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",5,1,4,0,0
+sat-java-claude-r1,claude,sat,java,out/Main$Clause.class,build output (.class),not recorded (no file_data or excluded_artifacts row),335,5,135,0,0
+sat-java-claude-r1,claude,sat,java,out/Main.class,build output (.class),not recorded (no file_data or excluded_artifacts row),9990,119,664,0,0
+sat-java-codex-r1,codex,sat,java,Main$Clause.class,build output (.class),Blocked (Explicitly Denied Extension: '.class'),301,6,108,0,0
+sat-java-codex-r1,codex,sat,java,Main$Solver.class,build output (.class),Blocked (Explicitly Denied Extension: '.class'),5243,63,642,0,0
+sat-java-codex-r1,codex,sat,java,Main.class,build output (.class),Blocked (Explicitly Denied Extension: '.class'),4060,51,569,0,0
+sat-java-haiku-b-r1,haiku-b,sat,java,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+sat-java-haiku-b-r1,haiku-b,sat,java,build/Solver$Cnf.class,build output (.class),not recorded (no file_data or excluded_artifacts row),437,8,148,0,0
+sat-java-haiku-b-r1,haiku-b,sat,java,build/Solver.class,build output (.class),not recorded (no file_data or excluded_artifacts row),14421,160,1210,0,0
+sat-java-haiku-r1,haiku,sat,java,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",7,1,6,0,0
+sat-java-haiku-r1,haiku,sat,java,build/classes/Solver$Clause.class,build output (.class),not recorded (no file_data or excluded_artifacts row),410,5,211,0,0
+sat-java-haiku-r1,haiku,sat,java,build/classes/Solver$Cnf.class,build output (.class),not recorded (no file_data or excluded_artifacts row),423,8,140,0,0
+sat-java-haiku-r1,haiku,sat,java,build/classes/Solver.class,build output (.class),not recorded (no file_data or excluded_artifacts row),13095,160,849,0,0
+sat-java-sonnet-b-r1,sonnet-b,sat,java,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",5,1,4,0,0
+sat-java-sonnet-b-r1,sonnet-b,sat,java,out/Main$Clause.class,build output (.class),not recorded (no file_data or excluded_artifacts row),351,6,132,0,0
+sat-java-sonnet-b-r1,sonnet-b,sat,java,out/Main$IntList.class,build output (.class),not recorded (no file_data or excluded_artifacts row),562,7,187,0,0
+sat-java-sonnet-b-r1,sonnet-b,sat,java,out/Main.class,build output (.class),not recorded (no file_data or excluded_artifacts row),10155,146,1615,0,0
+sat-python-claude-r2,claude,sat,python,__pycache__/sat.cpython-311.pyc,build output (.pyc),not recorded (no file_data or excluded_artifacts row),13979,62,2145,0,0
+sat-python-haiku-b-r2,haiku-b,sat,python,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",13,1,12,0,0
+sat-python-haiku-b-r2,haiku-b,sat,python,__pycache__/solvercpython-311.pyc,build output (.pyc),not recorded (no file_data or excluded_artifacts row),25751,163,1215,0,0
+sat-python-haiku-r2,haiku,sat,python,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",19,2,12,0,0
+sat-python-haiku-r2,haiku,sat,python,__pycache__/solvercpython-311.pyc,build output (.pyc),not recorded (no file_data or excluded_artifacts row),18570,85,1545,0,0
+sat-rust-claude-r1,claude,sat,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",14,2,6,0,0
+sat-rust-claude-r1,claude,sat,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),150,7,49,0,0
+sat-rust-claude-r1,claude,sat,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),185,14,20,0,0
+sat-rust-claude-r1,claude,sat,rust,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",431248,,,0,0
+sat-rust-codex-r1,codex,sat,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),150,7,49,0,0
+sat-rust-codex-r1,codex,sat,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),107,8,20,0,0
+sat-rust-codex-r1,codex,sat,rust,solver,binary (ELF),Blocked (Binary Format Detected),465608,,,0,0
+sat-rust-haiku-b-r1,haiku-b,sat,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",16,2,7,0,0
+sat-rust-haiku-b-r1,haiku-b,sat,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),150,7,49,0,0
+sat-rust-haiku-b-r1,haiku-b,sat,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),153,12,17,0,0
+sat-rust-haiku-b-r1,haiku-b,sat,rust,solver,binary (ELF),Blocked (Binary Format Detected),452592,,,0,0
+sat-rust-haiku-r1,haiku,sat,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",15,2,7,0,0
+sat-rust-haiku-r1,haiku,sat,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),150,7,49,0,0
+sat-rust-haiku-r1,haiku,sat,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),169,13,17,0,0
+sat-rust-haiku-r1,haiku,sat,rust,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",427648,,,0,0
+sat-rust-sonnet-b-r1,sonnet-b,sat,rust,.gitignore,config (.gitignore),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",14,2,6,0,0
+sat-rust-sonnet-b-r1,sonnet-b,sat,rust,Cargo.lock,lockfile,Blocked (Unsupported Extension: '.lock'),150,7,49,0,0
+sat-rust-sonnet-b-r1,sonnet-b,sat,rust,Cargo.toml,build manifest (toml),Blocked (Unsupported Extension: '.toml'),183,12,20,0,0
+sat-rust-sonnet-b-r1,sonnet-b,sat,rust,solver,binary (ELF),"Blocked (System Exclusion, Hidden Directory, or Dynamic Ignored Dir)",431368,,,0,0

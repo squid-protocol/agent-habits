@@ -1,0 +1,16 @@
+arm,cell_lang,shape,cause_class,slots
+claude,cobol,CT_only,ctags counts environment/data-division headers (GG counts procedure-division units only),8
+claude,cobol,CT_only,ctags phantom (statement/scope terminator ending in X tagged as paragraph),35
+codex,c,TS+CT_only,saturation exclusion (GG never read the file),31
+codex,cobol,CT_only,GG miss,12
+codex,cobol,CT_only,name-shape difference (GG names it X),15
+codex,java,GG+CT_only,TS node-map gap,1
+codex,java,TS+CT_only,GG miss (GG has zero functions in this file),1
+codex,rust,TS+CT_only,saturation exclusion (GG never read the file),50
+haiku,cobol,CT_only,ctags counts environment/data-division headers (GG counts procedure-division units only),10
+haiku,cobol,CT_only,ctags phantom (statement/scope terminator ending in X tagged as paragraph),55
+haiku-b,cobol,CT_only,ctags counts environment/data-division headers (GG counts procedure-division units only),23
+haiku-b,cobol,CT_only,ctags phantom (statement/scope terminator ending in X tagged as paragraph),58
+sonnet-b,cobol,CT_only,ctags counts environment/data-division headers (GG counts procedure-division units only),8
+sonnet-b,cobol,CT_only,ctags phantom (statement/scope terminator ending in X tagged as paragraph),32
+sonnet-b,java,TS+CT_only,GG miss,3

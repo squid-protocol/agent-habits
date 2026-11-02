@@ -1,0 +1,585 @@
+#!/usr/bin/env python3
+"""A DPLL-based SAT solver for DIMACS CNF formulas (Python 3, standard library only).
+
+The core is the DPLL search loop: unit propagation over two watched literals, a
+decision, and backtracking. On top of plain DPLL it uses the standard techniques
+that make the search practical on hard formulas:
+
+  * conflict analysis with first-UIP clause learning and non-chronological backjumps,
+  * VSIDS variable activities for decisions, with phase saving,
+  * Luby restarts,
+  * deletion of learned clauses ranked by literal block distance (LBD).
+
+When at least two CPUs are available, a local-search process (probSAT-style random
+walk) runs beside the DPLL search. It can only ever report a satisfying assignment,
+and every reported model is checked against the input before it is printed, so the
+answer is never wrong: UNSATISFIABLE comes only from the DPLL search.
+
+Usage:  ./solver FILE
+Output: "s SATISFIABLE" and "v ..." lines (exit 10), or "s UNSATISFIABLE" (exit 20).
+"""
+
+import heapq
+import multiprocessing
+import queue as queue_module
+import os
+import random
+import sys
+import time
+
+
+def parse_dimacs(text):
+    """Return (number of variables, list of clauses as lists of non-zero ints)."""
+    nvars = 0
+    clauses = []
+    cur = []
+    for line in text.splitlines():
+        s = line.strip()
+        if not s or s[0] == "c":
+            continue
+        if s[0] == "%":  # end-of-file marker used by some benchmark archives
+            break
+        if s[0] == "p":
+            parts = s.split()
+            if len(parts) >= 3 and parts[1] == "cnf":
+                nvars = max(nvars, int(parts[2]))
+            continue
+        for tok in s.split():
+            x = int(tok)
+            if x == 0:
+                clauses.append(cur)
+                cur = []
+            else:
+                cur.append(x)
+                if abs(x) > nvars:
+                    nvars = abs(x)
+    if cur:  # last clause without its terminating 0
+        clauses.append(cur)
+    return nvars, clauses
+
+
+def luby(i):
+    """The i-th term (i >= 0) of the Luby sequence 1,1,2,1,1,2,4,1,1,2,..."""
+    size, seq = 1, 0
+    while size < i + 1:
+        seq += 1
+        size = 2 * size + 1
+    while size - 1 != i:
+        size = (size - 1) >> 1
+        seq -= 1
+        i = i % size
+    return 1 << seq
+
+
+def dpll_cdcl(nv, clauses):
+    """DPLL with clause learning. Literals are encoded as 2*var (positive) and 2*var+1
+    (negative). `clauses` holds non-empty, duplicate-free, non-tautological clauses.
+
+    Returns the literal-value list `val` (1 true, -1 false) of a satisfying assignment,
+    or None if the formula is unsatisfiable.
+    """
+    N = nv + 1
+    val = [0] * (2 * N)          # value of each literal
+    level = [0] * N              # decision level of each variable
+    reason = [-1] * N            # clause id that implied each variable (-1: decision/unit)
+    phase = [False] * N          # saved phase: True means last value was positive
+    act = [0.0] * N              # VSIDS activity
+    seen = [False] * N           # scratch flags for conflict analysis
+    watches = [[] for _ in range(2 * N)]
+    cls = []                     # clause literal lists; None once a learned clause is deleted
+    lbd = []                     # literal block distance per clause (0 for original clauses)
+    learnt_ids = []
+    trail = []
+    trail_push = trail.append
+    trail_lim = []               # trail_lim[k] = trail length when decision level k+1 started
+    qhead = 0
+    dl = 0                       # current decision level
+    var_inc = 1.0
+    var_decay = 1 / 0.95
+
+    # --- load clauses -------------------------------------------------------
+    units = []
+    for c in clauses:
+        if not c:
+            return None
+        if len(c) == 1:
+            units.append(c[0])
+            continue
+        ci = len(cls)
+        cls.append(c)
+        lbd.append(0)
+        watches[c[0]] += (ci, c[1])
+        watches[c[1]] += (ci, c[0])
+    for l in units:
+        if val[l] == -1:
+            return None
+        if val[l] == 0:
+            v = l >> 1
+            val[l] = 1
+            val[l ^ 1] = -1
+            level[v] = 0
+            trail_push(l)
+
+    heap = [(0.0, v) for v in range(1, N)]
+    heapq.heapify(heap)
+
+    def backtrack(bt):
+        nonlocal qhead, dl
+        if bt >= dl:
+            return
+        lim = trail_lim[bt]
+        for k in range(len(trail) - 1, lim - 1, -1):
+            lit = trail[k]
+            v = lit >> 1
+            val[lit] = 0
+            val[lit ^ 1] = 0
+            phase[v] = not (lit & 1)
+            reason[v] = -1
+            heapq.heappush(heap, (-act[v], v))
+        del trail[lim:]
+        del trail_lim[bt:]
+        dl = bt
+        if qhead > lim:
+            qhead = lim
+
+    def reduce_db():
+        locked = set()
+        for lit in trail:
+            r = reason[lit >> 1]
+            if r >= 0:
+                locked.add(r)
+        cand = [ci for ci in learnt_ids if ci not in locked and lbd[ci] > 2]
+        cand.sort(key=lambda ci: (lbd[ci], len(cls[ci])), reverse=True)
+        for ci in cand[: len(cand) // 2]:
+            cls[ci] = None
+        learnt_ids[:] = [ci for ci in learnt_ids if cls[ci] is not None]
+        for l in range(2 * N):
+            ws = watches[l]
+            if ws:
+                watches[l] = [x for k in range(0, len(ws), 2) if cls[ws[k]] is not None
+                              for x in (ws[k], ws[k + 1])]
+        heap[:] = [(-act[v], v) for v in range(1, N) if val[2 * v] == 0]
+        heapq.heapify(heap)
+
+    conflicts = 0
+    restarts = 0
+    restart_limit = 100 * luby(0)
+    since_restart = 0
+    next_reduce = 2000
+    reductions = 0
+
+    while True:
+        # ---- unit propagation over the watched-literal lists ----------------
+        confl = -1
+        while qhead < len(trail):
+            p = trail[qhead]
+            qhead += 1
+            fl = p ^ 1                       # literal that just became false
+            ws = watches[fl]
+            i = j = 0
+            nws = len(ws)
+            while i < nws:
+                ci = ws[i]
+                blk = ws[i + 1]
+                i += 2
+                if val[blk] == 1:           # blocker literal true: clause satisfied
+                    ws[j] = ci
+                    ws[j + 1] = blk
+                    j += 2
+                    continue
+                c = cls[ci]
+                if c[0] == fl:
+                    c[0] = c[1]
+                    c[1] = fl
+                first = c[0]
+                if val[first] == 1:         # clause already satisfied
+                    ws[j] = ci
+                    ws[j + 1] = first
+                    j += 2
+                    continue
+                nc = len(c)
+                k = 2
+                while k < nc:              # look for a replacement watch
+                    lk = c[k]
+                    if val[lk] != -1:
+                        c[1] = lk
+                        c[k] = fl
+                        wl = watches[lk]
+                        wl.append(ci)
+                        wl.append(first)
+                        break
+                    k += 1
+                else:
+                    ws[j] = ci
+                    ws[j + 1] = first
+                    j += 2
+                    if val[first] == -1:    # every literal is false: conflict
+                        confl = ci
+                        while i < nws:
+                            ws[j] = ws[i]
+                            j += 1
+                            i += 1
+                        break
+                    # clause is unit: imply `first`
+                    v = first >> 1
+                    val[first] = 1
+                    val[first ^ 1] = -1
+                    level[v] = dl
+                    reason[v] = ci
+                    trail_push(first)
+            del ws[j:]
+            if confl >= 0:
+                break
+
+        if confl >= 0:
+            # ---- conflict analysis: first UIP -------------------------------
+            conflicts += 1
+            since_restart += 1
+            if dl == 0:
+                return None
+            learnt = [0]
+            touched = []
+            path = 0
+            p = -1
+            idx = len(trail) - 1
+            c_id = confl
+            while True:
+                for q in cls[c_id]:
+                    if q == p:
+                        continue
+                    v = q >> 1
+                    if not seen[v] and level[v] > 0:
+                        seen[v] = True
+                        touched.append(v)
+                        act[v] += var_inc
+                        if level[v] == dl:
+                            path += 1
+                        else:
+                            learnt.append(q)
+                while True:
+                    p = trail[idx]
+                    idx -= 1
+                    if seen[p >> 1]:
+                        break
+                path -= 1
+                if path == 0:
+                    break
+                c_id = reason[p >> 1]
+            learnt[0] = p ^ 1
+
+            # local minimisation: drop literals implied by the rest of the clause
+            kept = [learnt[0]]
+            for q in learnt[1:]:
+                v = q >> 1
+                r = reason[v]
+                if r >= 0 and all(seen[x >> 1] or level[x >> 1] == 0
+                                  for x in cls[r] if (x >> 1) != v):
+                    continue
+                kept.append(q)
+            learnt = kept
+            for v in touched:
+                seen[v] = False
+
+            if len(learnt) == 1:
+                bt = 0
+            else:
+                mi = 1
+                for k in range(2, len(learnt)):
+                    if level[learnt[k] >> 1] > level[learnt[mi] >> 1]:
+                        mi = k
+                learnt[1], learnt[mi] = learnt[mi], learnt[1]
+                bt = level[learnt[1] >> 1]
+            glue = len({level[q >> 1] for q in learnt})
+
+            backtrack(bt)
+            lit0 = learnt[0]
+            v0 = lit0 >> 1
+            if len(learnt) > 1:
+                ci = len(cls)
+                cls.append(learnt)
+                lbd.append(glue)
+                learnt_ids.append(ci)
+                watches[learnt[0]] += (ci, learnt[1])
+                watches[learnt[1]] += (ci, learnt[0])
+                reason[v0] = ci
+            else:
+                reason[v0] = -1
+            val[lit0] = 1
+            val[lit0 ^ 1] = -1
+            level[v0] = bt
+            trail_push(lit0)
+
+            var_inc *= var_decay
+            if var_inc > 1e100:
+                for v in range(1, N):
+                    act[v] *= 1e-100
+                var_inc *= 1e-100
+                heap[:] = [(-act[v], v) for v in range(1, N) if val[2 * v] == 0]
+                heapq.heapify(heap)
+
+            if since_restart >= restart_limit:
+                restarts += 1
+                since_restart = 0
+                restart_limit = 100 * luby(restarts)
+                backtrack(0)
+            if conflicts >= next_reduce:
+                reductions += 1
+                next_reduce = conflicts + 2000 + 300 * reductions
+                reduce_db()
+            continue
+
+        # ---- no conflict: decide ---------------------------------------------
+        v = None
+        while heap:
+            _, cand = heapq.heappop(heap)
+            if val[2 * cand] == 0:
+                v = cand
+                break
+        if v is None:
+            return val                       # every variable assigned, no conflict: SAT
+        trail_lim.append(len(trail))
+        dl += 1
+        lit = 2 * v if phase[v] else 2 * v + 1
+        val[lit] = 1
+        val[lit ^ 1] = -1
+        level[v] = dl
+        reason[v] = -1
+        trail_push(lit)
+
+
+def probsat(nv, clauses, seed, deadline=None):
+    """Random-walk search (probSAT with exponential break weights) for a satisfying
+    assignment. Runs until it finds one, so it is only used beside the DPLL search.
+
+    Returns the literal-value list `val` of a satisfying assignment.
+    """
+    rng = random.Random(seed)
+    N = nv + 1
+    cb = 2.06
+    occ = [[] for _ in range(2 * N)]
+    for ci, c in enumerate(clauses):
+        for l in c:
+            occ[l].append(ci)
+    tl = [0] * N                  # currently true literal of each variable
+    for v in range(1, N):
+        tl[v] = 2 * v if rng.random() < 0.5 else 2 * v + 1
+    numtrue = [0] * len(clauses)
+    for ci, c in enumerate(clauses):
+        numtrue[ci] = sum(1 for l in c if tl[l >> 1] == l)
+    unsat = []
+    pos = [-1] * len(clauses)
+    for ci in range(len(clauses)):
+        if numtrue[ci] == 0:
+            pos[ci] = len(unsat)
+            unsat.append(ci)
+    steps = 0
+    while True:
+        steps += 1
+        if deadline is not None and steps % 2048 == 0 and time.monotonic() > deadline:
+            return None
+        if not unsat:
+            val = [0] * (2 * N)
+            for v in range(1, N):
+                val[tl[v]] = 1
+                val[tl[v] ^ 1] = -1
+            return val
+        ci = unsat[rng.randrange(len(unsat))]
+        cand = clauses[ci]
+        weights = []
+        for l in cand:
+            u = l >> 1
+            brk = 0
+            for cj in occ[tl[u]]:
+                if numtrue[cj] == 1:
+                    brk += 1
+            weights.append(cb ** (-brk))
+        r = rng.random() * sum(weights)
+        pick = cand[-1] >> 1
+        acc = 0.0
+        for l, w in zip(cand, weights):
+            acc += w
+            if r < acc:
+                pick = l >> 1
+                break
+        # flip variable `pick`
+        t = tl[pick]
+        f = t ^ 1
+        for cj in occ[t]:
+            numtrue[cj] -= 1
+            if numtrue[cj] == 0:
+                pos[cj] = len(unsat)
+                unsat.append(cj)
+        for cj in occ[f]:
+            if numtrue[cj] == 0:
+                last = unsat.pop()
+                k = pos[cj]
+                if last != cj:
+                    unsat[k] = last
+                    pos[last] = k
+                pos[cj] = -1
+            numtrue[cj] += 1
+        tl[pick] = f
+
+
+def model_ok(val, raw):
+    """Check that a literal-value list satisfies every original clause."""
+    if val is None:
+        return False
+    for c in raw:
+        if not any(val[2 * x] == 1 if x > 0 else val[-2 * x + 1] == 1 for x in c):
+            return False
+    return True
+
+
+def cpu_count():
+    try:
+        return len(os.sched_getaffinity(0))
+    except AttributeError:
+        return os.cpu_count() or 1
+
+
+def split_variables(nv, clauses, k):
+    """The k most frequently occurring variables: the cube-and-conquer split set."""
+    counts = [0] * (nv + 1)
+    for c in clauses:
+        for l in c:
+            counts[l >> 1] += 1
+    order = sorted(range(1, nv + 1), key=lambda v: -counts[v])
+    return order[:k]
+
+
+def walk_worker(nv, clauses, results):
+    try:
+        results.put(("walk", "sat", probsat(nv, clauses, 12345)))
+    except BaseException as exc:
+        results.put(("walk", "error", repr(exc)))
+
+
+def cube_worker(nv, clauses, split, tasks, results):
+    """Solve cubes (fixed values for the split variables) taken from the task queue."""
+    try:
+        while True:
+            bits = tasks.get()
+            if bits is None:
+                return
+            extra = [[2 * v if (bits >> i) & 1 else 2 * v + 1] for i, v in enumerate(split)]
+            res = dpll_cdcl(nv, [list(c) for c in clauses] + extra)
+            results.put(("cube", "unsat" if res is None else "sat", res))
+    except BaseException as exc:
+        results.put(("cube", "error", repr(exc)))
+
+
+def solve_portfolio(nv, clauses, raw):
+    """Return ('sat', val), ('unsat', None) or ('unknown', None)."""
+    cpus = cpu_count()
+    if cpus < 2:
+        # One CPU: a short local-search slice first, then the complete DPLL search.
+        val = probsat_timed(nv, clauses, 8.0)
+        if model_ok(val, raw):
+            return "sat", val
+        res = dpll_cdcl(nv, [list(c) for c in clauses])
+        if res is None:
+            return "unsat", None
+        return ("sat", res) if model_ok(res, raw) else ("unknown", None)
+
+    ctx = multiprocessing.get_context("fork")
+    results = ctx.Queue()
+    ncdcl = cpus - 1                       # one core is left for local search
+    k = 0
+    if ncdcl >= 2:
+        k = min(3, nv)
+    split = split_variables(nv, clauses, k)
+    tasks = ctx.Queue()
+    tasks.cancel_join_thread()           # never block at exit on unread cube tasks
+    total = 2 ** k
+    for bits in range(total):
+        tasks.put(bits)
+    for _ in range(ncdcl):
+        tasks.put(None)
+
+    procs = [ctx.Process(target=walk_worker, args=(nv, clauses, results), daemon=True)]
+    for _ in range(ncdcl):
+        procs.append(ctx.Process(target=cube_worker, args=(nv, clauses, split, tasks, results),
+                                 daemon=True))
+    for p in procs:
+        p.start()
+    cube_procs = procs[1:]
+    pending = total
+    try:
+        while True:
+            try:
+                kind, status, payload = results.get(timeout=1.0)
+            except queue_module.Empty:
+                if not any(p.is_alive() for p in cube_procs):
+                    return "unknown", None   # DPLL workers are gone without an answer
+                continue
+            if kind == "walk":
+                if status == "sat" and model_ok(payload, raw):
+                    return "sat", payload
+                continue                     # local search gave nothing usable: keep going
+            if status == "error":
+                return "unknown", None
+            if status == "sat":
+                return ("sat", payload) if model_ok(payload, raw) else ("unknown", None)
+            pending -= 1                     # one cube is refuted
+            if pending == 0:
+                return "unsat", None
+    finally:
+        for p in procs:
+            if p.is_alive():
+                p.terminate()
+            p.join()
+
+
+def probsat_timed(nv, clauses, seconds):
+    """probSAT for a limited time; returns the literal-value list or None."""
+    return probsat(nv, clauses, 12345, deadline=time.monotonic() + seconds)
+
+
+def main(argv):
+    if len(argv) != 2:
+        print("usage: solver FILE", file=sys.stderr)
+        return 1
+    with open(argv[1], "r", errors="replace") as f:
+        nv, raw = parse_dimacs(f.read())
+
+    if any(not c for c in raw):          # an empty clause can never be satisfied
+        print("s UNSATISFIABLE")
+        return 20
+
+    clauses = []
+    for c in raw:
+        # Encode literals; drop tautologies and duplicate literals.
+        enc = {2 * x if x > 0 else -2 * x + 1 for x in c}
+        if any((l ^ 1) in enc for l in enc):
+            continue
+        clauses.append(list(enc))
+
+    status, val = solve_portfolio(nv, clauses, raw)
+    if status == "unsat":
+        print("s UNSATISFIABLE")
+        return 20
+    if status != "sat":
+        print("s UNKNOWN")
+        return 0
+
+    model = [0] * (nv + 1)
+    for v in range(1, nv + 1):
+        model[v] = v if val[2 * v] == 1 else -v
+    print("s SATISFIABLE")
+    out = []
+    line = "v"
+    for v in range(1, nv + 1):
+        item = " " + str(model[v])
+        if len(line) + len(item) > 78:
+            out.append(line)
+            line = "v"
+        line += item
+    line += " 0"
+    out.append(line)
+    sys.stdout.write("\n".join(out) + "\n")
+    return 10
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

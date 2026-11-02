@@ -1,0 +1,14 @@
+FAIL
+  ok   uci -> uciok
+  ok   isready -> readyok
+  ok   perft startpos depth 3: want 8902, got 8902
+  ok   perft startpos depth 4: want 197281, got 197281
+  FAIL perft kiwipete depth 3: want 97862, got 4396
+  ok   perft position 3 depth 4: want 43238, got 43238
+  FAIL perft position 4 depth 3: want 9467, got 9835
+  FAIL perft position 5 depth 3: want 62379, got 5183
+  ok   go movetime 1000 from the start position: bestmove b1a3
+  FAIL mate puzzles: solved 8 of 22 (need 18) in 2 s each
+         missed, first 3: mate in 2: 8/k7/3K3R/8/8/8/B7/8 w - - 0 1 (played a2b1); mate in 2: 5K2/1B5k/8/8/8/8/8/3R4 w - - 0 1 (played d1c1); mate in 2: 8/8/K7/2p5/8/Q7/4B3/7k w - - 0 1 (played e2d1)
+  FAIL match vs greedy opponent: 0.0 of 4 (need 3.0)
+         game 1: illegal or missing move 'h6f5' at ply 2; game 1 (white): 0.0 after 2 plies; game 2: illegal or missing move None at ply 1; game 2 (black): 0.0 after 1 plies; game 3: illegal or missing move 'h6f5' at ply 2; game 3 (white): 0.0 after 2 plies; game 4: illegal or missing move None at ply 1; game 4 (black): 0.0 after 1 plies

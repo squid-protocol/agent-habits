@@ -1,0 +1,2 @@
+{"hits": 43, "of": 52, "accuracy": 0.827, "chance": 0.271, "permutation_p": 0.0005}
+{"hits": 41, "of": 50, "accuracy": 0.82, "chance": 0.3, "permutation_p": 0.0005}

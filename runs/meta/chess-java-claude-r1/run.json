@@ -1,0 +1,22 @@
+{
+ "run_id": "chess-java-claude-r1",
+ "task": "chess",
+ "lang": "java",
+ "agent": "claude",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-sonnet-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T17:20:36Z",
+ "ended": "2026-11-01T17:23:20Z",
+ "active_s": 139,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "54c52ff5-9182-4a17-b1c4-245363b85c42",
+ "note": ""
+}

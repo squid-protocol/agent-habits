@@ -1,0 +1,22 @@
+{
+ "run_id": "sat-python-haiku-b-r1",
+ "task": "sat",
+ "lang": "python",
+ "agent": "haiku-b",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-haiku-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T21:24:58Z",
+ "ended": "2026-11-01T22:20:48Z",
+ "active_s": 3266,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "5f5da966-8f71-461d-89dc-71ab5e7719b6",
+ "note": ""
+}

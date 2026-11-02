@@ -1,0 +1,1389 @@
+{
+ "excluded_failed_runs": [
+  "chess-c-haiku-b-r1",
+  "chess-cobol-codex-r1",
+  "sat-c-codex-r1"
+ ],
+ "families": {
+  "A": {
+   "arms": [
+    "S",
+    "X"
+   ],
+   "directional": true,
+   "tests": {
+    "1": {
+     "measure": "doc_per_code_line",
+     "cells": 8,
+     "S_higher": 6,
+     "X_higher": 2,
+     "tie": 0,
+     "predicted": "S > X",
+     "p": 0.1445,
+     "per_cell": [
+      [
+       "chess-c",
+       0.008,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.009,
+       0.0
+      ],
+      [
+       "chess-python",
+       0.004,
+       0.024
+      ],
+      [
+       "chess-rust",
+       0.006,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.023,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.012,
+       0.0
+      ],
+      [
+       "sat-python",
+       0.013,
+       0.023
+      ],
+      [
+       "sat-rust",
+       0.002,
+       0.0
+      ]
+     ],
+     "p_holm": 0.5781
+    },
+    "2": {
+     "measure": "funcs_commented_share",
+     "cells": 8,
+     "S_higher": 3,
+     "X_higher": 2,
+     "tie": 3,
+     "predicted": "S > X",
+     "p": 0.5,
+     "per_cell": [
+      [
+       "chess-c",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.105,
+       0.0
+      ],
+      [
+       "chess-python",
+       0.0,
+       0.091
+      ],
+      [
+       "chess-rust",
+       0.038,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.071,
+       0.0
+      ],
+      [
+       "sat-python",
+       0.0,
+       0.083
+      ],
+      [
+       "sat-rust",
+       0.0,
+       0.0
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "3": {
+     "measure": "early_exit_per_1k",
+     "cells": 8,
+     "S_higher": 1,
+     "X_higher": 7,
+     "tie": 0,
+     "predicted": "X > S",
+     "p": 0.0352,
+     "per_cell": [
+      [
+       "chess-c",
+       80.46,
+       102.041
+      ],
+      [
+       "chess-java",
+       57.522,
+       81.585
+      ],
+      [
+       "chess-python",
+       62.95,
+       80.378
+      ],
+      [
+       "chess-rust",
+       31.983,
+       33.898
+      ],
+      [
+       "sat-cobol",
+       27.446,
+       4.338
+      ],
+      [
+       "sat-java",
+       48.991,
+       82.524
+      ],
+      [
+       "sat-python",
+       29.851,
+       98.592
+      ],
+      [
+       "sat-rust",
+       10.601,
+       32.258
+      ]
+     ],
+     "p_holm": 0.1758
+    },
+    "4": {
+     "measure": "python_helper",
+     "cells": 6,
+     "S_higher": 0,
+     "X_higher": 0,
+     "tie": 6,
+     "predicted": "X > S",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-c",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-rust",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-rust",
+       0.0,
+       0.0
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "5": {
+     "measure": "while_per_1k",
+     "cells": 7,
+     "S_higher": 5,
+     "X_higher": 2,
+     "tie": 0,
+     "predicted": "S > X",
+     "p": 0.2266,
+     "per_cell": [
+      [
+       "chess-c",
+       20.115,
+       29.478
+      ],
+      [
+       "chess-java",
+       7.375,
+       9.324
+      ],
+      [
+       "chess-python",
+       10.791,
+       7.092
+      ],
+      [
+       "chess-rust",
+       11.727,
+       4.622
+      ],
+      [
+       "sat-java",
+       40.346,
+       24.272
+      ],
+      [
+       "sat-python",
+       49.751,
+       28.169
+      ],
+      [
+       "sat-rust",
+       14.134,
+       8.798
+      ]
+     ],
+     "p_holm": 0.6797
+    }
+   }
+  },
+  "B": {
+   "arms": [
+    "K",
+    "X"
+   ],
+   "directional": true,
+   "tests": {
+    "1": {
+     "measure": "doc_per_code_line",
+     "cells": 8,
+     "K_higher": 7,
+     "X_higher": 1,
+     "tie": 0,
+     "predicted": "K > X",
+     "p": 0.0352,
+     "per_cell": [
+      [
+       "chess-c",
+       0.017,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.033,
+       0.0
+      ],
+      [
+       "chess-python",
+       0.017,
+       0.024
+      ],
+      [
+       "chess-rust",
+       0.023,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.116,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.065,
+       0.0
+      ],
+      [
+       "sat-python",
+       0.09,
+       0.023
+      ],
+      [
+       "sat-rust",
+       0.072,
+       0.0
+      ]
+     ],
+     "p_holm": 0.1406
+    },
+    "2": {
+     "measure": "funcs_commented_share",
+     "cells": 8,
+     "K_higher": 8,
+     "X_higher": 0,
+     "tie": 0,
+     "predicted": "K > X",
+     "p": 0.0039,
+     "per_cell": [
+      [
+       "chess-c",
+       0.07,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.255,
+       0.0
+      ],
+      [
+       "chess-python",
+       0.15,
+       0.091
+      ],
+      [
+       "chess-rust",
+       0.234,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.848,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.385,
+       0.0
+      ],
+      [
+       "sat-python",
+       0.667,
+       0.083
+      ],
+      [
+       "sat-rust",
+       0.526,
+       0.0
+      ]
+     ],
+     "p_holm": 0.0195
+    },
+    "3": {
+     "measure": "early_exit_per_1k",
+     "cells": 8,
+     "K_higher": 2,
+     "X_higher": 6,
+     "tie": 0,
+     "predicted": "X > K",
+     "p": 0.1445,
+     "per_cell": [
+      [
+       "chess-c",
+       64.483,
+       102.041
+      ],
+      [
+       "chess-java",
+       73.099,
+       81.585
+      ],
+      [
+       "chess-python",
+       94.406,
+       80.378
+      ],
+      [
+       "chess-rust",
+       38.71,
+       33.898
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       4.338
+      ],
+      [
+       "sat-java",
+       48.096,
+       82.524
+      ],
+      [
+       "sat-python",
+       70.175,
+       98.592
+      ],
+      [
+       "sat-rust",
+       12.598,
+       32.258
+      ]
+     ],
+     "p_holm": 0.4336
+    },
+    "4": {
+     "measure": "python_helper",
+     "cells": 6,
+     "K_higher": 0,
+     "X_higher": 0,
+     "tie": 6,
+     "predicted": "X > K",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-c",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-rust",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-rust",
+       0.0,
+       0.0
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "5": {
+     "measure": "while_per_1k",
+     "cells": 7,
+     "K_higher": 4,
+     "X_higher": 3,
+     "tie": 0,
+     "predicted": "K > X",
+     "p": 0.5,
+     "per_cell": [
+      [
+       "chess-c",
+       11.259,
+       29.478
+      ],
+      [
+       "chess-java",
+       3.899,
+       9.324
+      ],
+      [
+       "chess-python",
+       8.741,
+       7.092
+      ],
+      [
+       "chess-rust",
+       4.608,
+       4.622
+      ],
+      [
+       "sat-java",
+       26.052,
+       24.272
+      ],
+      [
+       "sat-python",
+       30.075,
+       28.169
+      ],
+      [
+       "sat-rust",
+       12.598,
+       8.798
+      ]
+     ],
+     "p_holm": 1.0
+    }
+   }
+  },
+  "C": {
+   "arms": [
+    "K",
+    "S"
+   ],
+   "directional": false,
+   "tests": {
+    "1": {
+     "measure": "doc_per_code_line",
+     "cells": 10,
+     "K_higher": 10,
+     "S_higher": 0,
+     "tie": 0,
+     "predicted": "two-sided",
+     "p": 0.002,
+     "per_cell": [
+      [
+       "chess-c",
+       0.017,
+       0.008
+      ],
+      [
+       "chess-cobol",
+       0.048,
+       0.014
+      ],
+      [
+       "chess-java",
+       0.033,
+       0.009
+      ],
+      [
+       "chess-python",
+       0.017,
+       0.004
+      ],
+      [
+       "chess-rust",
+       0.023,
+       0.006
+      ],
+      [
+       "sat-c",
+       0.119,
+       0.029
+      ],
+      [
+       "sat-cobol",
+       0.116,
+       0.023
+      ],
+      [
+       "sat-java",
+       0.065,
+       0.012
+      ],
+      [
+       "sat-python",
+       0.09,
+       0.013
+      ],
+      [
+       "sat-rust",
+       0.072,
+       0.002
+      ]
+     ],
+     "p_holm": 0.0098
+    },
+    "2": {
+     "measure": "funcs_commented_share",
+     "cells": 10,
+     "K_higher": 10,
+     "S_higher": 0,
+     "tie": 0,
+     "predicted": "two-sided",
+     "p": 0.002,
+     "per_cell": [
+      [
+       "chess-c",
+       0.07,
+       0.0
+      ],
+      [
+       "chess-cobol",
+       0.627,
+       0.182
+      ],
+      [
+       "chess-java",
+       0.255,
+       0.105
+      ],
+      [
+       "chess-python",
+       0.15,
+       0.0
+      ],
+      [
+       "chess-rust",
+       0.234,
+       0.038
+      ],
+      [
+       "sat-c",
+       0.321,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.848,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.385,
+       0.071
+      ],
+      [
+       "sat-python",
+       0.667,
+       0.0
+      ],
+      [
+       "sat-rust",
+       0.526,
+       0.0
+      ]
+     ],
+     "p_holm": 0.0098
+    },
+    "3": {
+     "measure": "early_exit_per_1k",
+     "cells": 10,
+     "K_higher": 6,
+     "S_higher": 3,
+     "tie": 1,
+     "predicted": "two-sided",
+     "p": 0.5078,
+     "per_cell": [
+      [
+       "chess-c",
+       64.483,
+       80.46
+      ],
+      [
+       "chess-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-java",
+       73.099,
+       57.522
+      ],
+      [
+       "chess-python",
+       94.406,
+       62.95
+      ],
+      [
+       "chess-rust",
+       38.71,
+       31.983
+      ],
+      [
+       "sat-c",
+       57.26,
+       43.836
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       27.446
+      ],
+      [
+       "sat-java",
+       48.096,
+       48.991
+      ],
+      [
+       "sat-python",
+       70.175,
+       29.851
+      ],
+      [
+       "sat-rust",
+       12.598,
+       10.601
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "4": {
+     "measure": "python_helper",
+     "cells": 8,
+     "K_higher": 0,
+     "S_higher": 0,
+     "tie": 8,
+     "predicted": "two-sided",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-c",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-rust",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-c",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-rust",
+       0.0,
+       0.0
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "5": {
+     "measure": "while_per_1k",
+     "cells": 8,
+     "K_higher": 0,
+     "S_higher": 8,
+     "tie": 0,
+     "predicted": "two-sided",
+     "p": 0.0078,
+     "per_cell": [
+      [
+       "chess-c",
+       11.259,
+       20.115
+      ],
+      [
+       "chess-java",
+       3.899,
+       7.375
+      ],
+      [
+       "chess-python",
+       8.741,
+       10.791
+      ],
+      [
+       "chess-rust",
+       4.608,
+       11.727
+      ],
+      [
+       "sat-c",
+       22.495,
+       41.096
+      ],
+      [
+       "sat-java",
+       26.052,
+       40.346
+      ],
+      [
+       "sat-python",
+       30.075,
+       49.751
+      ],
+      [
+       "sat-rust",
+       12.598,
+       14.134
+      ]
+     ],
+     "p_holm": 0.0234
+    }
+   }
+  },
+  "D": {
+   "arms": [
+    "S",
+    "S2"
+   ],
+   "directional": false,
+   "tests": {
+    "1": {
+     "measure": "doc_per_code_line",
+     "cells": 10,
+     "S_higher": 5,
+     "S2_higher": 4,
+     "tie": 1,
+     "predicted": "two-sided",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-c",
+       0.008,
+       0.006
+      ],
+      [
+       "chess-cobol",
+       0.014,
+       0.029
+      ],
+      [
+       "chess-java",
+       0.009,
+       0.011
+      ],
+      [
+       "chess-python",
+       0.004,
+       0.002
+      ],
+      [
+       "chess-rust",
+       0.006,
+       0.001
+      ],
+      [
+       "sat-c",
+       0.029,
+       0.029
+      ],
+      [
+       "sat-cobol",
+       0.023,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.012,
+       0.017
+      ],
+      [
+       "sat-python",
+       0.013,
+       0.027
+      ],
+      [
+       "sat-rust",
+       0.002,
+       0.0
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "2": {
+     "measure": "funcs_commented_share",
+     "cells": 10,
+     "S_higher": 3,
+     "S2_higher": 2,
+     "tie": 5,
+     "predicted": "two-sided",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-c",
+       0.0,
+       0.05
+      ],
+      [
+       "chess-cobol",
+       0.182,
+       0.388
+      ],
+      [
+       "chess-java",
+       0.105,
+       0.091
+      ],
+      [
+       "chess-python",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-rust",
+       0.038,
+       0.0
+      ],
+      [
+       "sat-c",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.071,
+       0.0
+      ],
+      [
+       "sat-python",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-rust",
+       0.0,
+       0.0
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "3": {
+     "measure": "early_exit_per_1k",
+     "cells": 10,
+     "S_higher": 5,
+     "S2_higher": 5,
+     "tie": 0,
+     "predicted": "two-sided",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-c",
+       80.46,
+       75.783
+      ],
+      [
+       "chess-cobol",
+       0.0,
+       14.212
+      ],
+      [
+       "chess-java",
+       57.522,
+       54.775
+      ],
+      [
+       "chess-python",
+       62.95,
+       67.29
+      ],
+      [
+       "chess-rust",
+       31.983,
+       30.303
+      ],
+      [
+       "sat-c",
+       43.836,
+       44.444
+      ],
+      [
+       "sat-cobol",
+       27.446,
+       9.083
+      ],
+      [
+       "sat-java",
+       48.991,
+       19.753
+      ],
+      [
+       "sat-python",
+       29.851,
+       31.414
+      ],
+      [
+       "sat-rust",
+       10.601,
+       11.029
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "4": {
+     "measure": "python_helper",
+     "cells": 8,
+     "S_higher": 0,
+     "S2_higher": 0,
+     "tie": 8,
+     "predicted": "two-sided",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-c",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-rust",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-c",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-rust",
+       0.0,
+       0.0
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "5": {
+     "measure": "while_per_1k",
+     "cells": 8,
+     "S_higher": 5,
+     "S2_higher": 3,
+     "tie": 0,
+     "predicted": "two-sided",
+     "p": 0.7266,
+     "per_cell": [
+      [
+       "chess-c",
+       20.115,
+       24.712
+      ],
+      [
+       "chess-java",
+       7.375,
+       7.022
+      ],
+      [
+       "chess-python",
+       10.791,
+       5.607
+      ],
+      [
+       "chess-rust",
+       11.727,
+       6.734
+      ],
+      [
+       "sat-c",
+       41.096,
+       41.667
+      ],
+      [
+       "sat-java",
+       40.346,
+       37.037
+      ],
+      [
+       "sat-python",
+       49.751,
+       52.356
+      ],
+      [
+       "sat-rust",
+       14.134,
+       12.868
+      ]
+     ],
+     "p_holm": 1.0
+    }
+   }
+  },
+  "E": {
+   "arms": [
+    "K",
+    "K2"
+   ],
+   "directional": false,
+   "tests": {
+    "1": {
+     "measure": "doc_per_code_line",
+     "cells": 9,
+     "K_higher": 6,
+     "K2_higher": 3,
+     "tie": 0,
+     "predicted": "two-sided",
+     "p": 0.5078,
+     "per_cell": [
+      [
+       "chess-cobol",
+       0.048,
+       0.005
+      ],
+      [
+       "chess-java",
+       0.033,
+       0.026
+      ],
+      [
+       "chess-python",
+       0.017,
+       0.036
+      ],
+      [
+       "chess-rust",
+       0.023,
+       0.043
+      ],
+      [
+       "sat-c",
+       0.119,
+       0.047
+      ],
+      [
+       "sat-cobol",
+       0.116,
+       0.062
+      ],
+      [
+       "sat-java",
+       0.065,
+       0.062
+      ],
+      [
+       "sat-python",
+       0.09,
+       0.077
+      ],
+      [
+       "sat-rust",
+       0.072,
+       0.099
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "2": {
+     "measure": "funcs_commented_share",
+     "cells": 9,
+     "K_higher": 6,
+     "K2_higher": 3,
+     "tie": 0,
+     "predicted": "two-sided",
+     "p": 0.5078,
+     "per_cell": [
+      [
+       "chess-cobol",
+       0.627,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.255,
+       0.158
+      ],
+      [
+       "chess-python",
+       0.15,
+       0.243
+      ],
+      [
+       "chess-rust",
+       0.234,
+       0.239
+      ],
+      [
+       "sat-c",
+       0.321,
+       0.31
+      ],
+      [
+       "sat-cobol",
+       0.848,
+       0.625
+      ],
+      [
+       "sat-java",
+       0.385,
+       0.409
+      ],
+      [
+       "sat-python",
+       0.667,
+       0.571
+      ],
+      [
+       "sat-rust",
+       0.526,
+       0.385
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "3": {
+     "measure": "early_exit_per_1k",
+     "cells": 9,
+     "K_higher": 3,
+     "K2_higher": 4,
+     "tie": 2,
+     "predicted": "two-sided",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-java",
+       73.099,
+       77.375
+      ],
+      [
+       "chess-python",
+       94.406,
+       90.909
+      ],
+      [
+       "chess-rust",
+       38.71,
+       33.607
+      ],
+      [
+       "sat-c",
+       57.26,
+       58.296
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-java",
+       48.096,
+       35.533
+      ],
+      [
+       "sat-python",
+       70.175,
+       92.949
+      ],
+      [
+       "sat-rust",
+       12.598,
+       18.072
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "4": {
+     "measure": "python_helper",
+     "cells": 7,
+     "K_higher": 0,
+     "K2_higher": 1,
+     "tie": 6,
+     "predicted": "two-sided",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-java",
+       0.0,
+       0.0
+      ],
+      [
+       "chess-rust",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-c",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-cobol",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-java",
+       0.0,
+       0.0
+      ],
+      [
+       "sat-rust",
+       0.0,
+       1.0
+      ]
+     ],
+     "p_holm": 1.0
+    },
+    "5": {
+     "measure": "while_per_1k",
+     "cells": 7,
+     "K_higher": 3,
+     "K2_higher": 4,
+     "tie": 0,
+     "predicted": "two-sided",
+     "p": 1.0,
+     "per_cell": [
+      [
+       "chess-java",
+       3.899,
+       5.877
+      ],
+      [
+       "chess-python",
+       8.741,
+       4.785
+      ],
+      [
+       "chess-rust",
+       4.608,
+       5.738
+      ],
+      [
+       "sat-c",
+       22.495,
+       24.664
+      ],
+      [
+       "sat-java",
+       26.052,
+       21.997
+      ],
+      [
+       "sat-python",
+       30.075,
+       38.462
+      ],
+      [
+       "sat-rust",
+       12.598,
+       10.542
+      ]
+     ],
+     "p_holm": 1.0
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,316 @@
+#!/usr/bin/env python3
+import sys, heapq
+
+def parse(path):
+    nv = 0
+    clauses = []
+    cur = []
+    with open(path) as f:
+        for line in f:
+            s = line.strip()
+            if not s or s[0] == 'c':
+                continue
+            if s[0] == '%':
+                break
+            if s[0] == 'p':
+                nv = int(s.split()[2])
+                continue
+            for t in s.split():
+                x = int(t)
+                if x == 0:
+                    clauses.append(cur)
+                    cur = []
+                else:
+                    cur.append(x)
+    if cur:
+        clauses.append(cur)
+    return nv, clauses
+
+def luby(i):
+    k = 1
+    while (1 << k) - 1 < i:
+        k += 1
+    while True:
+        if (1 << k) - 1 == i:
+            return 1 << (k - 1)
+        i -= (1 << (k - 1)) - 1
+        k = 1
+        while (1 << k) - 1 < i:
+            k += 1
+
+def solve(nv, raw):
+    for c in raw:
+        for x in c:
+            if abs(x) > nv:
+                nv = abs(x)
+    vals = [0] * (2 * nv + 2)
+    level = [0] * (nv + 1)
+    reason = [None] * (nv + 1)
+    phase = [1] * (nv + 1)  # 1 -> negative literal first
+    act = [0.0] * (nv + 1)
+    seen = [0] * (nv + 1)
+    watches = [[] for _ in range(2 * nv + 2)]
+    trail = []
+    trail_lim = []
+    units = []
+    clauses = []
+    for c in raw:
+        s = set()
+        taut = False
+        for x in c:
+            l = 2 * x if x > 0 else -2 * x + 1
+            if l ^ 1 in s:
+                taut = True
+                break
+            s.add(l)
+        if taut:
+            continue
+        if not s:
+            return None
+        if len(s) == 1:
+            units.append(next(iter(s)))
+        else:
+            cl = list(s)
+            clauses.append(cl)
+            watches[cl[0]].append(cl)
+            watches[cl[1]].append(cl)
+    for l in units:
+        if vals[l] == -1:
+            return None
+        if vals[l] == 0:
+            vals[l] = 1
+            vals[l ^ 1] = -1
+            trail.append(l)
+    # initial activity: occurrence counts
+    for c in clauses:
+        for l in c:
+            act[l >> 1] += 1e-3
+    heap = [(-act[v], v) for v in range(1, nv + 1)]
+    heapq.heapify(heap)
+    qhead = 0
+    inc = 1.0
+    learnts = []
+    conflicts = 0
+    restart_n = 1
+    next_restart = 100 * luby(1)
+    max_learnts = max(2000, len(clauses) // 3)
+    hpush = heapq.heappush
+    hpop = heapq.heappop
+
+    while True:
+        # propagate
+        confl = None
+        while qhead < len(trail):
+            p = trail[qhead]
+            qhead += 1
+            fl = p ^ 1
+            ws = watches[fl]
+            i = j = 0
+            n = len(ws)
+            while i < n:
+                c = ws[i]
+                i += 1
+                if c[0] == fl:
+                    c[0] = c[1]
+                    c[1] = fl
+                first = c[0]
+                if vals[first] == 1:
+                    ws[j] = c
+                    j += 1
+                    continue
+                for k in range(2, len(c)):
+                    l = c[k]
+                    if vals[l] != -1:
+                        c[1] = l
+                        c[k] = fl
+                        watches[l].append(c)
+                        break
+                else:
+                    ws[j] = c
+                    j += 1
+                    if vals[first] == -1:
+                        confl = c
+                        while i < n:
+                            ws[j] = ws[i]
+                            j += 1
+                            i += 1
+                        break
+                    vals[first] = 1
+                    vals[first ^ 1] = -1
+                    v = first >> 1
+                    level[v] = len(trail_lim)
+                    reason[v] = c
+                    trail.append(first)
+            del ws[j:]
+            if confl is not None:
+                qhead = len(trail)
+                break
+
+        if confl is not None:
+            conflicts += 1
+            if not trail_lim:
+                return None
+            cur = len(trail_lim)
+            learnt = [0]
+            pathC = 0
+            p = -1
+            idx = len(trail) - 1
+            while True:
+                for k in range(0 if p == -1 else 1, len(confl)):
+                    q = confl[k]
+                    v = q >> 1
+                    if not seen[v] and level[v] > 0:
+                        seen[v] = 1
+                        act[v] += inc
+                        if level[v] >= cur:
+                            pathC += 1
+                        else:
+                            learnt.append(q)
+                while not seen[trail[idx] >> 1]:
+                    idx -= 1
+                p = trail[idx]
+                idx -= 1
+                pv = p >> 1
+                confl = reason[pv]
+                seen[pv] = 0
+                pathC -= 1
+                if pathC == 0:
+                    break
+            learnt[0] = p ^ 1
+            # minimize
+            allq = learnt[:]
+            out = [learnt[0]]
+            for q in learnt[1:]:
+                r = reason[q >> 1]
+                if r is None:
+                    out.append(q)
+                    continue
+                for k in range(1, len(r)):
+                    x = r[k] >> 1
+                    if not seen[x] and level[x] > 0:
+                        out.append(q)
+                        break
+            for q in allq:
+                seen[q >> 1] = 0
+            learnt = out
+            # bump already done; decay
+            inc *= 1.05
+            if inc > 1e100:
+                for v in range(1, nv + 1):
+                    act[v] *= 1e-100
+                inc *= 1e-100
+                heap = [(-act[v], v) for v in range(1, nv + 1) if vals[2 * v] == 0]
+                heapq.heapify(heap)
+            if len(learnt) == 1:
+                bt = 0
+            else:
+                mi = 1
+                ml = level[learnt[1] >> 1]
+                for k in range(2, len(learnt)):
+                    lv = level[learnt[k] >> 1]
+                    if lv > ml:
+                        ml = lv
+                        mi = k
+                learnt[1], learnt[mi] = learnt[mi], learnt[1]
+                bt = ml
+            # backtrack
+            if len(trail_lim) > bt:
+                st = trail_lim[bt]
+                for t in range(len(trail) - 1, st - 1, -1):
+                    l = trail[t]
+                    v = l >> 1
+                    phase[v] = l & 1
+                    vals[l] = 0
+                    vals[l ^ 1] = 0
+                    reason[v] = None
+                    hpush(heap, (-act[v], v))
+                del trail[st:]
+                del trail_lim[bt:]
+                qhead = len(trail)
+            a = learnt[0]
+            if len(learnt) == 1:
+                reason[a >> 1] = None
+            else:
+                watches[learnt[0]].append(learnt)
+                watches[learnt[1]].append(learnt)
+                lv = len({level[x >> 1] for x in learnt})
+                learnts.append((lv, len(learnt), learnt))
+                reason[a >> 1] = learnt
+            vals[a] = 1
+            vals[a ^ 1] = -1
+            level[a >> 1] = bt
+            trail.append(a)
+            continue
+
+        # restart
+        if conflicts >= next_restart:
+            restart_n += 1
+            next_restart = conflicts + 100 * luby(restart_n)
+            if trail_lim:
+                st = trail_lim[0]
+                for t in range(len(trail) - 1, st - 1, -1):
+                    l = trail[t]
+                    v = l >> 1
+                    phase[v] = l & 1
+                    vals[l] = 0
+                    vals[l ^ 1] = 0
+                    reason[v] = None
+                    hpush(heap, (-act[v], v))
+                del trail[st:]
+                del trail_lim[:]
+                qhead = len(trail)
+            # reduce db
+            if len(learnts) > max_learnts:
+                learnts.sort(key=lambda t: (t[0], t[1]))
+                keep = learnts[:len(learnts) // 2]
+                dead = set()
+                for t in learnts[len(learnts) // 2:]:
+                    c = t[2]
+                    if t[0] <= 2:
+                        keep.append(t)
+                        continue
+                    v = c[0] >> 1
+                    if reason[v] is c and vals[c[0]] == 1:
+                        keep.append(t)
+                    else:
+                        dead.add(id(c))
+                learnts = keep
+                for ws in watches:
+                    if ws:
+                        ws[:] = [c for c in ws if id(c) not in dead]
+                max_learnts = int(max_learnts * 1.1)
+            continue
+
+        # decide
+        v = 0
+        while heap:
+            _, x = hpop(heap)
+            if vals[2 * x] == 0:
+                v = x
+                break
+        if v == 0:
+            return vals
+        l = 2 * v + phase[v]
+        trail_lim.append(len(trail))
+        vals[l] = 1
+        vals[l ^ 1] = -1
+        level[v] = len(trail_lim)
+        reason[v] = None
+        trail.append(l)
+
+def main():
+    nv, cl = parse(sys.argv[1])
+    res = solve(nv, cl)
+    if res is None:
+        print("s UNSATISFIABLE")
+        sys.exit(20)
+    n = max(nv, (len(res) - 2) // 2)
+    lits = [str(v if res[2 * v] == 1 else -v) for v in range(1, n + 1)]
+    print("s SATISFIABLE")
+    for i in range(0, len(lits), 20):
+        print("v " + " ".join(lits[i:i + 20]))
+    print("v 0")
+    sys.stdout.flush()
+    sys.exit(10)
+
+main()

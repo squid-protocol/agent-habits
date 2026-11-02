@@ -1,0 +1,3 @@
+run_id,task,lang,agent,rep,cli,model,setting,image,started,ended,active_s,sessions,nudges,limit_interruptions,limit_wait_s,cap_hit,final_check,session_id,note
+sat-rust-codex-r1,sat,rust,codex,1,Codex CLI 0.166.0,gpt-6-luna,model_reasoning_effort=medium,sha256:8f66cca4bca0,2026-11-01T13:56:07Z,2026-11-01T13:56:58Z,49,1,0,0,0,False,PASS,01a19765-6b21-78b0-8098-619c0e4f8b5b,
+chess-rust-claude-r1,chess,rust,claude,1,Claude Code 2.1.316,claude-sonnet-5-5,default effort,sha256:8f66cca4bca0,2026-11-01T13:56:58Z,2026-11-01T13:58:43Z,103,1,0,0,0,False,PASS,a3d8b0d1-635a-4d0c-b8f5-3434d0323515,

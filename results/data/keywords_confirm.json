@@ -1,0 +1,693 @@
+{
+ "S6_registered": {
+  "X uses CALL more than S": {
+   "per_cell": [
+    [
+     "chess-cobol",
+     0,
+     0
+    ],
+    [
+     "sat-cobol",
+     0,
+     0
+    ]
+   ],
+   "agree": 0,
+   "of": 0,
+   "p_one_sided": 1.0
+  },
+  "S uses EVALUATE more than X": {
+   "per_cell": [
+    [
+     "chess-cobol",
+     5.51,
+     2.46
+    ],
+    [
+     "sat-cobol",
+     0,
+     0
+    ]
+   ],
+   "agree": 1,
+   "of": 1,
+   "p_one_sided": 0.5
+  }
+ },
+ "replication_of_exploratory_leans": [
+  {
+   "lang": "cobol",
+   "keyword": "CALL",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "cobol",
+   "keyword": "CALL",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 0,
+   "cells_against": 1,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "cobol",
+   "keyword": "GOBACK",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "cobol",
+   "keyword": "GOBACK",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 0,
+   "cells_against": 1,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "cobol",
+   "keyword": "COMP-5",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 1,
+   "cells_against": 1,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "cobol",
+   "keyword": "COMP-5",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 0,
+   "cells_against": 2,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "cobol",
+   "keyword": "LINKAGE",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "cobol",
+   "keyword": "LINKAGE",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 0,
+   "cells_against": 1,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "cobol",
+   "keyword": "EXIT",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 1,
+   "cells_against": 1,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "cobol",
+   "keyword": "EXIT",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 2,
+   "cells_against": 0,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "cobol",
+   "keyword": "FILLER",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "cobol",
+   "keyword": "FILLER",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "cobol",
+   "keyword": "REDEFINES",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "cobol",
+   "keyword": "REDEFINES",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "cobol",
+   "keyword": "EVALUATE",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "cobol",
+   "keyword": "EVALUATE",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 2,
+   "cells_against": 0,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "cobol",
+   "keyword": "COMPUTE",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 2,
+   "cells_against": 0,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "cobol",
+   "keyword": "COMPUTE",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 1,
+   "cells_against": 1,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "cobol",
+   "keyword": "DISPLAY",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 1,
+   "cells_against": 1,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "cobol",
+   "keyword": "DISPLAY",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 1,
+   "cells_against": 1,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "rust",
+   "keyword": "#[inline",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "rust",
+   "keyword": "#[inline",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "rust",
+   "keyword": "unsafe",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "rust",
+   "keyword": "unsafe",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "rust",
+   "keyword": "static",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "rust",
+   "keyword": "static",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "c",
+   "keyword": "bool",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "c",
+   "keyword": "bool",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "c",
+   "keyword": "extern",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "c",
+   "keyword": "extern",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "java",
+   "keyword": "throw",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 2,
+   "cells_against": 0,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "java",
+   "keyword": "throw",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 2,
+   "cells_against": 0,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "java",
+   "keyword": "synchronized",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "java",
+   "keyword": "synchronized",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "python",
+   "keyword": "@dataclass",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "python",
+   "keyword": "@dataclass",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 0,
+   "cells_against": 0,
+   "tie_or_unused": 2
+  },
+  {
+   "lang": "python",
+   "keyword": "pass",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "python",
+   "keyword": "pass",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 1,
+   "cells_against": 0,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "python",
+   "keyword": "with",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 0,
+   "cells_against": 1,
+   "tie_or_unused": 1
+  },
+  {
+   "lang": "python",
+   "keyword": "with",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 0,
+   "cells_against": 2,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "*",
+   "keyword": "while",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 6,
+   "cells_against": 2,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "*",
+   "keyword": "while",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 4,
+   "cells_against": 4,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "*",
+   "keyword": "return",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 8,
+   "cells_against": 0,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "*",
+   "keyword": "return",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 6,
+   "cells_against": 2,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "*",
+   "keyword": "if",
+   "exploratory_side": "codex",
+   "claude_arm": "sonnet",
+   "cells_agree": 4,
+   "cells_against": 4,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "*",
+   "keyword": "if",
+   "exploratory_side": "codex",
+   "claude_arm": "haiku",
+   "cells_agree": 7,
+   "cells_against": 1,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "*",
+   "keyword": "for",
+   "exploratory_side": "claude",
+   "claude_arm": "sonnet",
+   "cells_agree": 3,
+   "cells_against": 5,
+   "tie_or_unused": 0
+  },
+  {
+   "lang": "*",
+   "keyword": "for",
+   "exploratory_side": "claude",
+   "claude_arm": "haiku",
+   "cells_agree": 2,
+   "cells_against": 6,
+   "tie_or_unused": 0
+  }
+ ],
+ "discovery_exploratory": {
+  "sonnet vs codex": {
+   "consistent_all_cells": [
+    {
+     "keyword": "return",
+     "more_in": "codex",
+     "cells": 8,
+     "p_two_sided": 0.0078
+    },
+    {
+     "keyword": "import",
+     "more_in": "codex",
+     "cells": 4,
+     "p_two_sided": 0.125
+    },
+    {
+     "keyword": "try",
+     "more_in": "codex",
+     "cells": 4,
+     "p_two_sided": 0.125
+    },
+    {
+     "keyword": "char",
+     "more_in": "codex",
+     "cells": 3,
+     "p_two_sided": 0.25
+    }
+   ],
+   "only_one_side": {
+    "sonnet only (c)": [
+     "long(13)",
+     "NULL(7)",
+     "const(5)",
+     "signed(4)",
+     "double(4)"
+    ],
+    "sonnet only (cobol)": [
+     "VALUE(58)",
+     "GO(24)",
+     "STRING(2)",
+     "TIMES(2)",
+     "POINTER(2)"
+    ],
+    "codex only (cobol)": [
+     "COMP-5(3)",
+     "STRING(2)"
+    ],
+    "sonnet only (java)": [
+     "null(10)",
+     "byte(9)",
+     "break(8)",
+     "float(2)"
+    ],
+    "codex only (java)": [
+     "throw(3)"
+    ],
+    "codex only (python)": [
+     "yield(9)",
+     "raise(6)",
+     "finally(5)",
+     "elif(3)",
+     "nonlocal(2)"
+    ]
+   }
+  },
+  "haiku vs codex": {
+   "consistent_all_cells": [
+    {
+     "keyword": "const",
+     "more_in": "haiku",
+     "cells": 4,
+     "p_two_sided": 0.125
+    },
+    {
+     "keyword": "try",
+     "more_in": "codex",
+     "cells": 4,
+     "p_two_sided": 0.125
+    },
+    {
+     "keyword": "as",
+     "more_in": "haiku",
+     "cells": 3,
+     "p_two_sided": 0.25
+    }
+   ],
+   "only_one_side": {
+    "haiku only (c)": [
+     "bool(27)",
+     "true(23)",
+     "false(21)",
+     "long(17)",
+     "const(14)",
+     "double(12)",
+     "NULL(6)",
+     "default(2)"
+    ],
+    "haiku only (cobol)": [
+     "VALUE(236)",
+     "CONTENT(30)",
+     "TIMES(30)",
+     "USING(20)",
+     "CALL(18)",
+     "REFERENCE(14)",
+     "GOBACK(13)",
+     "WHEN(7)"
+    ],
+    "codex only (cobol)": [
+     "EXIT(12)"
+    ],
+    "haiku only (java)": [
+     "private(112)",
+     "null(10)",
+     "byte(9)",
+     "break(7)",
+     "default(3)"
+    ],
+    "codex only (java)": [
+     "volatile(2)"
+    ],
+    "codex only (python)": [
+     "yield(9)",
+     "raise(6)",
+     "finally(5)",
+     "elif(3)",
+     "nonlocal(2)"
+    ],
+    "haiku only (rust)": [
+     "pub(62)",
+     "#[inline(7)",
+     "mod(3)",
+     "crate(3)",
+     "Box(2)",
+     "static(2)"
+    ],
+    "codex only (rust)": [
+     "Self(2)"
+    ]
+   }
+  },
+  "haiku vs sonnet": {
+   "consistent_all_cells": [
+    {
+     "keyword": "if",
+     "more_in": "sonnet",
+     "cells": 8,
+     "p_two_sided": 0.0078
+    },
+    {
+     "keyword": "while",
+     "more_in": "sonnet",
+     "cells": 8,
+     "p_two_sided": 0.0078
+    },
+    {
+     "keyword": "class",
+     "more_in": "haiku",
+     "cells": 4,
+     "p_two_sided": 0.125
+    },
+    {
+     "keyword": "import",
+     "more_in": "haiku",
+     "cells": 4,
+     "p_two_sided": 0.125
+    }
+   ],
+   "only_one_side": {
+    "haiku only (c)": [
+     "bool(27)",
+     "true(23)",
+     "false(21)",
+     "enum(4)",
+     "default(2)",
+     "inline(2)"
+    ],
+    "sonnet only (c)": [
+     "signed(4)"
+    ],
+    "haiku only (cobol)": [
+     "COMP-5(135)",
+     "CONTENT(30)",
+     "USING(20)",
+     "CALL(18)",
+     "REFERENCE(14)",
+     "GOBACK(13)",
+     "WHEN(7)",
+     "DIVIDE(3)"
+    ],
+    "sonnet only (cobol)": [
+     "EXIT(25)",
+     "GO(24)",
+     "THRU(8)",
+     "ALL(2)"
+    ],
+    "haiku only (java)": [
+     "private(112)",
+     "this(9)",
+     "default(3)",
+     "throw(3)",
+     "synchronized(2)",
+     "catch(2)",
+     "try(2)"
+    ],
+    "sonnet only (java)": [
+     "byte(5)",
+     "float(2)"
+    ],
+    "haiku only (rust)": [
+     "pub(62)",
+     "#[inline(7)",
+     "mod(3)",
+     "crate(3)",
+     "Box(2)"
+    ],
+    "sonnet only (rust)": [
+     "Self(3)"
+    ]
+   }
+  }
+ }
+}

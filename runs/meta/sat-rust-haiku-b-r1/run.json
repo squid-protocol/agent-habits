@@ -1,0 +1,22 @@
+{
+ "run_id": "sat-rust-haiku-b-r1",
+ "task": "sat",
+ "lang": "rust",
+ "agent": "haiku-b",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-haiku-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T23:45:23Z",
+ "ended": "2026-11-02T00:08:38Z",
+ "active_s": 1381,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "7aa651d0-50b1-4a66-abfd-6a91b8202c2f",
+ "note": ""
+}

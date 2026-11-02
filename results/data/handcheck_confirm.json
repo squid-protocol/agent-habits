@@ -1,0 +1,706 @@
+{
+ "overall": 0.54,
+ "n": 100,
+ "blocks": [
+  {
+   "block_id": "19",
+   "arm": "K2",
+   "hand_label": "why/rationale",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "48",
+   "arm": "K",
+   "hand_label": "what/restates",
+   "rule_label": "algorithm/domain reference",
+   "hard": true
+  },
+  {
+   "block_id": "49",
+   "arm": "K",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "invariant/assumption/units",
+   "hard": false
+  },
+  {
+   "block_id": "53",
+   "arm": "K",
+   "hand_label": "licence/boilerplate",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "60",
+   "arm": "K",
+   "hand_label": "algorithm/domain reference",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "74",
+   "arm": "S",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "79",
+   "arm": "S",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "80",
+   "arm": "S",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "85",
+   "arm": "S",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "97",
+   "arm": "K",
+   "hand_label": "doc/API",
+   "rule_label": "why/rationale",
+   "hard": false
+  },
+  {
+   "block_id": "101",
+   "arm": "K",
+   "hand_label": "doc/API",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "143",
+   "arm": "S2",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "149",
+   "arm": "S2",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": true
+  },
+  {
+   "block_id": "156",
+   "arm": "S2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": true
+  },
+  {
+   "block_id": "158",
+   "arm": "S2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "159",
+   "arm": "S2",
+   "hand_label": "doc/API",
+   "rule_label": "banner/divider",
+   "hard": true
+  },
+  {
+   "block_id": "161",
+   "arm": "S2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "166",
+   "arm": "S2",
+   "hand_label": "doc/API",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "171",
+   "arm": "S2",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "invariant/assumption/units",
+   "hard": false
+  },
+  {
+   "block_id": "174",
+   "arm": "S",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "invariant/assumption/units",
+   "hard": false
+  },
+  {
+   "block_id": "184",
+   "arm": "K2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "193",
+   "arm": "K2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "202",
+   "arm": "K",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "227",
+   "arm": "S2",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "229",
+   "arm": "S2",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "235",
+   "arm": "X",
+   "hand_label": "licence/boilerplate",
+   "rule_label": "licence/boilerplate",
+   "hard": false
+  },
+  {
+   "block_id": "236",
+   "arm": "X",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "238",
+   "arm": "X",
+   "hand_label": "why/rationale",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "253",
+   "arm": "K2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "281",
+   "arm": "S",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "288",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "289",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "291",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "301",
+   "arm": "K2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "373",
+   "arm": "K2",
+   "hand_label": "other",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "390",
+   "arm": "K2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "406",
+   "arm": "K2",
+   "hand_label": "algorithm/domain reference",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "425",
+   "arm": "K2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "455",
+   "arm": "K",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "501",
+   "arm": "K",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "541",
+   "arm": "S2",
+   "hand_label": "why/rationale",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "542",
+   "arm": "S2",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "543",
+   "arm": "S2",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "545",
+   "arm": "S2",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "547",
+   "arm": "S",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "548",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": true
+  },
+  {
+   "block_id": "557",
+   "arm": "K2",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "560",
+   "arm": "K2",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "563",
+   "arm": "K2",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": true
+  },
+  {
+   "block_id": "567",
+   "arm": "K2",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "589",
+   "arm": "K",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "630",
+   "arm": "S2",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "637",
+   "arm": "S2",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "640",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "645",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "652",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "653",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "655",
+   "arm": "S",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "663",
+   "arm": "K2",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "673",
+   "arm": "K2",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "717",
+   "arm": "K",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "728",
+   "arm": "K",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": true
+  },
+  {
+   "block_id": "791",
+   "arm": "K",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "793",
+   "arm": "K",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "794",
+   "arm": "K",
+   "hand_label": "algorithm/domain reference",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "816",
+   "arm": "K",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "817",
+   "arm": "K",
+   "hand_label": "why/rationale",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "834",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "836",
+   "arm": "S",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "840",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "844",
+   "arm": "S",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "847",
+   "arm": "X",
+   "hand_label": "licence/boilerplate",
+   "rule_label": "licence/boilerplate",
+   "hard": false
+  },
+  {
+   "block_id": "850",
+   "arm": "X",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "851",
+   "arm": "X",
+   "hand_label": "why/rationale",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "852",
+   "arm": "X",
+   "hand_label": "why/rationale",
+   "rule_label": "invariant/assumption/units",
+   "hard": false
+  },
+  {
+   "block_id": "853",
+   "arm": "X",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": true
+  },
+  {
+   "block_id": "854",
+   "arm": "X",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "855",
+   "arm": "X",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "857",
+   "arm": "X",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "858",
+   "arm": "X",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "859",
+   "arm": "X",
+   "hand_label": "why/rationale",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "860",
+   "arm": "X",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": true
+  },
+  {
+   "block_id": "861",
+   "arm": "X",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "862",
+   "arm": "X",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "invariant/assumption/units",
+   "hard": true
+  },
+  {
+   "block_id": "863",
+   "arm": "X",
+   "hand_label": "why/rationale",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "864",
+   "arm": "X",
+   "hand_label": "why/rationale",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "865",
+   "arm": "X",
+   "hand_label": "why/rationale",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "866",
+   "arm": "X",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": true
+  },
+  {
+   "block_id": "886",
+   "arm": "K2",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "890",
+   "arm": "K2",
+   "hand_label": "banner/divider",
+   "rule_label": "banner/divider",
+   "hard": false
+  },
+  {
+   "block_id": "915",
+   "arm": "K2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "950",
+   "arm": "K2",
+   "hand_label": "why/rationale",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "1028",
+   "arm": "S2",
+   "hand_label": "what/restates",
+   "rule_label": "invariant/assumption/units",
+   "hard": false
+  },
+  {
+   "block_id": "1030",
+   "arm": "S2",
+   "hand_label": "what/restates",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "1032",
+   "arm": "S2",
+   "hand_label": "what/restates",
+   "rule_label": "what/restates",
+   "hard": false
+  },
+  {
+   "block_id": "1037",
+   "arm": "S2",
+   "hand_label": "what/restates",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  },
+  {
+   "block_id": "1042",
+   "arm": "K2",
+   "hand_label": "doc/API",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "1077",
+   "arm": "K",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "doc/API",
+   "hard": false
+  },
+  {
+   "block_id": "1087",
+   "arm": "K",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "algorithm/domain reference",
+   "hard": true
+  },
+  {
+   "block_id": "1099",
+   "arm": "K",
+   "hand_label": "invariant/assumption/units",
+   "rule_label": "algorithm/domain reference",
+   "hard": false
+  }
+ ]
+}

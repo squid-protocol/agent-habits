@@ -1,0 +1,2 @@
+#!/bin/bash
+exec java -Xss16m -XX:+UseSerialGC -cp "$(dirname "$(readlink -f "$0")")/out" Main

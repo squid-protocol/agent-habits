@@ -1,0 +1,22 @@
+{
+ "run_id": "chess-cobol-haiku-b-r1",
+ "task": "chess",
+ "lang": "cobol",
+ "agent": "haiku-b",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-haiku-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T21:03:44Z",
+ "ended": "2026-11-01T21:24:58Z",
+ "active_s": 1183,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "5a115f98-d3ff-4f07-a23c-fc987840fc32",
+ "note": ""
+}

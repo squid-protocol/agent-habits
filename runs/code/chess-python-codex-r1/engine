@@ -1,0 +1,262 @@
+#!/usr/bin/env python3
+import sys, time, threading
+
+FILES='abcdefgh'; PIECES=' PNBRQK'; VAL=[0,100,320,335,500,950,0]
+KN=[-17,-15,-10,-6,6,10,15,17]; KI=[-9,-8,-7,-1,1,7,8,9]
+
+def sq(s): return (8-int(s[1]))*8+FILES.index(s[0])
+def name(x): return FILES[x%8]+str(8-x//8)
+class Board:
+ def __init__(self): self.setfen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+ def setfen(self,f):
+  a=f.split(); self.b=[0]*64
+  for r,row in enumerate(a[0].split('/')):
+   c=0
+   for ch in row:
+    if ch.isdigit(): c+=int(ch)
+    else: self.b[r*8+c]=(PIECES.index(ch.upper()) if ch.isupper() else -PIECES.index(ch.upper())); c+=1
+  self.side=1 if a[1]=='w' else -1; self.cast=a[2]; self.ep=sq(a[3]) if a[3]!='-' else -1; self.half=int(a[4]) if len(a)>4 else 0
+ def attacked(self,x,by):
+  # pawns
+  r,c=divmod(x,8)
+  pr=r+by
+  if 0<=pr<8:
+   for pc in (c-1,c+1):
+    if 0<=pc<8 and self.b[pr*8+pc]==by: return True
+  for d in KN:
+   y=x+d
+   if 0<=y<64 and abs(y%8-c)<=2 and self.b[y]==by*2:return True
+  for d in KI:
+   y=x+d
+   while 0<=y<64 and abs(y%8-(y-d)%8)<=1:
+    p=self.b[y]
+    if p:
+     if p*by>0 and ((abs(p)==6 and y==x+d) or (abs(d) in (1,8) and abs(p) in (4,5)) or (abs(d) in (7,9) and abs(p) in (3,5))): return True
+     break
+    y+=d
+  return False
+ def king(self,side): return self.b.index(6*side)
+ def check(self,side=None):
+  side=self.side if side is None else side
+  return self.attacked(self.king(side),-side)
+ def pseudo(self):
+  b=self.b; s=self.side
+  for x,p in enumerate(b):
+   if not p or p*s<0: continue
+   t=abs(p); r,c=divmod(x,8)
+   if t==1:
+    step=-8*s; y=x+step
+    if 0<=y<64 and not b[y]:
+     if y//8 in (0,7):
+      for q in 'qrbn': yield (x,y,q)
+     else:
+      yield (x,y,'')
+      z=y+step
+      if (r==6 if s==1 else r==1) and not b[z]: yield (x,z,'')
+    for dc in (-1,1):
+     nc=c+dc; y=x+step+dc
+     if 0<=nc<8 and 0<=y<64 and ((b[y]*s<0) or y==self.ep):
+      if y//8 in (0,7):
+       for q in 'qrbn': yield (x,y,q)
+      else: yield (x,y,'')
+   elif t==2:
+    for d in KN:
+     y=x+d
+     if 0<=y<64 and abs(y%8-c)<=2 and b[y]*s<=0: yield (x,y,'')
+   else:
+    ds=KI if t==6 else (KI if t==3 else (KI if t==4 else (KI if t==5 else ())) )
+    if t==3: ds=(-9,-7,7,9)
+    elif t==4: ds=(-8,-1,1,8)
+    elif t==5: ds=KI
+    for d in ds:
+     y=x+d
+     while 0<=y<64 and abs(y%8-(y-d)%8)<=1:
+      if b[y]*s>0: break
+      yield (x,y,'')
+      if b[y] or t==6: break
+      y+=d
+    if t==6 and not self.check(s):
+     rank=7 if s==1 else 0; home=rank*8+4
+     if x==home:
+      rights='KQ' if s==1 else 'kq'
+      if rights[0] in self.cast and not b[home+1] and not b[home+2] and b[home+3]==s*4 and not self.attacked(home+1,-s) and not self.attacked(home+2,-s): yield (x,home+2,'')
+      if rights[1] in self.cast and not b[home-1] and not b[home-2] and not b[home-3] and b[home-4]==s*4 and not self.attacked(home-1,-s) and not self.attacked(home-2,-s): yield (x,home-2,'')
+ def make(self,m):
+  x,y,q=m; b=self.b; s=self.side; p=b[x]; cap=b[y]; old=(self.cast,self.ep,self.half,cap)
+  b[x]=0
+  if abs(p)==1 and y==self.ep and not cap: b[y+8*s]=0; cap=-s
+  b[y]= (PIECES.index(q.upper())*s if q else p)
+  if abs(p)==6 and abs(y-x)==2:
+   if y>x: b[x+1]=b[x+3]; b[x+3]=0
+   else: b[x-1]=b[x-4]; b[x-4]=0
+  if p==6:self.cast=self.cast.replace('K','').replace('Q','')
+  if p==-6:self.cast=self.cast.replace('k','').replace('q','')
+  if x==63 or y==63:self.cast=self.cast.replace('K','')
+  if x==56 or y==56:self.cast=self.cast.replace('Q','')
+  if x==7 or y==7:self.cast=self.cast.replace('k','')
+  if x==0 or y==0:self.cast=self.cast.replace('q','')
+  self.ep=(x+y)//2 if abs(p)==1 and abs(y-x)==16 else -1
+  self.half=0 if abs(p)==1 or cap else self.half+1; self.side=-s
+  return old
+ def unmake(self,m,u):
+  x,y,q=m; self.side=-self.side; p=self.b[y]; s=self.side
+  if q:p=s
+  self.b[x]=p; self.b[y]=u[3]
+  if abs(p)==1 and y==u[1] and not u[3] and abs(y-x) in (7,9): self.b[y+8*s]= -s
+  if abs(p)==6 and abs(y-x)==2:
+   if y>x:self.b[x+3]=self.b[x+1];self.b[x+1]=0
+   else:self.b[x-4]=self.b[x-1];self.b[x-1]=0
+  self.cast,self.ep,self.half=u[:3]
+ def legal(self):
+  out=[]
+  for m in self.pseudo():
+   u=self.make(m); ok=not self.check(-self.side); self.unmake(m,u)
+   if ok: out.append(m)
+  return out
+
+def uci(m): return name(m[0])+name(m[1])+m[2]
+def evaluate(b):
+ score=0
+ for x,p in enumerate(b.b):
+  if not p:continue
+  v=VAL[abs(p)]; r,c=divmod(x,8); center=7-(abs(3.5-r)+abs(3.5-c))
+  bonus= (center*4 if abs(p) in (2,3) else 0)
+  if abs(p)==1: bonus+=(6-r if p>0 else r-1)*8
+  score+=(v+bonus)*(1 if p>0 else -1)
+ return score*b.side
+
+def search(b,deadline):
+ nodes=0; killers={}; history={}
+ attacker=b.side
+ proof_deadline=time.monotonic()+max(0.0,(deadline-time.monotonic())*.72)
+ def prove(depth):
+  # Boolean mate search: the attacker needs one continuation, the defender has to
+  # have no escape. This is much cheaper than asking a material evaluator to find mate.
+  def rec(left):
+   if time.monotonic()>proof_deadline: raise TimeoutError
+   moves=b.legal()
+   if not moves:return (b.check() and b.side!=attacker)
+   if left==0:return False
+   def key(m):
+    cap=VAL[abs(b.b[m[1]])] if b.b[m[1]] else 0
+    u=b.make(m); chk=b.check(); b.unmake(m,u)
+    return (chk, bool(m[2]), cap)
+   moves.sort(key=key,reverse=True)
+   if b.side==attacker:
+    for m in moves:
+     u=b.make(m)
+     try: ok=rec(left-1)
+     finally: b.unmake(m,u)
+     if ok:return True
+    return False
+   for m in moves:
+    u=b.make(m)
+    try: ok=rec(left-1)
+    finally: b.unmake(m,u)
+    if not ok:return False
+   return True
+  for m in b.legal():
+   u=b.make(m)
+   try: ok=rec(depth-1)
+   finally: b.unmake(m,u)
+   if ok:return m
+  return None
+ try:
+  # Mate in two and three are common tactical motifs; prove them before
+  # spending the clock on the general evaluation search.
+  if sum(1 for p in b.b if p and abs(p)!=6)<=5:
+   for d in (3,5):
+    m=prove(d)
+    if m:return m
+ except TimeoutError: pass
+ def qsearch(alpha,beta,ply):
+  nonlocal nodes
+  nodes+=1
+  if time.monotonic()>deadline: raise TimeoutError
+  stand=evaluate(b)
+  if stand>=beta:return beta
+  if stand>alpha:alpha=stand
+  if ply>=10:return alpha
+  for m in b.legal():
+   if not b.b[m[1]] and not (abs(b.b[m[0]])==1 and m[1]==b.ep) and not m[2]:continue
+   u=b.make(m)
+   try: v=-qsearch(-beta,-alpha,ply+1)
+   finally: b.unmake(m,u)
+   if v>=beta:return beta
+   if v>alpha:alpha=v
+  return alpha
+ def negamax(depth,alpha,beta,ply):
+  nonlocal nodes
+  nodes+=1
+  if time.monotonic()>deadline: raise TimeoutError
+  if depth<=0:return qsearch(alpha,beta,0)
+  moves=b.legal()
+  if not moves:return -30000+ply if b.check() else 0
+  # MVV/LVA ordering, promotions, previous cutoff moves.
+  def order(m):
+   capture=VAL[abs(b.b[m[1]])] if b.b[m[1]] else (100 if abs(b.b[m[0]])==1 and m[1]==b.ep else 0)
+   promo=800 if m[2] else 0
+   u=b.make(m); gives=b.check(); b.unmake(m,u)
+   return (2 if gives else 0)+promo+capture
+  moves.sort(key=order,reverse=True)
+  best=-32000
+  for m in moves:
+   u=b.make(m)
+   try: v=-negamax(depth-1,-beta,-alpha,ply+1)
+   finally: b.unmake(m,u)
+   if v>best:best=v
+   if v>alpha:alpha=v
+   if alpha>=beta:break
+  return best
+ root=b.legal()
+ if not root:return None
+ best=root[0]; depth=1
+ while time.monotonic()<deadline:
+  try:
+   scores=[]
+   for m in root:
+    u=b.make(m); v=-negamax(depth-1,-32000,32000,1); b.unmake(m,u); scores.append((v,m))
+   best=max(scores)[1]; root=[m for _,m in sorted(scores,reverse=True)]; depth+=1
+  except TimeoutError:break
+ return best
+
+def perft(b,d):
+ if d==0:return 1
+ n=0
+ for m in b.legal():
+  u=b.make(m); n+=perft(b,d-1); b.unmake(m,u)
+ return n
+
+def main():
+ b=Board(); active=[False]
+ for line in sys.stdin:
+  a=line.strip().split()
+  if not a:continue
+  if a[0]=='uci':print('id name PyLegal\nid author OpenAI\nuciok',flush=True)
+  elif a[0]=='isready':print('readyok',flush=True)
+  elif a[0] in ('quit','stop'):active[0]=False
+  elif a[0]=='ucinewgame':pass
+  elif a[0]=='position':
+   try:
+    if a[1]=='startpos':b=Board(); i=2
+    else:b=Board(); b.setfen(' '.join(a[2:8])); i=8
+    if i<len(a) and a[i]=='moves':
+     for z in a[i+1:]:
+      fr,to,pr=z[:2],z[2:4],z[4:]; m=(sq(fr),sq(to),pr)
+      if m not in b.legal():break
+      b.make(m)
+   except Exception: pass
+  elif a[0]=='go':
+   if 'perft' in a:
+    d=int(a[a.index('perft')+1]); total=0
+    for m in b.legal():
+     u=b.make(m); n=perft(b,d-1); b.unmake(m,u); total+=n; print(f'{uci(m)}: {n}')
+    print(f'Nodes searched: {total}',flush=True)
+   else:
+    ms=1000
+    if 'movetime' in a:ms=int(a[a.index('movetime')+1])
+    elif 'wtime' in a or 'btime' in a:
+     key='wtime' if b.side==1 else 'btime'; rem=int(a[a.index(key)+1]); inc=int(a[a.index('winc' if b.side==1 else 'binc')+1]) if ('winc' if b.side==1 else 'binc') in a else 0; ms=max(10,min(5000,rem//25+inc//2))
+    depth=int(a[a.index('depth')+1]) if 'depth' in a else 99
+    move=search(b,time.monotonic()+max(.01,ms/1000-.015)); print('bestmove '+(uci(move) if move else '0000'),flush=True)
+if __name__=='__main__':main()

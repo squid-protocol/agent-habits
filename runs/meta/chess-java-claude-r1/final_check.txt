@@ -1,0 +1,13 @@
+PASS
+  ok   uci -> uciok
+  ok   isready -> readyok
+  ok   perft startpos depth 3: want 8902, got 8902
+  ok   perft startpos depth 4: want 197281, got 197281
+  ok   perft kiwipete depth 3: want 97862, got 97862
+  ok   perft position 3 depth 4: want 43238, got 43238
+  ok   perft position 4 depth 3: want 9467, got 9467
+  ok   perft position 5 depth 3: want 62379, got 62379
+  ok   go movetime 1000 from the start position: bestmove b1c3
+  ok   mate puzzles: solved 22 of 22 (need 18) in 2 s each
+  ok   match vs greedy opponent: 4.0 of 4 (need 3.0)
+         game 1 (white): 1.0 after 27 plies; game 2 (black): 1.0 after 38 plies; game 3 (white): 1.0 after 27 plies; game 4 (black): 1.0 after 28 plies

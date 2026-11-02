@@ -1,0 +1,22 @@
+{
+ "run_id": "chess-python-claude-r1",
+ "task": "chess",
+ "lang": "python",
+ "agent": "claude",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-sonnet-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T16:04:27Z",
+ "ended": "2026-11-01T16:07:27Z",
+ "active_s": 157,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "246e8070-79db-4b9e-ac56-f3dd6c187ec4",
+ "note": ""
+}

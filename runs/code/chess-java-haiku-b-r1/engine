@@ -1,0 +1,4 @@
+#!/bin/sh
+# Starts the UCI engine. Run ./build.sh first.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec "${JAVA_HOME:+$JAVA_HOME/bin/}java" -XX:+UseSerialGC -cp "$DIR/build/classes" engine.Main "$@"

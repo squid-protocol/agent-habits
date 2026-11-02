@@ -1,0 +1,22 @@
+{
+ "run_id": "sat-java-claude-r1",
+ "task": "sat",
+ "lang": "java",
+ "agent": "claude",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-sonnet-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T15:59:46Z",
+ "ended": "2026-11-01T16:01:22Z",
+ "active_s": 69,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "05a1cef7-b9bd-42e1-9f7f-09707a17d6dc",
+ "note": ""
+}

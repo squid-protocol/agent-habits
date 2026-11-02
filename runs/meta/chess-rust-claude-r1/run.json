@@ -1,0 +1,22 @@
+{
+ "run_id": "chess-rust-claude-r1",
+ "task": "chess",
+ "lang": "rust",
+ "agent": "claude",
+ "rep": 1,
+ "cli": "Claude Code 2.1.316",
+ "model": "claude-sonnet-5-5",
+ "setting": "default effort",
+ "image": "sha256:5f635efda405",
+ "started": "2026-11-01T15:47:10Z",
+ "ended": "2026-11-01T15:50:10Z",
+ "active_s": 160,
+ "sessions": 1,
+ "nudges": 0,
+ "limit_interruptions": 0,
+ "limit_wait_s": 0,
+ "cap_hit": false,
+ "final_check": "PASS",
+ "session_id": "6d36e1b5-99a9-4bc4-9a17-71d12a98f621",
+ "note": ""
+}

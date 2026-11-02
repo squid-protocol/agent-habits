@@ -1,0 +1,283 @@
+{
+ "S1": {
+  "measure": "fan_out_mean",
+  "agree": 0,
+  "of": 7,
+  "p_one_sided": 1.0,
+  "per_cell": [
+   [
+    "chess-c",
+    2.32,
+    2.95
+   ],
+   [
+    "chess-java",
+    1.89,
+    3.67
+   ],
+   [
+    "chess-python",
+    2.14,
+    3.18
+   ],
+   [
+    "chess-rust",
+    0.77,
+    1
+   ],
+   [
+    "sat-java",
+    1.79,
+    1.9
+   ],
+   [
+    "sat-python",
+    0.75,
+    1
+   ],
+   [
+    "sat-rust",
+    0.87,
+    1.12
+   ]
+  ]
+ },
+ "S2": {
+  "measure": "complexity_median",
+  "agree": 5,
+  "of": 7,
+  "p_one_sided": 0.2266,
+  "per_cell": [
+   [
+    "chess-c",
+    10,
+    7
+   ],
+   [
+    "chess-java",
+    8,
+    13.5
+   ],
+   [
+    "chess-python",
+    8,
+    11
+   ],
+   [
+    "chess-rust",
+    4.0,
+    7.0
+   ],
+   [
+    "sat-java",
+    3.0,
+    2.5
+   ],
+   [
+    "sat-python",
+    9.0,
+    11.5
+   ],
+   [
+    "sat-rust",
+    3,
+    11.0
+   ]
+  ]
+ },
+ "S3": {
+  "cells": [
+   {
+    "cell": "chess-cobol",
+    "S1_holds": false,
+    "S2_holds": true
+   },
+   {
+    "cell": "sat-cobol",
+    "S1_holds": true,
+    "S2_holds": true
+   }
+  ],
+  "cells_where_neither_holds": 0,
+  "of": 2,
+  "supported": false
+ },
+ "S4": {
+  "measure": "named / implemented (automatic)",
+  "agree": 1,
+  "of": 1,
+  "p_one_sided": 0.5,
+  "per_cell": [
+   [
+    "chess-c",
+    0.0,
+    0.0
+   ],
+   [
+    "chess-cobol",
+    0.5,
+    0.0
+   ],
+   [
+    "chess-java",
+    0.0,
+    0.0
+   ],
+   [
+    "chess-python",
+    0.0,
+    0.0
+   ],
+   [
+    "chess-rust",
+    0.0,
+    0.0
+   ]
+  ]
+ },
+ "S5": {
+  "measure": "bitwise_ops per 100 function LOC",
+  "agree": 6,
+  "of": 7,
+  "p_one_sided": 0.0625,
+  "per_cell": [
+   [
+    "chess-c",
+    8.798,
+    2.759
+   ],
+   [
+    "chess-java",
+    12.449,
+    14.286
+   ],
+   [
+    "chess-python",
+    14.286,
+    0.0
+   ],
+   [
+    "chess-rust",
+    4.86,
+    0.134
+   ],
+   [
+    "sat-java",
+    7.763,
+    0.0
+   ],
+   [
+    "sat-python",
+    11.074,
+    0.0
+   ],
+   [
+    "sat-rust",
+    5.085,
+    4.819
+   ]
+  ]
+ },
+ "V1_registered": {
+  "cells": [
+   {
+    "cell": "chess-rust",
+    "S": [
+     0.006,
+     0.012
+    ],
+    "X": [
+     0.0,
+     0.0
+    ],
+    "gap": 0.009,
+    "pooled_sd": 0.003,
+    "ratio": 3.0,
+    "passes": true
+   },
+   {
+    "cell": "sat-python",
+    "S": [
+     0.013,
+     0.034
+    ],
+    "X": [
+     0.023,
+     0.043
+    ],
+    "gap": -0.0095,
+    "pooled_sd": 0.0145,
+    "ratio": -0.66,
+    "passes": false
+   }
+  ],
+  "passes_both": false,
+  "note": "underpowered (two cells)"
+ },
+ "V1_allcell_D11": {
+  "cells": [
+   {
+    "cell": "chess-c",
+    "S-X": 0.008,
+    "S-S2": 0.002,
+    "gap_exceeds_noise": true
+   },
+   {
+    "cell": "chess-cobol",
+    "S-X": 0.014,
+    "S-S2": 0.015,
+    "gap_exceeds_noise": false
+   },
+   {
+    "cell": "chess-java",
+    "S-X": 0.009,
+    "S-S2": 0.002,
+    "gap_exceeds_noise": true
+   },
+   {
+    "cell": "chess-python",
+    "S-X": 0.02,
+    "S-S2": 0.002,
+    "gap_exceeds_noise": true
+   },
+   {
+    "cell": "chess-rust",
+    "S-X": 0.006,
+    "S-S2": 0.005,
+    "gap_exceeds_noise": true
+   },
+   {
+    "cell": "sat-c",
+    "S-X": 0.029,
+    "S-S2": 0.0,
+    "gap_exceeds_noise": true
+   },
+   {
+    "cell": "sat-cobol",
+    "S-X": 0.023,
+    "S-S2": 0.023,
+    "gap_exceeds_noise": false
+   },
+   {
+    "cell": "sat-java",
+    "S-X": 0.012,
+    "S-S2": 0.005,
+    "gap_exceeds_noise": true
+   },
+   {
+    "cell": "sat-python",
+    "S-X": 0.01,
+    "S-S2": 0.014,
+    "gap_exceeds_noise": false
+   },
+   {
+    "cell": "sat-rust",
+    "S-X": 0.002,
+    "S-S2": 0.002,
+    "gap_exceeds_noise": false
+   }
+  ],
+  "count": 6,
+  "of": 10
+ }
+}

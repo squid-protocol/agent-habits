@@ -1,0 +1,2 @@
+#!/bin/bash
+exec java -Xss64m -Xmx3g -XX:+UseSerialGC -cp "$(dirname "$0")/out" Main "$@"

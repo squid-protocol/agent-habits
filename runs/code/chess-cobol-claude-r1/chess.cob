@@ -1,0 +1,1637 @@
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CHESS.
+ENVIRONMENT DIVISION.
+INPUT-OUTPUT SECTION.
+FILE-CONTROL.
+    SELECT INF ASSIGN TO KEYBOARD ORGANIZATION LINE SEQUENTIAL.
+DATA DIVISION.
+FILE SECTION.
+FD INF.
+01 INREC PIC X(6000).
+WORKING-STORAGE SECTION.
+*> ---------------- board and game state ----------------
+01 BRDG.
+   05 BRD OCCURS 120 PIC S9(4) COMP-5.
+01 KSQG.
+   05 KSQ OCCURS 2 PIC S9(4) COMP-5.
+01 SIDE PIC S9(4) COMP-5 VALUE 0.
+01 FWD PIC S9(4) COMP-5 VALUE 10.
+01 COLOFF PIC S9(4) COMP-5 VALUE 0.
+01 CAST PIC S9(4) COMP-5 VALUE 1.
+01 EP PIC S9(4) COMP-5 VALUE 0.
+01 HALF PIC S9(4) COMP-5 VALUE 0.
+01 HASH PIC S9(18) COMP-5 VALUE 0.
+01 EVS PIC S9(9) COMP-5 VALUE 0.
+01 NPW PIC S9(9) COMP-5 VALUE 0.
+01 NPB PIC S9(9) COMP-5 VALUE 0.
+01 HIDX PIC S9(9) COMP-5 VALUE 1.
+*> ---------------- static tables ----------------
+01 TBL1.
+   05 DIRN OCCURS 8 PIC S9(4) COMP-5.
+   05 DIRK OCCURS 8 PIC S9(4) COMP-5.
+   05 PTYPE OCCURS 13 PIC S9(4) COMP-5.
+   05 CAPSC OCCURS 13 PIC S9(9) COMP-5.
+   05 PRSC OCCURS 6 PIC S9(9) COMP-5.
+   05 NPV OCCURS 13 PIC S9(9) COMP-5.
+   05 SQL OCCURS 64 PIC S9(4) COMP-5.
+   05 CRCLS OCCURS 120 PIC S9(4) COMP-5.
+   05 MOPC OCCURS 120 PIC S9(4) COMP-5.
+   05 DFT OCCURS 120 PIC S9(4) COMP-5.
+   05 DRT OCCURS 120 PIC S9(4) COMP-5.
+   05 KDB OCCURS 8 PIC S9(4) COMP-5.
+   05 PBASE OCCURS 90 PIC S9(9) COMP-5.
+   05 MATESC OCCURS 90 PIC S9(9) COMP-5.
+   05 DSQ OCCURS 90 PIC S9(9) COMP-5.
+01 CRTABG.
+   05 CRROW OCCURS 16.
+      10 CRTAB OCCURS 7 PIC S9(4) COMP-5.
+      10 CRHAS OCCURS 4 PIC S9(4) COMP-5.
+01 PSTG.
+   05 PSTR OCCURS 12.
+      10 PSTV OCCURS 120 PIC S9(4) COMP-5.
+01 HKG.
+   05 HKR OCCURS 12.
+      10 HK OCCURS 120 PIC S9(18) COMP-5.
+   05 HEPV OCCURS 120 PIC S9(18) COMP-5.
+   05 HCRV OCCURS 16 PIC S9(18) COMP-5.
+   05 HSIDE PIC S9(18) COMP-5.
+01 SQNG.
+   05 SQNAME OCCURS 120 PIC XX.
+*> ---------------- undo / history ----------------
+01 UNDOG.
+   05 UFR OCCURS 4200 PIC S9(4) COMP-5.
+   05 UTO OCCURS 4200 PIC S9(4) COMP-5.
+   05 UPR OCCURS 4200 PIC S9(4) COMP-5.
+   05 UFL OCCURS 4200 PIC S9(4) COMP-5.
+   05 UPC OCCURS 4200 PIC S9(4) COMP-5.
+   05 UCAP OCCURS 4200 PIC S9(4) COMP-5.
+   05 UCAST OCCURS 4200 PIC S9(4) COMP-5.
+   05 UEP OCCURS 4200 PIC S9(4) COMP-5.
+   05 UHALF OCCURS 4200 PIC S9(4) COMP-5.
+   05 UEVS OCCURS 4200 PIC S9(9) COMP-5.
+   05 UNPW OCCURS 4200 PIC S9(9) COMP-5.
+   05 UNPB OCCURS 4200 PIC S9(9) COMP-5.
+   05 HISTH OCCURS 4200 PIC S9(18) COMP-5.
+*> ---------------- move lists ----------------
+01 MLG.
+   05 MF OCCURS 23000 PIC S9(4) COMP-5.
+   05 MT OCCURS 23000 PIC S9(4) COMP-5.
+   05 MP OCCURS 23000 PIC S9(4) COMP-5.
+   05 MX OCCURS 23000 PIC S9(4) COMP-5.
+   05 MS OCCURS 23000 PIC S9(9) COMP-5.
+*> ---------------- search stack ----------------
+01 STKG.
+   05 SA OCCURS 90 PIC S9(9) COMP-5.
+   05 SB OCCURS 90 PIC S9(9) COMP-5.
+   05 SDP OCCURS 90 PIC S9(9) COMP-5.
+   05 SBEST OCCURS 90 PIC S9(9) COMP-5.
+   05 SNM OCCURS 90 PIC S9(9) COMP-5.
+   05 SI OCCURS 90 PIC S9(9) COMP-5.
+   05 SL OCCURS 90 PIC S9(9) COMP-5.
+   05 BMF OCCURS 90 PIC S9(4) COMP-5.
+   05 BMT OCCURS 90 PIC S9(4) COMP-5.
+   05 BMP OCCURS 90 PIC S9(4) COMP-5.
+   05 K1F OCCURS 90 PIC S9(4) COMP-5.
+   05 K1T OCCURS 90 PIC S9(4) COMP-5.
+   05 K2F OCCURS 90 PIC S9(4) COMP-5.
+   05 K2T OCCURS 90 PIC S9(4) COMP-5.
+   05 PCN OCCURS 90 PIC S9(18) COMP-5.
+   05 SCDEPTH OCCURS 90 PIC S9(9) COMP-5.
+01 HISTG.
+   05 HISTR OCCURS 120.
+      10 HISTV OCCURS 120 PIC S9(9) COMP-5.
+*> ---------------- scratch ----------------
+01 P PIC S9(9) COMP-5 VALUE 1.
+01 GB PIC S9(9) COMP-5.
+01 GN PIC S9(9) COMP-5.
+01 GMODE PIC S9(4) COMP-5.
+01 GI PIC S9(4) COMP-5.
+01 FS PIC S9(4) COMP-5.
+01 TS PIC S9(4) COMP-5.
+01 TS2 PIC S9(4) COMP-5.
+01 PC PIC S9(4) COMP-5.
+01 PT PIC S9(4) COMP-5.
+01 X PIC S9(4) COMP-5.
+01 DI PIC S9(4) COMP-5.
+01 DI2 PIC S9(4) COMP-5.
+01 DD PIC S9(4) COMP-5.
+01 SDONE PIC S9(4) COMP-5.
+01 OWNLO PIC S9(4) COMP-5.
+01 OWNHI PIC S9(4) COMP-5.
+01 ENLO PIC S9(4) COMP-5.
+01 ENHI PIC S9(4) COMP-5.
+01 PROMLO PIC S9(4) COMP-5.
+01 PROMHI PIC S9(4) COMP-5.
+01 STLO PIC S9(4) COMP-5.
+01 STHI PIC S9(4) COMP-5.
+01 ESIDE PIC S9(4) COMP-5.
+01 EPPAWN PIC S9(4) COMP-5.
+01 GX PIC S9(4) COMP-5.
+01 GPR PIC S9(4) COMP-5.
+01 GFL PIC S9(4) COMP-5.
+01 GPRMIN PIC S9(4) COMP-5.
+01 CKS PIC S9(4) COMP-5.
+01 CPS PIC S9(4) COMP-5.
+01 CTS PIC S9(4) COMP-5.
+01 CE1 PIC S9(4) COMP-5.
+01 CE2 PIC S9(4) COMP-5.
+01 CE3 PIC S9(4) COMP-5.
+01 ASQ PIC S9(4) COMP-5.
+01 ABY PIC S9(4) COMP-5.
+01 ATK PIC S9(4) COMP-5.
+01 AP PIC S9(4) COMP-5.
+01 AN PIC S9(4) COMP-5.
+01 AB PIC S9(4) COMP-5.
+01 AR PIC S9(4) COMP-5.
+01 AQ PIC S9(4) COMP-5.
+01 AK PIC S9(4) COMP-5.
+01 AO1 PIC S9(4) COMP-5.
+01 AO2 PIC S9(4) COMP-5.
+01 AQS PIC S9(4) COMP-5.
+01 MFR PIC S9(4) COMP-5.
+01 MTO PIC S9(4) COMP-5.
+01 MPR PIC S9(4) COMP-5.
+01 MFL PIC S9(4) COMP-5.
+01 MPC PIC S9(4) COMP-5.
+01 MCAP PIC S9(4) COMP-5.
+01 MNEW PIC S9(4) COMP-5.
+01 CS PIC S9(4) COMP-5.
+01 RFR PIC S9(4) COMP-5.
+01 RTO PIC S9(4) COMP-5.
+01 RCD PIC S9(4) COMP-5.
+01 SC PIC S9(9) COMP-5.
+01 MB PIC S9(9) COMP-5.
+01 WKS PIC S9(4) COMP-5.
+01 LKS PIC S9(4) COMP-5.
+01 DFV PIC S9(4) COMP-5.
+01 DRV PIC S9(4) COMP-5.
+01 PK1 PIC S9(9) COMP-5.
+01 PK2 PIC S9(9) COMP-5.
+01 PKE PIC S9(9) COMP-5.
+01 PKB PIC S9(9) COMP-5.
+01 PKS PIC S9(9) COMP-5.
+01 PKT PIC S9(9) COMP-5.
+01 TMPA PIC S9(4) COMP-5.
+01 TMPB PIC S9(9) COMP-5.
+01 REPF PIC S9(4) COMP-5.
+01 RJ PIC S9(9) COMP-5.
+01 RL PIC S9(9) COMP-5.
+01 RETV PIC S9(9) COMP-5.
+01 RETC PIC S9(18) COMP-5.
+01 V PIC S9(9) COMP-5.
+01 CDP PIC S9(9) COMP-5.
+01 NODES PIC S9(18) COMP-5 VALUE 0.
+01 TCHK PIC S9(9) COMP-5 VALUE 0.
+01 ABORTED PIC S9(4) COMP-5 VALUE 0.
+01 INFV PIC S9(9) COMP-5 VALUE 32000.
+01 MATEV PIC S9(9) COMP-5 VALUE 30000.
+01 PFD PIC S9(9) COMP-5.
+01 RDP PIC S9(9) COMP-5.
+01 MAXD PIC S9(9) COMP-5.
+01 PVF PIC S9(4) COMP-5 VALUE 0.
+01 PVT PIC S9(4) COMP-5 VALUE 0.
+01 PVP PIC S9(4) COMP-5 VALUE 0.
+01 BESTF PIC S9(4) COMP-5 VALUE 0.
+01 BESTT PIC S9(4) COMP-5 VALUE 0.
+01 BESTP PIC S9(4) COMP-5 VALUE 0.
+01 BESTSC PIC S9(9) COMP-5 VALUE 0.
+01 EXTLIM PIC S9(9) COMP-5 VALUE 40.
+01 MAXPLY PIC S9(9) COMP-5 VALUE 60.
+*> ---------------- time ----------------
+01 CDATE.
+   05 CD-YMD PIC 9(8).
+   05 CD-HH PIC 99.
+   05 CD-MM PIC 99.
+   05 CD-SS PIC 99.
+   05 CD-CC PIC 99.
+   05 CD-REST PIC X(5).
+01 NOWCS PIC S9(18) COMP-5.
+01 STARTCS PIC S9(18) COMP-5.
+01 ELAPS PIC S9(18) COMP-5.
+01 HARDCS PIC S9(18) COMP-5.
+01 SOFTCS PIC S9(18) COMP-5.
+*> ---------------- parsing / io ----------------
+01 EOFF PIC 9 VALUE 0.
+01 QUITF PIC 9 VALUE 0.
+01 LLEN PIC S9(9) COMP-5.
+01 LPTR PIC S9(9) COMP-5.
+01 TOK PIC X(200).
+01 MSTR PIC X(5).
+01 PRCHARS PIC X(6) VALUE "?nbrq?".
+01 PIECES PIC X(12) VALUE "PNBRQKpnbrqk".
+01 FENB PIC X(100).
+01 FENS PIC X(10).
+01 FENC PIC X(10).
+01 FENE PIC X(10).
+01 FENH PIC X(10).
+01 PFL PIC S9(4) COMP-5.
+01 PR PIC S9(4) COMP-5.
+01 CI PIC S9(4) COMP-5.
+01 CHR PIC X.
+01 SEED PIC S9(18) COMP-5 VALUE 12345.
+01 RND PIC S9(18) COMP-5.
+01 RND2 PIC S9(18) COMP-5.
+01 ED1 PIC -(11)9.
+01 ED2 PIC -(11)9.
+01 ED3 PIC -(11)9.
+01 ED4 PIC -(11)9.
+01 WT PIC S9(9) COMP-5.
+01 BT PIC S9(9) COMP-5.
+01 WI PIC S9(9) COMP-5.
+01 BI PIC S9(9) COMP-5.
+01 MT-MS PIC S9(9) COMP-5.
+01 MVTG PIC S9(9) COMP-5.
+01 DEPTHARG PIC S9(9) COMP-5.
+01 MYT PIC S9(9) COMP-5.
+01 MYI PIC S9(9) COMP-5.
+01 IA PIC S9(9) COMP-5.
+01 IB PIC S9(9) COMP-5.
+01 IC PIC S9(9) COMP-5.
+01 FOUND PIC S9(4) COMP-5.
+01 INFIN PIC S9(4) COMP-5.
+01 MV-N PIC S9(9) COMP-5.
+01 ISMATE PIC S9(4) COMP-5.
+01 MVR PIC S9(4) COMP-5.
+01 PFLAST PIC S9(18) COMP-5.
+
+PROCEDURE DIVISION.
+MAIN-SECT SECTION.
+MAIN-START.
+    PERFORM INIT-TABLES
+    PERFORM SET-STARTPOS
+    OPEN INPUT INF
+    PERFORM UNTIL EOFF = 1 OR QUITF = 1
+        READ INF
+            AT END MOVE 1 TO EOFF
+            NOT AT END PERFORM HANDLE-LINE
+        END-READ
+    END-PERFORM
+    STOP RUN.
+
+HANDLE-LINE.
+    COMPUTE LLEN = FUNCTION LENGTH(FUNCTION TRIM(INREC TRAILING))
+    MOVE 1 TO LPTR
+    PERFORM NEXT-TOKEN
+    EVALUATE TOK
+        WHEN "uci"
+            DISPLAY "id name CobolChess 1.0"
+            DISPLAY "id author Claude"
+            DISPLAY "uciok"
+        WHEN "isready"
+            DISPLAY "readyok"
+        WHEN "ucinewgame"
+            PERFORM SET-STARTPOS
+        WHEN "position"
+            PERFORM DO-POSITION
+        WHEN "go"
+            PERFORM DO-GO
+        WHEN "quit"
+            MOVE 1 TO QUITF
+        WHEN OTHER
+            CONTINUE
+    END-EVALUATE.
+
+NEXT-TOKEN.
+    MOVE SPACES TO TOK
+    PERFORM UNTIL LPTR > LLEN OR INREC(LPTR:1) NOT = SPACE
+        ADD 1 TO LPTR
+    END-PERFORM
+    IF LPTR NOT > LLEN
+        UNSTRING INREC DELIMITED BY ALL SPACE INTO TOK WITH POINTER LPTR
+        END-UNSTRING
+    END-IF.
+
+DO-POSITION.
+    PERFORM NEXT-TOKEN
+    IF TOK = "startpos"
+        PERFORM SET-STARTPOS
+        PERFORM NEXT-TOKEN
+    ELSE
+        IF TOK = "fen"
+            MOVE SPACES TO FENB FENS FENC FENE FENH
+            PERFORM NEXT-TOKEN
+            MOVE TOK TO FENB
+            PERFORM NEXT-TOKEN
+            MOVE TOK TO FENS
+            PERFORM NEXT-TOKEN
+            MOVE TOK TO FENC
+            PERFORM NEXT-TOKEN
+            MOVE TOK TO FENE
+            PERFORM NEXT-TOKEN
+            IF TOK NOT = "moves" AND TOK NOT = SPACES
+                MOVE TOK TO FENH
+                PERFORM NEXT-TOKEN
+                IF TOK NOT = "moves" AND TOK NOT = SPACES
+                    PERFORM NEXT-TOKEN
+                END-IF
+            END-IF
+            PERFORM LOAD-FEN
+        END-IF
+    END-IF
+    IF TOK = "moves"
+        PERFORM NEXT-TOKEN
+        PERFORM UNTIL TOK = SPACES
+            PERFORM APPLY-MOVE-STR
+            PERFORM NEXT-TOKEN
+        END-PERFORM
+    END-IF.
+
+SET-STARTPOS.
+    MOVE "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" TO FENB
+    MOVE "w" TO FENS
+    MOVE "KQkq" TO FENC
+    MOVE "-" TO FENE
+    MOVE "0" TO FENH
+    PERFORM LOAD-FEN.
+
+LOAD-FEN.
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 120
+        MOVE 13 TO BRD(GI)
+    END-PERFORM
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 64
+        MOVE SQL(GI) TO FS
+        MOVE 0 TO BRD(FS)
+    END-PERFORM
+    MOVE 7 TO PR
+    MOVE 0 TO PFL
+    PERFORM VARYING CI FROM 1 BY 1 UNTIL CI > 100 OR FENB(CI:1) = SPACE
+        MOVE FENB(CI:1) TO CHR
+        IF CHR = "/"
+            SUBTRACT 1 FROM PR
+            MOVE 0 TO PFL
+        ELSE
+            IF CHR >= "1" AND CHR <= "8"
+                COMPUTE PFL = PFL + FUNCTION ORD(CHR) - 49
+            ELSE
+                PERFORM VARYING DI FROM 1 BY 1 UNTIL DI > 12
+                    IF PIECES(DI:1) = CHR
+                        COMPUTE FS = 22 + PFL + 10 * PR
+                        MOVE DI TO BRD(FS)
+                        ADD 1 TO PFL
+                        MOVE 13 TO DI
+                    END-IF
+                END-PERFORM
+            END-IF
+        END-IF
+    END-PERFORM
+    IF FENS(1:1) = "b" MOVE 1 TO SIDE ELSE MOVE 0 TO SIDE END-IF
+    MOVE 0 TO CAST
+    PERFORM VARYING CI FROM 1 BY 1 UNTIL CI > 4
+        EVALUATE FENC(CI:1)
+            WHEN "K" ADD 1 TO CAST
+            WHEN "Q" ADD 2 TO CAST
+            WHEN "k" ADD 4 TO CAST
+            WHEN "q" ADD 8 TO CAST
+            WHEN OTHER CONTINUE
+        END-EVALUATE
+    END-PERFORM
+    ADD 1 TO CAST
+    MOVE 0 TO EP
+    IF FENE(1:1) >= "a" AND FENE(1:1) <= "h"
+        COMPUTE EP = 22 + FUNCTION ORD(FENE(1:1)) - 98
+                   + 10 * (FUNCTION ORD(FENE(2:1)) - 50)
+    END-IF
+    MOVE 0 TO HALF
+    IF FENH(1:1) >= "0" AND FENH(1:1) <= "9"
+        COMPUTE HALF = FUNCTION NUMVAL(FENH)
+    END-IF
+    PERFORM RECOMPUTE.
+
+RECOMPUTE.
+    MOVE 0 TO HASH EVS NPW NPB
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 64
+        MOVE SQL(GI) TO FS
+        MOVE BRD(FS) TO PC
+        IF PC > 0 AND PC < 13
+            ADD PSTV(PC, FS) TO EVS
+            ADD HK(PC, FS) TO HASH
+            IF PC = 6 MOVE FS TO KSQ(1) END-IF
+            IF PC = 12 MOVE FS TO KSQ(2) END-IF
+            IF PC > 1 AND PC < 7 ADD NPV(PC) TO NPW END-IF
+            IF PC > 7 AND PC < 12 ADD NPV(PC) TO NPB END-IF
+        END-IF
+    END-PERFORM
+    ADD HCRV(CAST) TO HASH
+    IF EP NOT = 0 ADD HEPV(EP) TO HASH END-IF
+    IF SIDE = 1 ADD HSIDE TO HASH END-IF
+    MOVE 1 TO HIDX
+    MOVE HASH TO HISTH(1).
+
+APPLY-MOVE-STR.
+    COMPUTE MFR = 22 + FUNCTION ORD(TOK(1:1)) - 98
+                + 10 * (FUNCTION ORD(TOK(2:1)) - 50)
+    COMPUTE MTO = 22 + FUNCTION ORD(TOK(3:1)) - 98
+                + 10 * (FUNCTION ORD(TOK(4:1)) - 50)
+    MOVE 0 TO MPR
+    EVALUATE TOK(5:1)
+        WHEN "q" MOVE 5 TO MPR
+        WHEN "r" MOVE 4 TO MPR
+        WHEN "b" MOVE 3 TO MPR
+        WHEN "n" MOVE 2 TO MPR
+        WHEN OTHER CONTINUE
+    END-EVALUATE
+    MOVE 1 TO P
+    MOVE 0 TO GMODE
+    PERFORM GEN
+    MOVE 0 TO FOUND
+    MOVE PBASE(1) TO PKB
+    PERFORM VARYING IA FROM 1 BY 1 UNTIL IA > GN OR FOUND = 1
+        MOVE PKB TO IB
+        ADD IA TO IB
+        IF MF(IB) = MFR AND MT(IB) = MTO AND MP(IB) = MPR
+            MOVE MX(IB) TO MFL
+            PERFORM MAKE
+            MOVE KSQ(MVR + 1) TO ASQ
+            MOVE SIDE TO ABY
+            PERFORM IS-ATTACKED THRU IS-ATT-EXIT
+            IF ATK = 1
+                PERFORM UNMAKE
+            ELSE
+                MOVE 1 TO FOUND
+            END-IF
+        END-IF
+    END-PERFORM.
+
+MOVE-TO-STR.
+    MOVE SPACES TO MSTR
+    IF MFR = 0
+        MOVE "0000" TO MSTR
+    ELSE
+        MOVE SQNAME(MFR) TO MSTR(1:2)
+        MOVE SQNAME(MTO) TO MSTR(3:2)
+        IF MPR NOT = 0
+            MOVE PRCHARS(MPR:1) TO MSTR(5:1)
+        END-IF
+    END-IF.
+
+*> ---------------- go ----------------
+DO-GO.
+    MOVE 0 TO WT BT WI BI
+    MOVE 0 TO DEPTHARG MVTG MV-N INFIN PFD
+    MOVE -1 TO DEPTHARG
+    MOVE -1 TO MVTG
+    MOVE -1 TO PFD
+    MOVE 0 TO MV-N
+    PERFORM NEXT-TOKEN
+    PERFORM UNTIL TOK = SPACES
+        EVALUATE TOK
+            WHEN "depth"
+                PERFORM NEXT-TOKEN
+                COMPUTE DEPTHARG = FUNCTION NUMVAL(TOK)
+            WHEN "movetime"
+                PERFORM NEXT-TOKEN
+                COMPUTE MVTG = FUNCTION NUMVAL(TOK)
+            WHEN "wtime"
+                PERFORM NEXT-TOKEN
+                COMPUTE WT = FUNCTION NUMVAL(TOK)
+            WHEN "btime"
+                PERFORM NEXT-TOKEN
+                COMPUTE BT = FUNCTION NUMVAL(TOK)
+            WHEN "winc"
+                PERFORM NEXT-TOKEN
+                COMPUTE WI = FUNCTION NUMVAL(TOK)
+            WHEN "binc"
+                PERFORM NEXT-TOKEN
+                COMPUTE BI = FUNCTION NUMVAL(TOK)
+            WHEN "movestogo"
+                PERFORM NEXT-TOKEN
+                COMPUTE MV-N = FUNCTION NUMVAL(TOK)
+            WHEN "perft"
+                PERFORM NEXT-TOKEN
+                COMPUTE PFD = FUNCTION NUMVAL(TOK)
+            WHEN "infinite"
+                MOVE 1 TO INFIN
+            WHEN OTHER
+                CONTINUE
+        END-EVALUATE
+        PERFORM NEXT-TOKEN
+    END-PERFORM
+    IF PFD >= 0
+        PERFORM DO-PERFT
+    ELSE
+        PERFORM THINK
+    END-IF.
+
+GET-TIME.
+    MOVE FUNCTION CURRENT-DATE TO CDATE
+    COMPUTE NOWCS = ((CD-HH * 60 + CD-MM) * 60 + CD-SS) * 100 + CD-CC.
+
+CHECK-TIME.
+    PERFORM GET-TIME
+    COMPUTE ELAPS = NOWCS - STARTCS
+    IF ELAPS < 0 ADD 8640000 TO ELAPS END-IF
+    IF ELAPS >= HARDCS MOVE 1 TO ABORTED END-IF.
+
+THINK.
+    PERFORM GET-TIME
+    MOVE NOWCS TO STARTCS
+    MOVE 99999999 TO HARDCS
+    MOVE 99999999 TO SOFTCS
+    MOVE 64 TO MAXD
+    IF DEPTHARG > 0 MOVE DEPTHARG TO MAXD END-IF
+    IF MVTG >= 0
+        COMPUTE HARDCS = (MVTG * 9 / 10 - 15) / 10
+        IF HARDCS < 1 MOVE 1 TO HARDCS END-IF
+        COMPUTE SOFTCS = HARDCS * 5 / 10
+    ELSE
+        IF DEPTHARG <= 0
+            IF INFIN = 1
+                MOVE 500 TO HARDCS
+                MOVE 500 TO SOFTCS
+            ELSE
+                IF SIDE = 0
+                    MOVE WT TO MYT
+                    MOVE WI TO MYI
+                ELSE
+                    MOVE BT TO MYT
+                    MOVE BI TO MYI
+                END-IF
+                IF MYT > 0 OR MYI > 0
+                    COMPUTE SOFTCS = (MYT / 30 + MYI * 7 / 10) / 10
+                    COMPUTE HARDCS = SOFTCS * 3
+                    IF HARDCS > MYT / 250 COMPUTE HARDCS = MYT / 250 END-IF
+                    IF HARDCS < 2 MOVE 2 TO HARDCS END-IF
+                    IF SOFTCS > HARDCS MOVE HARDCS TO SOFTCS END-IF
+                ELSE
+                    MOVE 100 TO HARDCS
+                    MOVE 50 TO SOFTCS
+                END-IF
+            END-IF
+        END-IF
+    END-IF
+    MOVE 0 TO ABORTED
+    MOVE 0 TO NODES
+    MOVE 0 TO TCHK
+    MOVE 0 TO BESTF BESTT BESTP
+    MOVE 0 TO PVF PVT PVP
+    MOVE 0 TO BESTSC
+    PERFORM VARYING IA FROM 1 BY 1 UNTIL IA > 120
+        PERFORM VARYING IB FROM 1 BY 1 UNTIL IB > 120
+            MOVE 0 TO HISTV(IA, IB)
+        END-PERFORM
+    END-PERFORM
+    PERFORM VARYING IA FROM 1 BY 1 UNTIL IA > 90
+        MOVE 0 TO K1F(IA) K1T(IA) K2F(IA) K2T(IA)
+    END-PERFORM
+    PERFORM VARYING RDP FROM 1 BY 1 UNTIL RDP > MAXD OR ABORTED = 1
+        MOVE 1 TO P
+        MOVE -32000 TO SA(1)
+        MOVE 32000 TO SB(1)
+        MOVE RDP TO SDP(1)
+        PERFORM SEARCH-SECT
+        IF ABORTED = 0
+            MOVE BMF(1) TO BESTF
+            MOVE BMT(1) TO BESTT
+            MOVE BMP(1) TO BESTP
+            MOVE SBEST(1) TO BESTSC
+            MOVE BESTF TO PVF
+            MOVE BESTT TO PVT
+            MOVE BESTP TO PVP
+            PERFORM PRINT-INFO
+            PERFORM GET-TIME
+            COMPUTE ELAPS = NOWCS - STARTCS
+            IF ELAPS < 0 ADD 8640000 TO ELAPS END-IF
+            IF ELAPS >= SOFTCS AND DEPTHARG <= 0 MOVE 1 TO ABORTED END-IF
+            IF BESTSC >= 29000 OR BESTSC <= -29000
+                IF DEPTHARG <= 0 AND INFIN = 0 MOVE 1 TO ABORTED END-IF
+            END-IF
+            IF SL(1) = 1 AND DEPTHARG <= 0 AND INFIN = 0 AND RDP >= 4
+                MOVE 1 TO ABORTED
+            END-IF
+        END-IF
+    END-PERFORM
+    MOVE BESTF TO MFR
+    MOVE BESTT TO MTO
+    MOVE BESTP TO MPR
+    PERFORM MOVE-TO-STR
+    DISPLAY "bestmove " FUNCTION TRIM(MSTR).
+
+PRINT-INFO.
+    PERFORM GET-TIME
+    COMPUTE ELAPS = (NOWCS - STARTCS) * 10
+    IF ELAPS < 0 ADD 86400000 TO ELAPS END-IF
+    MOVE RDP TO ED1
+    MOVE NODES TO ED2
+    MOVE ELAPS TO ED3
+    MOVE BESTF TO MFR
+    MOVE BESTT TO MTO
+    MOVE BESTP TO MPR
+    PERFORM MOVE-TO-STR
+    IF BESTSC >= 29000
+        COMPUTE IC = (30000 - BESTSC + 1) / 2
+        MOVE IC TO ED4
+        DISPLAY "info depth " FUNCTION TRIM(ED1) " score mate "
+            FUNCTION TRIM(ED4) " nodes " FUNCTION TRIM(ED2)
+            " time " FUNCTION TRIM(ED3) " pv " FUNCTION TRIM(MSTR)
+    ELSE
+        IF BESTSC <= -29000
+            COMPUTE IC = (30000 + BESTSC + 1) / 2
+            COMPUTE IC = 0 - IC
+            MOVE IC TO ED4
+            DISPLAY "info depth " FUNCTION TRIM(ED1) " score mate "
+                FUNCTION TRIM(ED4) " nodes " FUNCTION TRIM(ED2)
+                " time " FUNCTION TRIM(ED3) " pv " FUNCTION TRIM(MSTR)
+        ELSE
+            MOVE BESTSC TO ED4
+            DISPLAY "info depth " FUNCTION TRIM(ED1) " score cp "
+                FUNCTION TRIM(ED4) " nodes " FUNCTION TRIM(ED2)
+                " time " FUNCTION TRIM(ED3) " pv " FUNCTION TRIM(MSTR)
+        END-IF
+    END-IF.
+
+*> ---------------- tables ----------------
+INIT-TABLES.
+    MOVE 21 TO DIRN(1)
+    MOVE 19 TO DIRN(2)
+    MOVE 12 TO DIRN(3)
+    MOVE 8 TO DIRN(4)
+    MOVE -8 TO DIRN(5)
+    MOVE -12 TO DIRN(6)
+    MOVE -19 TO DIRN(7)
+    MOVE -21 TO DIRN(8)
+    MOVE 1 TO DIRK(1)
+    MOVE -1 TO DIRK(2)
+    MOVE 10 TO DIRK(3)
+    MOVE -10 TO DIRK(4)
+    MOVE 9 TO DIRK(5)
+    MOVE -9 TO DIRK(6)
+    MOVE 11 TO DIRK(7)
+    MOVE -11 TO DIRK(8)
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 13
+        MOVE 0 TO PTYPE(GI) CAPSC(GI) NPV(GI)
+    END-PERFORM
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 12
+        IF GI > 6
+            COMPUTE PTYPE(GI) = GI - 6
+        ELSE
+            MOVE GI TO PTYPE(GI)
+        END-IF
+        COMPUTE CAPSC(GI) = 10000 + 16 * PTYPE(GI)
+        EVALUATE PTYPE(GI)
+            WHEN 2 MOVE 300 TO NPV(GI)
+            WHEN 3 MOVE 300 TO NPV(GI)
+            WHEN 4 MOVE 500 TO NPV(GI)
+            WHEN 5 MOVE 900 TO NPV(GI)
+            WHEN OTHER MOVE 0 TO NPV(GI)
+        END-EVALUATE
+    END-PERFORM
+    MOVE 0 TO PRSC(1) PRSC(2) PRSC(3) PRSC(4) PRSC(6)
+    MOVE 20000 TO PRSC(5)
+    PERFORM VARYING PR FROM 0 BY 1 UNTIL PR > 7
+        PERFORM VARYING PFL FROM 0 BY 1 UNTIL PFL > 7
+            COMPUTE GI = PR * 8 + PFL + 1
+            COMPUTE SQL(GI) = 22 + PFL + 10 * PR
+        END-PERFORM
+    END-PERFORM
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 120
+        MOVE 1 TO CRCLS(GI)
+        MOVE 0 TO MOPC(GI) DFT(GI) DRT(GI)
+        MOVE SPACES TO SQNAME(GI)
+    END-PERFORM
+    MOVE 2 TO CRCLS(22)
+    MOVE 3 TO CRCLS(29)
+    MOVE 4 TO CRCLS(26)
+    MOVE 5 TO CRCLS(92)
+    MOVE 6 TO CRCLS(99)
+    MOVE 7 TO CRCLS(96)
+    PERFORM VARYING PR FROM 0 BY 1 UNTIL PR > 7
+        PERFORM VARYING PFL FROM 0 BY 1 UNTIL PFL > 7
+            COMPUTE FS = 22 + PFL + 10 * PR
+            MOVE PFL TO DFT(FS)
+            MOVE PR TO DRT(FS)
+            COMPUTE MOPC(FS) = 6 * (FUNCTION ABS(2 * PFL - 7)
+                                  + FUNCTION ABS(2 * PR - 7))
+            MOVE FUNCTION CHAR(98 + PFL) TO SQNAME(FS)(1:1)
+            MOVE FUNCTION CHAR(50 + PR) TO SQNAME(FS)(2:1)
+        END-PERFORM
+    END-PERFORM
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 8
+        COMPUTE KDB(GI) = 8 * (7 - GI)
+    END-PERFORM
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 90
+        COMPUTE PBASE(GI) = (GI - 1) * 256
+        COMPUTE MATESC(GI) = GI - 30000
+        COMPUTE DSQ(GI) = GI * GI
+    END-PERFORM
+*> castling tables: rights value rv = CAST-1 ; bits WK=1 WQ=2 BK=4 BQ=8
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 16
+        PERFORM VARYING DI FROM 1 BY 1 UNTIL DI > 7
+            COMPUTE TMPB = GI - 1
+            EVALUATE DI
+                WHEN 2 MOVE 2 TO IA
+                WHEN 3 MOVE 1 TO IA
+                WHEN 4 MOVE 3 TO IA
+                WHEN 5 MOVE 8 TO IA
+                WHEN 6 MOVE 4 TO IA
+                WHEN 7 MOVE 12 TO IA
+                WHEN OTHER MOVE 0 TO IA
+            END-EVALUATE
+            PERFORM VARYING DI2 FROM 0 BY 1 UNTIL DI2 > 3
+                COMPUTE IB = FUNCTION MOD(FUNCTION INTEGER(IA / (2 ** DI2)), 2)
+                IF IB = 1
+                    COMPUTE IC = FUNCTION MOD(FUNCTION INTEGER(TMPB / (2 ** DI2)), 2)
+                    IF IC = 1
+                        COMPUTE TMPB = TMPB - 2 ** DI2
+                    END-IF
+                END-IF
+            END-PERFORM
+            COMPUTE CRTAB(GI, DI) = TMPB + 1
+        END-PERFORM
+        PERFORM VARYING DI2 FROM 1 BY 1 UNTIL DI2 > 4
+            COMPUTE TMPB = GI - 1
+            COMPUTE CRHAS(GI, DI2) =
+                FUNCTION MOD(FUNCTION INTEGER(TMPB / (2 ** (DI2 - 1))), 2)
+        END-PERFORM
+    END-PERFORM
+*> piece square tables
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 6
+        PERFORM VARYING PR FROM 0 BY 1 UNTIL PR > 7
+            PERFORM VARYING PFL FROM 0 BY 1 UNTIL PFL > 7
+                COMPUTE FS = 22 + PFL + 10 * PR
+                COMPUTE TMPB = FUNCTION MIN(PFL, 7 - PFL)
+                                + FUNCTION MIN(PR, 7 - PR)
+                MOVE PR TO IA
+                EVALUATE GI
+                    WHEN 1
+                        COMPUTE IB = 100 + 4 * IA
+                        IF PFL = 3 OR PFL = 4 ADD 10 TO IB END-IF
+                        IF PFL = 2 OR PFL = 5 ADD 4 TO IB END-IF
+                        IF IA = 6 ADD 20 TO IB END-IF
+                    WHEN 2
+                        COMPUTE IB = 320 + 5 * TMPB
+                    WHEN 3
+                        COMPUTE IB = 330 + 2 * TMPB
+                    WHEN 4
+                        MOVE 500 TO IB
+                        IF IA = 6 ADD 10 TO IB END-IF
+                    WHEN 5
+                        COMPUTE IB = 900 + TMPB
+                    WHEN OTHER
+                        COMPUTE IB = 0 - 3 * TMPB
+                        IF IA = 0 ADD 15 TO IB END-IF
+                END-EVALUATE
+                MOVE IB TO PSTV(GI, FS)
+*> black: mirrored rank, negative
+                COMPUTE IA = 7 - PR
+                EVALUATE GI
+                    WHEN 1
+                        COMPUTE IB = 100 + 4 * IA
+                        IF PFL = 3 OR PFL = 4 ADD 10 TO IB END-IF
+                        IF PFL = 2 OR PFL = 5 ADD 4 TO IB END-IF
+                        IF IA = 6 ADD 20 TO IB END-IF
+                    WHEN 2
+                        COMPUTE IB = 320 + 5 * TMPB
+                    WHEN 3
+                        COMPUTE IB = 330 + 2 * TMPB
+                    WHEN 4
+                        MOVE 500 TO IB
+                        IF IA = 6 ADD 10 TO IB END-IF
+                    WHEN 5
+                        COMPUTE IB = 900 + TMPB
+                    WHEN OTHER
+                        COMPUTE IB = 0 - 3 * TMPB
+                        IF IA = 0 ADD 15 TO IB END-IF
+                END-EVALUATE
+                COMPUTE PSTV(GI + 6, FS) = 0 - IB
+            END-PERFORM
+        END-PERFORM
+    END-PERFORM
+*> zobrist-like additive keys
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 12
+        PERFORM VARYING FS FROM 1 BY 1 UNTIL FS > 120
+            PERFORM NEXT-RAND
+            MOVE RND TO HK(GI, FS)
+        END-PERFORM
+    END-PERFORM
+    PERFORM VARYING FS FROM 1 BY 1 UNTIL FS > 120
+        PERFORM NEXT-RAND
+        MOVE RND TO HEPV(FS)
+    END-PERFORM
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 16
+        PERFORM NEXT-RAND
+        MOVE RND TO HCRV(GI)
+    END-PERFORM
+    PERFORM NEXT-RAND
+    MOVE RND TO HSIDE.
+
+NEXT-RAND.
+    COMPUTE SEED = FUNCTION MOD(SEED * 1103515245 + 12345, 2147483648)
+    COMPUTE RND2 = FUNCTION MOD(FUNCTION INTEGER(SEED / 64), 1000000)
+    COMPUTE SEED = FUNCTION MOD(SEED * 1103515245 + 12345, 2147483648)
+    COMPUTE RND = RND2 * 1000000 + FUNCTION MOD(FUNCTION INTEGER(SEED / 64), 1000000).
+
+*> ---------------- attack detection ----------------
+IS-ATTACKED.
+    MOVE 0 TO ATK
+    IF ABY = 0
+        IF BRD(ASQ - 9) = 1 OR BRD(ASQ - 11) = 1
+            MOVE 1 TO ATK
+            GO TO IS-ATT-EXIT
+        END-IF
+        MOVE 2 TO AN
+        MOVE 3 TO AB
+        MOVE 4 TO AR
+        MOVE 5 TO AQ
+        MOVE 6 TO AK
+    ELSE
+        IF BRD(ASQ + 9) = 7 OR BRD(ASQ + 11) = 7
+            MOVE 1 TO ATK
+            GO TO IS-ATT-EXIT
+        END-IF
+        MOVE 8 TO AN
+        MOVE 9 TO AB
+        MOVE 10 TO AR
+        MOVE 11 TO AQ
+        MOVE 12 TO AK
+    END-IF
+    PERFORM VARYING AQS FROM 1 BY 1 UNTIL AQS > 8
+        IF BRD(ASQ + DIRN(AQS)) = AN
+            MOVE 1 TO ATK
+            GO TO IS-ATT-EXIT
+        END-IF
+        IF BRD(ASQ + DIRK(AQS)) = AK
+            MOVE 1 TO ATK
+            GO TO IS-ATT-EXIT
+        END-IF
+    END-PERFORM
+    PERFORM VARYING AQS FROM 1 BY 1 UNTIL AQS > 4
+        MOVE DIRK(AQS) TO DD
+        MOVE ASQ TO AO1
+        ADD DD TO AO1
+        PERFORM UNTIL BRD(AO1) NOT = 0
+            ADD DD TO AO1
+        END-PERFORM
+        IF BRD(AO1) = AR OR BRD(AO1) = AQ
+            MOVE 1 TO ATK
+            GO TO IS-ATT-EXIT
+        END-IF
+    END-PERFORM
+    PERFORM VARYING AQS FROM 5 BY 1 UNTIL AQS > 8
+        MOVE DIRK(AQS) TO DD
+        MOVE ASQ TO AO1
+        ADD DD TO AO1
+        PERFORM UNTIL BRD(AO1) NOT = 0
+            ADD DD TO AO1
+        END-PERFORM
+        IF BRD(AO1) = AB OR BRD(AO1) = AQ
+            MOVE 1 TO ATK
+            GO TO IS-ATT-EXIT
+        END-IF
+    END-PERFORM.
+IS-ATT-EXIT.
+    EXIT.
+
+*> ---------------- move generation ----------------
+GEN.
+    MOVE PBASE(P) TO GB
+    MOVE 0 TO GN
+    IF SIDE = 0
+        MOVE 1 TO OWNLO
+        MOVE 6 TO OWNHI
+        MOVE 7 TO ENLO
+        MOVE 12 TO ENHI
+        MOVE 92 TO PROMLO
+        MOVE 99 TO PROMHI
+        MOVE 32 TO STLO
+        MOVE 39 TO STHI
+        MOVE 10 TO FWD
+        MOVE 0 TO COLOFF
+        MOVE 1 TO ESIDE
+        MOVE 7 TO EPPAWN
+    ELSE
+        MOVE 7 TO OWNLO
+        MOVE 12 TO OWNHI
+        MOVE 1 TO ENLO
+        MOVE 6 TO ENHI
+        MOVE 22 TO PROMLO
+        MOVE 29 TO PROMHI
+        MOVE 82 TO STLO
+        MOVE 89 TO STHI
+        MOVE -10 TO FWD
+        MOVE 6 TO COLOFF
+        MOVE 0 TO ESIDE
+        MOVE 1 TO EPPAWN
+    END-IF
+    IF GMODE = 0 MOVE 2 TO GPRMIN ELSE MOVE 5 TO GPRMIN END-IF
+    PERFORM VARYING GI FROM 1 BY 1 UNTIL GI > 64
+        MOVE SQL(GI) TO FS
+        MOVE BRD(FS) TO PC
+        IF PC >= OWNLO AND PC <= OWNHI
+            MOVE PTYPE(PC) TO PT
+            MOVE 0 TO GFL
+            MOVE 0 TO GPR
+            EVALUATE PT
+                WHEN 1 PERFORM GEN-PAWN
+                WHEN 2 PERFORM GEN-KNIGHT
+                WHEN 3 PERFORM GEN-SLIDE-B
+                WHEN 4 PERFORM GEN-SLIDE-R
+                WHEN 5 PERFORM GEN-SLIDE-Q
+                WHEN OTHER PERFORM GEN-KING
+            END-EVALUATE
+        END-IF
+    END-PERFORM
+    IF P = 1 AND (PVF NOT = 0)
+        MOVE PBASE(1) TO PKB
+        PERFORM VARYING IA FROM 1 BY 1 UNTIL IA > GN
+            MOVE PKB TO IB
+            ADD IA TO IB
+            IF MF(IB) = PVF AND MT(IB) = PVT AND MP(IB) = PVP
+                MOVE 30000 TO MS(IB)
+            END-IF
+        END-PERFORM
+    END-IF.
+
+ADD-MOVE.
+    ADD 1 TO GN
+    MOVE GB TO PKB
+    ADD GN TO PKB
+    MOVE FS TO MF(PKB)
+    MOVE TS TO MT(PKB)
+    MOVE GPR TO MP(PKB)
+    MOVE GFL TO MX(PKB)
+    IF GX NOT = 0
+        MOVE CAPSC(GX) TO MS(PKB)
+        SUBTRACT PT FROM MS(PKB)
+    ELSE
+        MOVE HISTV(FS, TS) TO MS(PKB)
+        IF FS = K1F(P) AND TS = K1T(P)
+            MOVE 9000 TO MS(PKB)
+        ELSE
+            IF FS = K2F(P) AND TS = K2T(P)
+                MOVE 8900 TO MS(PKB)
+            END-IF
+        END-IF
+    END-IF
+    IF GPR NOT = 0
+        ADD PRSC(GPR) TO MS(PKB)
+    END-IF.
+
+ADD-PROMOS.
+    PERFORM VARYING GPR FROM 5 BY -1 UNTIL GPR < GPRMIN
+        PERFORM ADD-MOVE
+    END-PERFORM
+    MOVE 0 TO GPR.
+
+GEN-PAWN.
+    MOVE FS TO TS
+    ADD FWD TO TS
+    IF BRD(TS) = 0
+        IF TS >= PROMLO AND TS <= PROMHI
+            MOVE 0 TO GX
+            PERFORM ADD-PROMOS
+        ELSE
+            IF GMODE = 0
+                MOVE 0 TO GX
+                PERFORM ADD-MOVE
+                IF FS >= STLO AND FS <= STHI
+                    MOVE TS TO TS2
+                    ADD FWD TO TS2
+                    IF BRD(TS2) = 0
+                        MOVE TS2 TO TS
+                        MOVE 3 TO GFL
+                        PERFORM ADD-MOVE
+                        MOVE 0 TO GFL
+                    END-IF
+                END-IF
+            END-IF
+        END-IF
+    END-IF
+    MOVE FS TO TS
+    ADD FWD TO TS
+    SUBTRACT 1 FROM TS
+    PERFORM PAWN-CAP
+    ADD 2 TO TS
+    PERFORM PAWN-CAP.
+
+PAWN-CAP.
+    MOVE BRD(TS) TO X
+    IF X >= ENLO AND X <= ENHI
+        MOVE X TO GX
+        IF TS >= PROMLO AND TS <= PROMHI
+            PERFORM ADD-PROMOS
+        ELSE
+            PERFORM ADD-MOVE
+        END-IF
+    ELSE
+        IF TS = EP
+            MOVE EPPAWN TO GX
+            MOVE 1 TO GFL
+            PERFORM ADD-MOVE
+            MOVE 0 TO GFL
+        END-IF
+    END-IF.
+
+GEN-KNIGHT.
+    PERFORM VARYING DI FROM 1 BY 1 UNTIL DI > 8
+        MOVE FS TO TS
+        ADD DIRN(DI) TO TS
+        MOVE BRD(TS) TO X
+        IF X = 0
+            IF GMODE = 0
+                MOVE 0 TO GX
+                PERFORM ADD-MOVE
+            END-IF
+        ELSE
+            IF X >= ENLO AND X <= ENHI
+                MOVE X TO GX
+                PERFORM ADD-MOVE
+            END-IF
+        END-IF
+    END-PERFORM.
+
+GEN-SLIDE-B.
+    PERFORM VARYING DI FROM 5 BY 1 UNTIL DI > 8
+        PERFORM SLIDE-DIR
+    END-PERFORM.
+GEN-SLIDE-R.
+    PERFORM VARYING DI FROM 1 BY 1 UNTIL DI > 4
+        PERFORM SLIDE-DIR
+    END-PERFORM.
+GEN-SLIDE-Q.
+    PERFORM VARYING DI FROM 1 BY 1 UNTIL DI > 8
+        PERFORM SLIDE-DIR
+    END-PERFORM.
+
+SLIDE-DIR.
+    MOVE DIRK(DI) TO DD
+    MOVE FS TO TS
+    MOVE 0 TO SDONE
+    PERFORM UNTIL SDONE = 1
+        ADD DD TO TS
+        MOVE BRD(TS) TO X
+        IF X = 0
+            IF GMODE = 0
+                MOVE 0 TO GX
+                PERFORM ADD-MOVE
+            END-IF
+        ELSE
+            MOVE 1 TO SDONE
+            IF X >= ENLO AND X <= ENHI
+                MOVE X TO GX
+                PERFORM ADD-MOVE
+            END-IF
+        END-IF
+    END-PERFORM.
+
+GEN-KING.
+    PERFORM VARYING DI FROM 1 BY 1 UNTIL DI > 8
+        MOVE FS TO TS
+        ADD DIRK(DI) TO TS
+        MOVE BRD(TS) TO X
+        IF X = 0
+            IF GMODE = 0
+                MOVE 0 TO GX
+                PERFORM ADD-MOVE
+            END-IF
+        ELSE
+            IF X >= ENLO AND X <= ENHI
+                MOVE X TO GX
+                PERFORM ADD-MOVE
+            END-IF
+        END-IF
+    END-PERFORM
+    IF GMODE = 0
+        IF SIDE = 0
+            IF FS = 26
+                IF CRHAS(CAST, 1) = 1
+                    MOVE 26 TO CKS
+                    MOVE 27 TO CPS
+                    MOVE 28 TO CTS
+                    MOVE 27 TO CE1
+                    MOVE 28 TO CE2
+                    MOVE 28 TO CE3
+                    PERFORM TRY-CASTLE
+                END-IF
+                IF CRHAS(CAST, 2) = 1
+                    MOVE 26 TO CKS
+                    MOVE 25 TO CPS
+                    MOVE 24 TO CTS
+                    MOVE 25 TO CE1
+                    MOVE 24 TO CE2
+                    MOVE 23 TO CE3
+                    PERFORM TRY-CASTLE
+                END-IF
+            END-IF
+        ELSE
+            IF FS = 96
+                IF CRHAS(CAST, 3) = 1
+                    MOVE 96 TO CKS
+                    MOVE 97 TO CPS
+                    MOVE 98 TO CTS
+                    MOVE 97 TO CE1
+                    MOVE 98 TO CE2
+                    MOVE 98 TO CE3
+                    PERFORM TRY-CASTLE
+                END-IF
+                IF CRHAS(CAST, 4) = 1
+                    MOVE 96 TO CKS
+                    MOVE 95 TO CPS
+                    MOVE 94 TO CTS
+                    MOVE 95 TO CE1
+                    MOVE 94 TO CE2
+                    MOVE 93 TO CE3
+                    PERFORM TRY-CASTLE
+                END-IF
+            END-IF
+        END-IF
+    END-IF.
+
+TRY-CASTLE.
+    IF BRD(CE1) = 0 AND BRD(CE2) = 0 AND BRD(CE3) = 0
+        MOVE ESIDE TO ABY
+        MOVE CKS TO ASQ
+        PERFORM IS-ATTACKED THRU IS-ATT-EXIT
+        IF ATK = 0
+            MOVE CPS TO ASQ
+            PERFORM IS-ATTACKED THRU IS-ATT-EXIT
+            IF ATK = 0
+                MOVE CTS TO ASQ
+                PERFORM IS-ATTACKED THRU IS-ATT-EXIT
+                IF ATK = 0
+                    MOVE CTS TO TS
+                    MOVE 0 TO GX
+                    MOVE 2 TO GFL
+                    PERFORM ADD-MOVE
+                    MOVE 0 TO GFL
+                END-IF
+            END-IF
+        END-IF
+    END-IF.
+
+*> ---------------- make / unmake ----------------
+MAKE.
+    MOVE SIDE TO MVR
+    IF SIDE = 0
+        MOVE 10 TO FWD
+        MOVE 0 TO COLOFF
+    ELSE
+        MOVE -10 TO FWD
+        MOVE 6 TO COLOFF
+    END-IF
+    ADD 1 TO HIDX
+    MOVE BRD(MFR) TO MPC
+    MOVE BRD(MTO) TO MCAP
+    MOVE MFR TO UFR(HIDX)
+    MOVE MTO TO UTO(HIDX)
+    MOVE MPR TO UPR(HIDX)
+    MOVE MFL TO UFL(HIDX)
+    MOVE MPC TO UPC(HIDX)
+    MOVE MCAP TO UCAP(HIDX)
+    MOVE CAST TO UCAST(HIDX)
+    MOVE EP TO UEP(HIDX)
+    MOVE HALF TO UHALF(HIDX)
+    MOVE EVS TO UEVS(HIDX)
+    MOVE NPW TO UNPW(HIDX)
+    MOVE NPB TO UNPB(HIDX)
+    IF EP NOT = 0 SUBTRACT HEPV(EP) FROM HASH END-IF
+    SUBTRACT HCRV(CAST) FROM HASH
+    MOVE 0 TO BRD(MFR)
+    SUBTRACT PSTV(MPC, MFR) FROM EVS
+    SUBTRACT HK(MPC, MFR) FROM HASH
+    ADD 1 TO HALF
+    IF PTYPE(MPC) = 1 MOVE 0 TO HALF END-IF
+    IF MCAP NOT = 0
+        MOVE 0 TO HALF
+        SUBTRACT PSTV(MCAP, MTO) FROM EVS
+        SUBTRACT HK(MCAP, MTO) FROM HASH
+        IF SIDE = 0
+            SUBTRACT NPV(MCAP) FROM NPB
+        ELSE
+            SUBTRACT NPV(MCAP) FROM NPW
+        END-IF
+    END-IF
+    MOVE MPC TO MNEW
+    IF MPR NOT = 0
+        MOVE MPR TO MNEW
+        ADD COLOFF TO MNEW
+        IF SIDE = 0
+            ADD NPV(MNEW) TO NPW
+        ELSE
+            ADD NPV(MNEW) TO NPB
+        END-IF
+    END-IF
+    MOVE MNEW TO BRD(MTO)
+    ADD PSTV(MNEW, MTO) TO EVS
+    ADD HK(MNEW, MTO) TO HASH
+    IF MPC = 6 MOVE MTO TO KSQ(1) END-IF
+    IF MPC = 12 MOVE MTO TO KSQ(2) END-IF
+    MOVE 0 TO EP
+    IF MFL NOT = 0
+        EVALUATE MFL
+            WHEN 1
+                MOVE MTO TO CS
+                SUBTRACT FWD FROM CS
+                MOVE BRD(CS) TO RCD
+                MOVE 0 TO BRD(CS)
+                SUBTRACT PSTV(RCD, CS) FROM EVS
+                SUBTRACT HK(RCD, CS) FROM HASH
+            WHEN 2
+                PERFORM CASTLE-ROOK-FWD
+            WHEN 3
+                MOVE MFR TO EP
+                ADD FWD TO EP
+        END-EVALUATE
+    END-IF
+    MOVE CRTAB(CAST, CRCLS(MFR)) TO CAST
+    MOVE CRTAB(CAST, CRCLS(MTO)) TO CAST
+    ADD HCRV(CAST) TO HASH
+    IF EP NOT = 0 ADD HEPV(EP) TO HASH END-IF
+    IF SIDE = 0
+        MOVE 1 TO SIDE
+        ADD HSIDE TO HASH
+    ELSE
+        MOVE 0 TO SIDE
+        SUBTRACT HSIDE FROM HASH
+    END-IF
+    MOVE HASH TO HISTH(HIDX).
+
+CASTLE-ROOK-FWD.
+    PERFORM CASTLE-SQ
+    MOVE 0 TO BRD(RFR)
+    SUBTRACT PSTV(RCD, RFR) FROM EVS
+    SUBTRACT HK(RCD, RFR) FROM HASH
+    MOVE RCD TO BRD(RTO)
+    ADD PSTV(RCD, RTO) TO EVS
+    ADD HK(RCD, RTO) TO HASH.
+
+CASTLE-SQ.
+    EVALUATE MTO
+        WHEN 28 MOVE 29 TO RFR MOVE 27 TO RTO MOVE 4 TO RCD
+        WHEN 24 MOVE 22 TO RFR MOVE 25 TO RTO MOVE 4 TO RCD
+        WHEN 98 MOVE 99 TO RFR MOVE 97 TO RTO MOVE 10 TO RCD
+        WHEN OTHER MOVE 92 TO RFR MOVE 95 TO RTO MOVE 10 TO RCD
+    END-EVALUATE.
+
+UNMAKE.
+    MOVE UFR(HIDX) TO MFR
+    MOVE UTO(HIDX) TO MTO
+    MOVE UFL(HIDX) TO MFL
+    MOVE UPC(HIDX) TO MPC
+    MOVE UCAP(HIDX) TO MCAP
+    IF SIDE = 0
+        MOVE 1 TO SIDE
+        MOVE -10 TO FWD
+        MOVE 6 TO COLOFF
+    ELSE
+        MOVE 0 TO SIDE
+        MOVE 10 TO FWD
+        MOVE 0 TO COLOFF
+    END-IF
+    MOVE SIDE TO MVR
+    MOVE UPR(HIDX) TO MPR
+    MOVE UCAST(HIDX) TO CAST
+    MOVE UEP(HIDX) TO EP
+    MOVE UHALF(HIDX) TO HALF
+    MOVE UEVS(HIDX) TO EVS
+    MOVE UNPW(HIDX) TO NPW
+    MOVE UNPB(HIDX) TO NPB
+    MOVE MCAP TO BRD(MTO)
+    MOVE MPC TO BRD(MFR)
+    IF MPC = 6 MOVE MFR TO KSQ(1) END-IF
+    IF MPC = 12 MOVE MFR TO KSQ(2) END-IF
+    IF MFL NOT = 0
+        EVALUATE MFL
+            WHEN 1
+                MOVE MTO TO CS
+                SUBTRACT FWD FROM CS
+                IF SIDE = 0 MOVE 7 TO BRD(CS) ELSE MOVE 1 TO BRD(CS) END-IF
+            WHEN 2
+                PERFORM CASTLE-SQ
+                MOVE 0 TO BRD(RTO)
+                MOVE RCD TO BRD(RFR)
+        END-EVALUATE
+    END-IF
+    SUBTRACT 1 FROM HIDX
+    MOVE HISTH(HIDX) TO HASH.
+
+*> ---------------- evaluation ----------------
+EVAL.
+    IF SIDE = 0
+        MOVE EVS TO SC
+    ELSE
+        MOVE 0 TO SC
+        SUBTRACT EVS FROM SC
+    END-IF
+    ADD 8 TO SC
+    IF SC > 200
+        IF SIDE = 0
+            IF NPB < 500
+                MOVE KSQ(1) TO WKS
+                MOVE KSQ(2) TO LKS
+                PERFORM MOPUP
+                ADD MB TO SC
+            END-IF
+        ELSE
+            IF NPW < 500
+                MOVE KSQ(2) TO WKS
+                MOVE KSQ(1) TO LKS
+                PERFORM MOPUP
+                ADD MB TO SC
+            END-IF
+        END-IF
+    ELSE
+        IF SC < -200
+            IF SIDE = 0
+                IF NPW < 500
+                    MOVE KSQ(2) TO WKS
+                    MOVE KSQ(1) TO LKS
+                    PERFORM MOPUP
+                    SUBTRACT MB FROM SC
+                END-IF
+            ELSE
+                IF NPB < 500
+                    MOVE KSQ(1) TO WKS
+                    MOVE KSQ(2) TO LKS
+                    PERFORM MOPUP
+                    SUBTRACT MB FROM SC
+                END-IF
+            END-IF
+        END-IF
+    END-IF.
+
+MOPUP.
+    MOVE MOPC(LKS) TO MB
+    MOVE DFT(WKS) TO DFV
+    SUBTRACT DFT(LKS) FROM DFV
+    IF DFV < 0 MOVE 0 TO TMPA SUBTRACT DFV FROM TMPA MOVE TMPA TO DFV END-IF
+    MOVE DRT(WKS) TO DRV
+    SUBTRACT DRT(LKS) FROM DRV
+    IF DRV < 0 MOVE 0 TO TMPA SUBTRACT DRV FROM TMPA MOVE TMPA TO DRV END-IF
+    IF DRV > DFV MOVE DRV TO DFV END-IF
+    IF DFV < 1 MOVE 1 TO DFV END-IF
+    ADD KDB(DFV) TO MB.
+
+*> ---------------- repetition ----------------
+REP-CHECK.
+    MOVE 0 TO REPF
+    MOVE HIDX TO RJ
+    SUBTRACT 4 FROM RJ
+    MOVE HIDX TO RL
+    SUBTRACT HALF FROM RL
+    IF RL < 1 MOVE 1 TO RL END-IF
+    PERFORM UNTIL RJ < RL OR REPF = 1
+        IF HISTH(RJ) = HASH MOVE 1 TO REPF END-IF
+        SUBTRACT 2 FROM RJ
+    END-PERFORM.
+
+*> ---------------- pick best move ----------------
+PICK.
+    MOVE PBASE(P) TO PKB
+    MOVE PKB TO PK1
+    ADD SI(P) TO PK1
+    MOVE PKB TO PKE
+    ADD SNM(P) TO PKE
+    MOVE PK1 TO PK2
+    MOVE MS(PK1) TO PKS
+    PERFORM VARYING IA FROM PK1 BY 1 UNTIL IA > PKE
+        IF MS(IA) > PKS
+            MOVE MS(IA) TO PKS
+            MOVE IA TO PK2
+        END-IF
+    END-PERFORM
+    IF PK2 NOT = PK1
+        MOVE MF(PK1) TO TMPA
+        MOVE MF(PK2) TO MF(PK1)
+        MOVE TMPA TO MF(PK2)
+        MOVE MT(PK1) TO TMPA
+        MOVE MT(PK2) TO MT(PK1)
+        MOVE TMPA TO MT(PK2)
+        MOVE MP(PK1) TO TMPA
+        MOVE MP(PK2) TO MP(PK1)
+        MOVE TMPA TO MP(PK2)
+        MOVE MX(PK1) TO TMPA
+        MOVE MX(PK2) TO MX(PK1)
+        MOVE TMPA TO MX(PK2)
+        MOVE MS(PK1) TO TMPB
+        MOVE MS(PK2) TO MS(PK1)
+        MOVE TMPB TO MS(PK2)
+    END-IF.
+
+*> ---------------- perft ----------------
+DO-PERFT.
+    IF PFD = 0
+        DISPLAY "Nodes searched: 1"
+    ELSE
+        PERFORM PERFT-SECT
+    END-IF.
+
+PRINT-PF-ROOT.
+    MOVE PBASE(1) TO PKB
+    ADD SI(1) TO PKB
+    MOVE MF(PKB) TO MFR
+    MOVE MT(PKB) TO MTO
+    MOVE MP(PKB) TO MPR
+    MOVE 1 TO PFLAST
+    PERFORM PRINT-PF-LINE.
+
+PRINT-PF-LINE.
+    PERFORM MOVE-TO-STR
+    MOVE PFLAST TO ED2
+    DISPLAY FUNCTION TRIM(MSTR) ": " FUNCTION TRIM(ED2).
+
+*> ---------------- alpha-beta search (iterative state machine) ----------
+SEARCH-SECT SECTION.
+SN-ENTER.
+    ADD 1 TO NODES
+    ADD 1 TO TCHK
+    IF TCHK >= 2048
+        MOVE 0 TO TCHK
+        PERFORM CHECK-TIME
+    END-IF
+    IF ABORTED = 1
+        GO TO SN-UNWIND
+    END-IF
+    IF SDP(P) > 0 AND P > 1
+        IF HALF >= 100
+            MOVE 0 TO RETV
+            GO TO SN-RETURN
+        END-IF
+        PERFORM REP-CHECK
+        IF REPF = 1
+            MOVE 0 TO RETV
+            GO TO SN-RETURN
+        END-IF
+    END-IF
+    IF P >= MAXPLY
+        PERFORM EVAL
+        MOVE SC TO RETV
+        GO TO SN-RETURN
+    END-IF
+    IF SDP(P) <= 0
+        PERFORM EVAL
+        MOVE SC TO SBEST(P)
+        IF SC >= SB(P)
+            MOVE SC TO RETV
+            GO TO SN-RETURN
+        END-IF
+        IF SC > SA(P)
+            MOVE SC TO SA(P)
+        END-IF
+        MOVE 1 TO GMODE
+    ELSE
+        MOVE -32000 TO SBEST(P)
+        MOVE 0 TO GMODE
+    END-IF
+    PERFORM GEN
+    MOVE GN TO SNM(P)
+    MOVE 0 TO SI(P)
+    MOVE 0 TO SL(P)
+    MOVE 0 TO BMF(P)
+    MOVE 0 TO BMT(P)
+    MOVE 0 TO BMP(P).
+SN-NEXT.
+    ADD 1 TO SI(P)
+    IF SI(P) > SNM(P)
+        GO TO SN-FINISH
+    END-IF
+    PERFORM PICK
+    MOVE MF(PK1) TO MFR
+    MOVE MT(PK1) TO MTO
+    MOVE MP(PK1) TO MPR
+    MOVE MX(PK1) TO MFL
+    PERFORM MAKE
+    MOVE KSQ(MVR + 1) TO ASQ
+    MOVE SIDE TO ABY
+    PERFORM IS-ATTACKED THRU IS-ATT-EXIT
+    IF ATK = 1
+        PERFORM UNMAKE
+        GO TO SN-NEXT
+    END-IF
+    ADD 1 TO SL(P)
+    MOVE SDP(P) TO CDP
+    SUBTRACT 1 FROM CDP
+    IF SDP(P) > 0 AND P < EXTLIM
+        MOVE KSQ(SIDE + 1) TO ASQ
+        MOVE MVR TO ABY
+        PERFORM IS-ATTACKED THRU IS-ATT-EXIT
+        IF ATK = 1
+            ADD 1 TO CDP
+        END-IF
+    END-IF
+    ADD 1 TO P
+    MOVE 0 TO SA(P)
+    SUBTRACT SB(P - 1) FROM SA(P)
+    MOVE 0 TO SB(P)
+    SUBTRACT SA(P - 1) FROM SB(P)
+    MOVE CDP TO SDP(P)
+    GO TO SN-ENTER.
+SN-RETURN.
+    IF P = 1
+        GO TO SN-DONE
+    END-IF
+    SUBTRACT 1 FROM P
+    PERFORM UNMAKE
+    MOVE 0 TO V
+    SUBTRACT RETV FROM V
+    IF V > SBEST(P)
+        MOVE V TO SBEST(P)
+        MOVE PBASE(P) TO PKB
+        ADD SI(P) TO PKB
+        MOVE MF(PKB) TO BMF(P)
+        MOVE MT(PKB) TO BMT(P)
+        MOVE MP(PKB) TO BMP(P)
+        IF V > SA(P)
+            MOVE V TO SA(P)
+            IF V >= SB(P)
+                IF BRD(MTO) = 0 AND MPR = 0 AND MFL NOT = 1
+                    IF NOT (MFR = K1F(P) AND MTO = K1T(P))
+                        MOVE K1F(P) TO K2F(P)
+                        MOVE K1T(P) TO K2T(P)
+                        MOVE MFR TO K1F(P)
+                        MOVE MTO TO K1T(P)
+                    END-IF
+                    IF HISTV(MFR, MTO) < 7000
+                        ADD DSQ(SDP(P)) TO HISTV(MFR, MTO)
+                    END-IF
+                END-IF
+                GO TO SN-FINISH
+            END-IF
+        END-IF
+    END-IF
+    GO TO SN-NEXT.
+SN-FINISH.
+    IF SL(P) = 0 AND SDP(P) > 0
+        MOVE KSQ(SIDE + 1) TO ASQ
+        IF SIDE = 0 MOVE 1 TO ABY ELSE MOVE 0 TO ABY END-IF
+        PERFORM IS-ATTACKED THRU IS-ATT-EXIT
+        IF ATK = 1
+            MOVE MATESC(P) TO RETV
+        ELSE
+            MOVE 0 TO RETV
+        END-IF
+    ELSE
+        MOVE SBEST(P) TO RETV
+    END-IF
+    GO TO SN-RETURN.
+SN-UNWIND.
+    PERFORM UNTIL P = 1
+        SUBTRACT 1 FROM P
+        PERFORM UNMAKE
+    END-PERFORM.
+SN-DONE.
+    EXIT.
+
+PERFT-SECT SECTION.
+PF-START.
+    MOVE 1 TO P
+    MOVE PFD TO SCDEPTH(1)
+    MOVE 0 TO PCN(1).
+PF-ENTER.
+    MOVE 0 TO GMODE
+    PERFORM GEN
+    MOVE GN TO SNM(P)
+    MOVE 0 TO SI(P).
+PF-NEXT.
+    ADD 1 TO SI(P)
+    IF SI(P) > SNM(P)
+        GO TO PF-FINISH
+    END-IF
+    MOVE PBASE(P) TO PKB
+    ADD SI(P) TO PKB
+    MOVE MF(PKB) TO MFR
+    MOVE MT(PKB) TO MTO
+    MOVE MP(PKB) TO MPR
+    MOVE MX(PKB) TO MFL
+    PERFORM MAKE
+    MOVE KSQ(MVR + 1) TO ASQ
+    MOVE SIDE TO ABY
+    PERFORM IS-ATTACKED THRU IS-ATT-EXIT
+    IF ATK = 1
+        PERFORM UNMAKE
+        GO TO PF-NEXT
+    END-IF
+    IF SCDEPTH(P) = 1
+        ADD 1 TO PCN(P)
+        IF P = 1
+            PERFORM PRINT-PF-ROOT
+        END-IF
+        PERFORM UNMAKE
+        GO TO PF-NEXT
+    END-IF
+    ADD 1 TO P
+    MOVE SCDEPTH(P - 1) TO SCDEPTH(P)
+    SUBTRACT 1 FROM SCDEPTH(P)
+    MOVE 0 TO PCN(P)
+    GO TO PF-ENTER.
+PF-FINISH.
+    IF P = 1
+        GO TO PF-DONE
+    END-IF
+    MOVE PCN(P) TO RETC
+    SUBTRACT 1 FROM P
+    ADD RETC TO PCN(P)
+    IF P = 1
+        MOVE PBASE(1) TO PKB
+        ADD SI(1) TO PKB
+        MOVE MF(PKB) TO MFR
+        MOVE MT(PKB) TO MTO
+        MOVE MP(PKB) TO MPR
+        MOVE RETC TO PFLAST
+        PERFORM PRINT-PF-LINE
+    END-IF
+    PERFORM UNMAKE
+    GO TO PF-NEXT.
+PF-DONE.
+    MOVE PCN(1) TO ED2
+    DISPLAY "Nodes searched: " FUNCTION TRIM(ED2).
+
